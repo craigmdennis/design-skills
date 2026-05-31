@@ -1,6 +1,6 @@
 # Design skills
 
-Two installable Claude Code skills from [Design Out Loud](https://designoutloud.craigmdennis.com),
+Two installable Claude Code skills from [Visible by Design](https://visiblebydesign.craigmdennis.com),
 a field guide for designers turning invisible work into visible impact.
 
 - **design-goal-setting** — interview-driven goal-setting and performance-review prep.
