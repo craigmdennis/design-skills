@@ -31,7 +31,7 @@ Then either say "keep field notes on this project" in any repo, or just start a 
 npx skills add craigmdennis/design-skills
 ```
 
-The [skills CLI](https://skills.sh) installs the `field-notes` skill only, into Claude Code or any agent that supports skills (Codex, Cursor, Amp, and others) — hooks are a Claude Code plugin concept it doesn't handle. You keep the full setup + decision-log workflow (the agent-instructions file still makes the agent log your reasoning every session), but lose the automatic parts: new-project detection, the verbatim prompt log, insight capture, and the rationale nudge. For those, install the plugin.
+The [skills CLI](https://skills.sh) installs skills from this repo (pick `field-notes`) into Claude Code or any agent that supports skills (Codex, Cursor, Amp, and others) — hooks are a Claude Code plugin concept it doesn't handle. You keep the full setup + decision-log workflow (the agent-instructions file still makes the agent log your reasoning every session), but lose the automatic parts: new-project detection, the verbatim prompt log, insight capture, and the rationale nudge. For those, install the plugin.
 
 ## Privacy — read this
 
