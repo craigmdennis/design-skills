@@ -7,9 +7,9 @@ description: Use when the user wants to keep field notes on a project — a live
 
 ## Overview
 
-Adds live decision capture to a project by updating CLAUDE.md with an instruction, creating a gitignored `.field-notes/` folder, and adding `.field-notes/` to `.gitignore`. The `.field-notes/` folder holds the notes log, draft writeups, and any images — none of it gets committed to the project repo. The dot-prefix keeps it out of the way and guarantees it never collides with the project's own content directories (`blog/`, `notes/`, `docs/`).
+Adds live decision capture to a project by updating the project's agent-instructions file (`AGENTS.md` or `CLAUDE.md`) with an instruction, creating a gitignored `.field-notes/` folder, and adding `.field-notes/` to `.gitignore`. The `.field-notes/` folder holds the notes log, draft writeups, and any images — none of it gets committed to the project repo. The dot-prefix keeps it out of the way and guarantees it never collides with the project's own content directories (`blog/`, `notes/`, `docs/`).
 
-The presence of `.field-notes/notes.md` is what marks a project as tracked — the plugin's capture hooks key off that file. A `.field-notes-ignore` file in the project root permanently opts a project out.
+The presence of `.field-notes/notes.md` is what marks a project as tracked — on Claude Code with the plugin installed, the capture hooks key off that file. A `.field-notes-ignore` file in the project root permanently opts a project out.
 
 ## Focus: whose story the notes tell
 
@@ -28,7 +28,7 @@ The notes are the **user's** story — their thinking, their decisions, the ques
 
 ## Capture thinking live, not just from history
 
-Once a project is tracked, this skill's setup is one-off but its intent is ongoing: capture the user's reasoning *in the moment*, because reconstructing it later from commits gets the *what* but loses the *why*. The Step 3 CLAUDE.md instruction is what carries this into every future session — it tells the assistant to treat a non-obvious decision, a rejected approach, a change of direction, a sharp question, or a reaction to what a tool did as a logworthy moment in the same turn, and to keep the Framing block (problem, goal, workaround, outcome) current as the bookends.
+Once a project is tracked, this skill's setup is one-off but its intent is ongoing: capture the user's reasoning *in the moment*, because reconstructing it later from commits gets the *what* but loses the *why*. The Step 3 instruction is what carries this into every future session — it tells the assistant to treat a non-obvious decision, a rejected approach, a change of direction, a sharp question, or a reaction to what a tool did as a logworthy moment in the same turn, and to keep the Framing block (problem, goal, workaround, outcome) current as the bookends.
 
 The rule of thumb: if the user has already said *why* in the conversation, log it in their words; if they haven't, ask one short question to draw it out, then log it. Prompt only at real decision points, and back off immediately if the user doesn't want to capture a given moment. The goal is the user's voice and reasoning at the time, which is exactly what a later writeup can't manufacture.
 
@@ -45,7 +45,7 @@ Create `.field-notes/notes.md` if it does not already exist:
 ```markdown
 # Field notes
 
-Raw notes captured during Claude Code sessions. Input for a later writing pass that turns them into a post.
+Raw notes captured during agent sessions. Input for a later writing pass that turns them into a post.
 
 ## Framing
 
@@ -61,9 +61,16 @@ The writeup's opening and ending. Fill the first three at the start; fill Outcom
 <!-- Dated decision log. Each entry is about the user's thinking, decisions, questions, and their experience of the tools — not the assistant's own debugging. Format: **YYYY-MM-DD — Short title**\nOne to three sentences. -->
 ```
 
-### Step 3: Add section to CLAUDE.md
+### Step 3: Add section to the agent-instructions file
 
-If CLAUDE.md does not exist, create it. If it exists, append the section. Check first — do not add it twice.
+Pick the file that carries this project's agent instructions:
+
+- If `AGENTS.md` exists, use it — it's the cross-agent convention (Codex, Cursor, Amp, Gemini CLI; newer Claude Code reads it too).
+- Otherwise, if `CLAUDE.md` exists, use that.
+- If neither exists, create `AGENTS.md`.
+- If both exist, add the section to whichever holds the project's main instructions and do not duplicate it in the other.
+
+Append the section below to that file. Check first — do not add it twice.
 
 Add this section exactly:
 
@@ -123,7 +130,7 @@ Skip this step if the repo has no meaningful commits yet (only setup/init commit
 Stage the two tracked files and propose the commit — only run it if the user has already authorized commits (in this session or their instructions); otherwise ask first:
 
 ```bash
-git add .gitignore CLAUDE.md
+git add .gitignore AGENTS.md   # or CLAUDE.md — whichever file Step 3 used
 git commit -m "docs: add field notes capture"
 ```
 
@@ -134,9 +141,9 @@ Do not `git add .field-notes/` — it is intentionally untracked.
 Do not:
 - Commit anything inside `.field-notes/` — it is gitignored by design
 - Create scripts, CLI tools, or npm commands
-- Add hooks to settings.json — the plugin already registers its own capture hooks
+- Add hooks or other automation config — on Claude Code the plugin registers its own capture hooks; on other agents, skill-only mode is the design
 - Add dependencies
-- Create more than the two tracked files (`.gitignore`, `CLAUDE.md`)
+- Create more than the two tracked files (`.gitignore` and the agent-instructions file)
 - Log your own debugging, tool errors, or problems you encountered — the notes are the user's story, told from their perspective
 
 Finished writeups belong in the user's blog or portfolio site, not in the project repo. The `.field-notes/` folder is a local working area only.
@@ -145,6 +152,6 @@ Finished writeups belong in the user's blog or portfolio site, not in the projec
 
 - If `.field-notes/` is already in `.gitignore`, skip Step 1
 - If `.field-notes/notes.md` already exists, skip Step 2
-- If CLAUDE.md already has a `## Field notes` section, skip Step 3
+- If the agent-instructions file already has a `## Field notes` section, skip Step 3
 - If all three are already set up but `.field-notes/notes.md` is empty or only contains the template placeholder, still run Step 4 to populate it
 - If all three are set up and notes already have content, report that field notes are already configured and stop

@@ -4,7 +4,7 @@ Keep field notes on a project. Commit history can reconstruct *what* you built �
 
 It has two halves:
 
-1. **A skill** (`field-notes`) that sets a project up: a gitignored `.field-notes/` working folder with a `notes.md` decision log, plus a `CLAUDE.md` instruction that tells Claude to keep logging your reasoning in every future session.
+1. **A skill** (`field-notes`) that sets a project up: a gitignored `.field-notes/` working folder with a `notes.md` decision log, plus an instruction in the project's agent-instructions file (`AGENTS.md` or `CLAUDE.md`) that keeps the agent logging your reasoning in every future session.
 2. **Four capture hooks** that run automatically once a project is tracked:
 
 | Hook | Event | What it does |
@@ -31,7 +31,7 @@ Then either say "keep field notes on this project" in any repo, or just start a 
 npx skills add craigmdennis/design-skills
 ```
 
-The [skills CLI](https://skills.sh) installs the `field-notes` skill only — hooks are a Claude Code plugin concept it doesn't handle. You keep the full setup + decision-log workflow (the CLAUDE.md instruction still makes Claude log your reasoning every session), but lose the automatic parts: new-project detection, the verbatim prompt log, insight capture, and the rationale nudge. For those, install the plugin.
+The [skills CLI](https://skills.sh) installs the `field-notes` skill only, into Claude Code or any agent that supports skills (Codex, Cursor, Amp, and others) — hooks are a Claude Code plugin concept it doesn't handle. You keep the full setup + decision-log workflow (the agent-instructions file still makes the agent log your reasoning every session), but lose the automatic parts: new-project detection, the verbatim prompt log, insight capture, and the rationale nudge. For those, install the plugin.
 
 ## Privacy — read this
 
