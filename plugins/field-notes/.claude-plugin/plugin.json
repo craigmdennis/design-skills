@@ -1,0 +1,20 @@
+{
+  "name": "field-notes",
+  "version": "0.1.0",
+  "description": "Keep field notes on a project — a skill plus capture hooks that log the why behind your decisions, live, for a future blog post, case study, or retro.",
+  "author": {
+    "name": "Craig Dennis",
+    "url": "https://craigmdennis.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "portfolio",
+    "blog",
+    "case-study",
+    "writing",
+    "capture",
+    "hooks",
+    "skill"
+  ],
+  "repository": "https://github.com/craigmdennis/design-skills"
+}

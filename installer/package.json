@@ -1,0 +1,30 @@
+{
+  "name": "field-notes",
+  "version": "0.1.0",
+  "description": "One-command installer for the field-notes Claude Code plugin — log the why behind your decisions, live",
+  "bin": {
+    "field-notes": "bin/install.js"
+  },
+  "files": [
+    "bin"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "claude-code",
+    "claude",
+    "plugin",
+    "field-notes",
+    "decision-log",
+    "portfolio",
+    "blog"
+  ],
+  "author": "Craig Dennis (https://craigmdennis.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/craigmdennis/design-skills.git",
+    "directory": "installer"
+  }
+}

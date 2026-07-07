@@ -13,6 +13,12 @@
       "source": "./plugins/design-impact-report",
       "description": "Turn one initiative you owned into a short, shareable impact report.",
       "version": "1.0.0"
+    },
+    {
+      "name": "field-notes",
+      "source": "./plugins/field-notes",
+      "description": "Keep field notes on a project — a skill plus capture hooks that log the why behind your decisions, live, for a future blog post, case study, or retro.",
+      "version": "0.1.0"
     }
   ]
 }
