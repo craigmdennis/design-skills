@@ -19,6 +19,12 @@
       "source": "./plugins/field-notes",
       "description": "Keep field notes on a project — a skill plus capture hooks that log the why behind your decisions, live, for a future blog post, case study, or retro.",
       "version": "0.1.0"
+    },
+    {
+      "name": "strengthen-case-study",
+      "source": "./plugins/strengthen-case-study",
+      "description": "Strengthen an existing portfolio case study through an evidence-first interview — real proof, clear arcs, team and craft evidence, and zero fabricated facts.",
+      "version": "1.0.0"
     }
   ]
 }

@@ -1,0 +1,16 @@
+{
+  "name": "strengthen-case-study",
+  "description": "Strengthen an existing portfolio case study through an evidence-first interview — real proof, clear arcs, team and craft evidence, and zero fabricated facts.",
+  "version": "1.0.0",
+  "author": { "name": "Craig Dennis", "url": "https://craigmdennis.com" },
+  "license": "MIT",
+  "keywords": [
+    "portfolio",
+    "case-study",
+    "design",
+    "writing",
+    "interview",
+    "editing"
+  ],
+  "repository": "https://github.com/craigmdennis/design-skills"
+}
