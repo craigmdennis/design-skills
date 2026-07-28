@@ -12,8 +12,10 @@ designers get the recognition they deserve within organisations.
   behind your choices, captured while it's fresh, as raw material for a future blog post,
   case study, or retro.
 - **[strengthen-case-study](plugins/strengthen-case-study/)** — strengthens an existing
-  portfolio case study through an evidence-first interview: real proof, clear arcs, team
-  and craft evidence, and zero fabricated facts. Its reader-questions rubric is adapted
+  portfolio case study by interviewing you about it one question at a time, then trimming
+  and correcting your own words: real proof, clear arcs, an ownership audit for the parts
+  you undersold, and zero fabricated facts. Every gap becomes a question rather than a
+  placeholder. Works on a file, a URL, or pasted text. Its reader-questions rubric is adapted
   from Brian Lovin's ["How to give a great product design portfolio presentation"](https://brianlovin.com/writing/how-to-give-a-great-product-design-portfolio-presentation-G24VB2c).
 
 ## Install
