@@ -3,27 +3,27 @@
   "owner": { "name": "Craig Dennis", "url": "https://craigmdennis.com" },
   "plugins": [
     {
-      "name": "design-goal-setting",
-      "source": "./plugins/design-goal-setting",
-      "description": "Interview-driven goal-setting and performance-review prep for designers: map your evidence to a behavioural bar and pick the moves that close the gaps.",
-      "version": "1.0.0"
+      "name": "case-study",
+      "source": "./plugins/case-study",
+      "description": "Strengthen an existing portfolio case study by interviewing you about it one question at a time, then trimming and correcting your own words — real proof, clear arcs, an ownership audit for the parts you undersold, and zero fabricated facts. Every gap becomes a question, never a placeholder. Works on a file, a URL, or pasted text.",
+      "version": "3.0.0"
     },
     {
-      "name": "design-impact-report",
-      "source": "./plugins/design-impact-report",
-      "description": "Turn one initiative you owned into a short, shareable impact report.",
-      "version": "1.0.0"
+      "name": "design-goals",
+      "source": "./plugins/design-goals",
+      "description": "Interview-driven goal-setting and performance-review prep for designers: map your evidence to a behavioural bar and pick the moves that close the gaps.",
+      "version": "2.0.0"
     },
     {
       "name": "field-notes",
       "source": "./plugins/field-notes",
       "description": "Keep field notes on a project — a skill plus capture hooks that log the why behind your decisions, live, for a future blog post, case study, or retro.",
-      "version": "0.1.0"
+      "version": "0.2.0"
     },
     {
-      "name": "strengthen-case-study",
-      "source": "./plugins/strengthen-case-study",
-      "description": "Strengthen an existing portfolio case study by interviewing you about it one question at a time, then trimming and correcting your own words — real proof, clear arcs, an ownership audit for the parts you undersold, and zero fabricated facts. Every gap becomes a question, never a placeholder. Works on a file, a URL, or pasted text.",
+      "name": "impact-report",
+      "source": "./plugins/impact-report",
+      "description": "Turn one initiative you owned into a short, shareable impact report.",
       "version": "2.0.0"
     }
   ]

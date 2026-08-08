@@ -1,5 +1,5 @@
 ---
-name: design-impact-report
+name: write-report
 description: Use when a designer wants to write up the impact of an initiative they owned, turning a shipped project into a short, shareable impact report. Triggers on "impact report", "write up my impact", "report the result of my project", "evidence for an initiative".
 ---
 

@@ -1,7 +1,7 @@
 {
-  "name": "strengthen-case-study",
+  "name": "case-study",
   "description": "Strengthen an existing portfolio case study by interviewing you about it one question at a time, then trimming and correcting your own words — real proof, clear arcs, an ownership audit for the parts you undersold, and zero fabricated facts. Every gap becomes a question, never a placeholder. Works on a file, a URL, or pasted text.",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "author": { "name": "Craig Dennis", "url": "https://craigmdennis.com" },
   "license": "MIT",
   "keywords": [

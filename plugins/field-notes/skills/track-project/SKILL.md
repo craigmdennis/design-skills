@@ -1,5 +1,5 @@
 ---
-name: field-notes
+name: track-project
 description: Use when the user wants to keep field notes on a project — a live decision log for a future blog post, case study, or retrospective. Invoke at the start of a new project or when asked to add field notes to an existing repo.
 ---
 

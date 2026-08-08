@@ -7,6 +7,31 @@ contract changes.
 
 ## 2026-07-28
 
+### all plugins — renamed so `plugin:skill` reads properly
+
+Major for every plugin, because how you invoke them changed. Each plugin was
+named after its single skill, so every invocation stuttered:
+`field-notes:field-notes`, `strengthen-case-study:strengthen-case-study`. A
+plugin is now named for its domain and a skill for the action it performs.
+
+| Was | Now |
+|-----|-----|
+| `strengthen-case-study:strengthen-case-study` | `case-study:strengthen` |
+| `design-goal-setting:design-goal-setting` | `design-goals:set-goals` |
+| `design-impact-report:design-impact-report` | `impact-report:write-report` |
+| `field-notes:field-notes` | `field-notes:track-project` |
+
+Skill names stayed domain-bearing rather than becoming bare verbs (`set-goals`,
+not `set`) because `npx skills add` installs them into other agents with no
+plugin prefix, where a skill called `set` says nothing and risks colliding.
+
+**Install specs changed.** Three of the four are new — `case-study@design-skills`,
+`design-goals@design-skills`, `impact-report@design-skills`. Uninstall the old
+ones and install the new. `field-notes@design-skills` is unchanged, and so is
+`npx field-notes`. Nothing about behaviour changed, and existing `.field-notes/`
+folders keep working: `.field-notes/notes.md` is still what marks a project as
+tracked.
+
 ### strengthen-case-study 2.0.0 — interview, don't rewrite
 
 Major, because three guarantees changed.

@@ -1,5 +1,5 @@
 ---
-name: design-goal-setting
+name: set-goals
 description: Use when a designer wants to set growth goals or prepare for a performance review, mapping their evidence to a behavioural bar and picking the moves that close the gaps. Triggers on "set my goals", "performance review prep", "growth plan", "map my evidence to the next level".
 ---
 

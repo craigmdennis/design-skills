@@ -2,6 +2,8 @@
 
 Claude Code plugin marketplace repo (marketplace name: `design-skills`). Each plugin lives in `plugins/<name>/` with its manifest in `.claude-plugin/plugin.json`; the marketplace manifest is `.claude-plugin/marketplace.json` at the repo root. Install specs read `<plugin>@design-skills`.
 
+Naming: a plugin is named for its **domain** (`case-study`, `field-notes`), a skill for the **action** it performs (`strengthen`, `track-project`), so the invocation reads `plugin:skill` without stuttering. Skill names also have to stand alone, because `npx skills add` installs them into other agents with no plugin prefix — so prefer `set-goals` over `set`. A plugin's name, its directory, its `source` in `marketplace.json`, and its skill directory names are four separate places that must agree.
+
 Hook scripts (field-notes) are dependency-free CommonJS Node — no `package.json` in the plugin dirs, so keep them `require()`-based and runnable with a bare `node` invocation. Hooks must always exit 0 and print nothing to stdout except deliberate context injections (SessionStart/UserPromptSubmit stdout reaches Claude's context).
 
 The `installer/` directory is a separate npm package (`field-notes`) whose only job is to shell out to `claude plugin marketplace add` + `claude plugin install`. It never copies files or edits settings.json itself.

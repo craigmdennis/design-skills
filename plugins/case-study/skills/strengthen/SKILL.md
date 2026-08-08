@@ -1,5 +1,5 @@
 ---
-name: strengthen-case-study
+name: strengthen
 description: Use when an existing portfolio case study underperforms — it reads like a PM writeup, undersells the author's ownership (describes deliverables not influence, "we" where it was "I", a bare job title as the role), has vague or unproven claims, thin design-craft or team/collaboration evidence, a process section that reads as a timeline rather than decisions, two interleaved narratives, opens at the solution with no problem-discovery or constraints story, or never closes the loop on whether the problem was solved. Interviews the author one question at a time for every gap rather than writing around it, then trims and corrects their own words. Works on a file, a URL, or pasted text. Triggers on "strengthen my case study", "review my portfolio piece", "make this case study land", "punch up this writeup".
 ---
 
@@ -637,10 +637,10 @@ was wrong with the piece when you started, and what's different now. Then give t
 
 ## Related skills
 
-- `field-notes` (this marketplace) — keeps the live decision log that makes the interview
-  mostly confirmation instead of archaeology.
-- `design-impact-report` (this marketplace) — produces the verified outcome evidence that
-  step 9 wants to lead with.
+- `track-project` (this marketplace, `field-notes` plugin) — keeps the live decision log that
+  makes the interview mostly confirmation instead of archaeology.
+- `write-report` (this marketplace, `impact-report` plugin) — produces the verified outcome
+  evidence that step 9 wants to lead with.
 
 ## Credits
 

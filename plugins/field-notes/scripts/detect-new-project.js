@@ -53,7 +53,7 @@ async function main() {
   if (boolEnv('FIELD_NOTES_AUTO_TRACK')) {
     process.stdout.write(
       `[field-notes] This looks like a new project with no field notes yet (${count} commit(s)). ` +
-        'Auto-tracking is enabled (FIELD_NOTES_AUTO_TRACK): invoke the field-notes skill now ' +
+        'Auto-tracking is enabled (FIELD_NOTES_AUTO_TRACK): invoke the track-project skill now ' +
         'to set up the .field-notes/ decision log — no need to ask. To opt this project out ' +
         'permanently, create a .field-notes-ignore file in the project root.\n'
     );
@@ -61,7 +61,7 @@ async function main() {
     process.stdout.write(
       `[field-notes] This looks like a new project with no field notes yet (${count} commit(s)). ` +
         'Ask the user once whether to keep field notes on it — a live decision log for a future ' +
-        'writeup — and if yes, invoke the field-notes skill. If they decline, create a ' +
+        'writeup — and if yes, invoke the track-project skill. If they decline, create a ' +
         '.field-notes-ignore file in the project root so this suggestion never repeats.\n'
     );
   }
