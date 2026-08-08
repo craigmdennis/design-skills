@@ -5,6 +5,27 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-08-08
+
+### field-notes 0.3.0 — nothing offers itself unprompted
+
+Removed the `detect-new-project` SessionStart hook. It fired in any git repo
+with two commits or fewer and injected a directive telling Claude to offer
+field-notes tracking. Starting a new project is not consent to be pitched a
+feature, and a plugin that speaks first in repos it was never invited into is
+the wrong default however cheap the check is.
+
+Tracking now only ever begins because someone asked for it — say "keep field
+notes on this project", or run `/field-notes:track-project`. The three
+remaining hooks are unchanged and still no-op in any project without
+`.field-notes/notes.md`.
+
+Gone with it: `FIELD_NOTES_AUTO_TRACK`, `FIELD_NOTES_NEW_PROJECT_COMMITS`, and
+the `.field-notes-ignore` opt-out marker, which existed only to silence the
+detector. Existing `.field-notes-ignore` files are now inert and can be
+deleted. `FIELD_NOTES_CAPTURE_FEEDBACK` and `FIELD_NOTES_RATIONALE_TURNS` are
+unaffected.
+
 ## 2026-07-28
 
 ### all plugins — renamed so `plugin:skill` reads properly

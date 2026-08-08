@@ -9,7 +9,7 @@ description: Use when the user wants to keep field notes on a project — a live
 
 Adds live decision capture to a project by updating the project's agent-instructions file (`AGENTS.md` or `CLAUDE.md`) with an instruction, creating a gitignored `.field-notes/` folder, and adding `.field-notes/` to `.gitignore`. The `.field-notes/` folder holds the notes log, draft writeups, and any images — none of it gets committed to the project repo. The dot-prefix keeps it out of the way and guarantees it never collides with the project's own content directories (`blog/`, `notes/`, `docs/`).
 
-The presence of `.field-notes/notes.md` is what marks a project as tracked — on Claude Code with the plugin installed, the capture hooks key off that file. A `.field-notes-ignore` file in the project root permanently opts a project out.
+The presence of `.field-notes/notes.md` is what marks a project as tracked — on Claude Code with the plugin installed, the capture hooks key off that file, and do nothing in any project that lacks it. Tracking only ever starts because someone asked for it; nothing offers it unprompted.
 
 ## Focus: whose story the notes tell
 

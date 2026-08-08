@@ -1,18 +1,6 @@
 {
-  "description": "field-notes capture hooks: detect new projects, capture prompts and insight blocks, nudge for rationale",
+  "description": "field-notes capture hooks: capture prompts and insight blocks, nudge for rationale. All are no-ops unless the project is already tracked.",
   "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/detect-new-project.js\"",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
     "UserPromptSubmit": [
       {
         "hooks": [

@@ -5,11 +5,10 @@ Keep field notes on a project. Commit history can reconstruct *what* you built �
 It has two halves:
 
 1. **A skill** (`/field-notes:track-project`) that sets a project up: a gitignored `.field-notes/` working folder with a `notes.md` decision log, plus an instruction in the project's agent-instructions file (`AGENTS.md` or `CLAUDE.md`) that keeps the agent logging your reasoning in every future session.
-2. **Four capture hooks** that run automatically once a project is tracked:
+2. **Three capture hooks** that run automatically once a project is tracked, and do nothing at all until then:
 
 | Hook | Event | What it does |
 |------|-------|--------------|
-| `detect-new-project` | SessionStart | In a brand-new git repo (≤2 commits), offers to set up field notes — once. |
 | `capture-feedback` | UserPromptSubmit | Appends your prompts verbatim to `.field-notes/feedback-raw.md` — the raw record of where you corrected or redirected Claude. |
 | `prompt-rationale` | UserPromptSubmit | Once per session, after ~5 turns, nudges Claude to ask you the "why" behind recent decisions and log it. |
 | `capture-insights` | Stop | Collects Claude's `★ Insight` callouts into `.field-notes/insights-raw.md` (only produces anything in the `explanatory` output style). |
@@ -23,7 +22,7 @@ Everything lands in `.field-notes/`, which the skill gitignores — the dot-pref
 /plugin install field-notes@design-skills
 ```
 
-Then either say "keep field notes on this project" in any repo, or just start a new project — the SessionStart hook will offer it automatically.
+Then say "keep field notes on this project" in any repo you want tracked. Nothing starts on its own — the hooks stay dormant until you've asked for a project to be tracked.
 
 ### Skill-only install (no hooks)
 
@@ -31,7 +30,7 @@ Then either say "keep field notes on this project" in any repo, or just start a 
 npx skills add craigmdennis/design-skills
 ```
 
-The [skills CLI](https://skills.sh) installs skills from this repo (pick `track-project`) into Claude Code or any agent that supports skills (Codex, Cursor, Amp, and others) — hooks are a Claude Code plugin concept it doesn't handle. You keep the full setup + decision-log workflow (the agent-instructions file still makes the agent log your reasoning every session), but lose the automatic parts: new-project detection, the verbatim prompt log, insight capture, and the rationale nudge. For those, install the plugin.
+The [skills CLI](https://skills.sh) installs skills from this repo (pick `track-project`) into Claude Code or any agent that supports skills (Codex, Cursor, Amp, and others) — hooks are a Claude Code plugin concept it doesn't handle. You keep the full setup + decision-log workflow (the agent-instructions file still makes the agent log your reasoning every session), but lose the automatic parts: the verbatim prompt log, insight capture, and the rationale nudge. For those, install the plugin.
 
 ## Privacy — read this
 
@@ -49,12 +48,10 @@ Set these in the `env` block of `~/.claude/settings.json` (or your shell):
 
 | Variable | Default | Effect |
 |----------|---------|--------|
-| `FIELD_NOTES_AUTO_TRACK` | off | `1` = set up field notes on new projects automatically instead of asking first |
 | `FIELD_NOTES_CAPTURE_FEEDBACK` | on | `0` = never write prompts to `feedback-raw.md` |
-| `FIELD_NOTES_NEW_PROJECT_COMMITS` | `2` | Max commit count for a repo to count as "new" |
 | `FIELD_NOTES_RATIONALE_TURNS` | `5` | Turns before the once-per-session rationale nudge; `0` disables it |
 
-Opt a single project out forever: `touch .field-notes-ignore` in its root.
+To stop capture in a project you've tracked, delete its `.field-notes/` folder.
 
 ## Uninstall
 
@@ -67,4 +64,4 @@ Hooks are removed with the plugin. Any `.field-notes/` folders it created stay w
 ## Requirements
 
 - Claude Code with plugin support
-- `node` and `git` on your PATH (the hooks are dependency-free Node scripts)
+- `node` on your PATH (the hooks are dependency-free Node scripts)

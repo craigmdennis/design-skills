@@ -49,9 +49,10 @@ For **case-study**, **design-goals**, and **impact-report** the two routes are e
 they're pure skills either way.
 
 **field-notes** is the one where the plugin route adds something: it also registers capture
-hooks that run on Claude Code events — offering tracking on new projects, logging your
-prompts, and nudging for the "why" behind decisions once a session — so capture happens
-without you thinking about it. Installed skill-only, field-notes still works; you just
+hooks that run on Claude Code events — logging your prompts, collecting insight callouts,
+and nudging for the "why" behind decisions once a session — so capture happens without you
+thinking about it. They only ever run in a project you've asked to track, and do nothing at
+all in one you haven't. Installed skill-only, field-notes still works; you just
 invoke it and the agent maintains the log, with none of the automatic capture. Start
 skill-only, upgrade to the plugin later — they key off the same files, so nothing is lost
 switching. Details (including the privacy switches) in the

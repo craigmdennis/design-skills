@@ -44,14 +44,6 @@ function isTracked(dir) {
   }
 }
 
-function isIgnored(dir) {
-  try {
-    return fs.existsSync(path.join(dir, '.field-notes-ignore'));
-  } catch {
-    return false;
-  }
-}
-
 function timestamp() {
   const d = new Date();
   const pad = (n) => String(n).padStart(2, '0');
@@ -64,10 +56,6 @@ function timestamp() {
 function intEnv(name, fallback) {
   const v = parseInt(process.env[name] || '', 10);
   return Number.isInteger(v) && v >= 0 ? v : fallback;
-}
-
-function boolEnv(name) {
-  return ['1', 'true', 'yes'].includes(String(process.env[name] || '').toLowerCase());
 }
 
 // Mutable state directory for per-session sentinels. Prefers the plugin data
@@ -107,10 +95,8 @@ module.exports = {
   parsePayload,
   projectDir,
   isTracked,
-  isIgnored,
   timestamp,
   intEnv,
-  boolEnv,
   stateDir,
   appendFile,
   ensureFile,
