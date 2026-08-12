@@ -8,11 +8,11 @@ Hook scripts (field-notes) are dependency-free CommonJS Node — no `package.jso
 
 The `installer/` directory is a separate npm package (`field-notes`) whose only job is to shell out to `claude plugin marketplace add` + `claude plugin install`. It never copies files or edits settings.json itself.
 
-## Blog content capture
+## Field notes
 
-This project is tracked for a portfolio blog post. Throughout sessions, maintain `blog/notes.md`: a **Framing** block (the bookends) plus a dated decision log.
+This project keeps field notes for a future writeup (blog post, case study, or retro). Throughout sessions, maintain `.field-notes/notes.md`: a **Framing** block (the bookends) plus a dated decision log.
 
-Keep the Framing block current — it's the case study's opening and ending, and the part commit history can never reconstruct:
+Keep the Framing block current — it's the writeup's opening and ending, and the part commit history can never reconstruct:
 - **Problem / who feels it** and the **goal** (the outcome the user wants in the world) — capture these the moment they surface, usually early. A decision log with no why has no opening.
 - **Current workaround** — what the user does today, before this exists.
 - **Outcome** — fill in once it ships: whether it works end to end, and what it's like now versus before. Don't leave it blank at the finish; if the user hasn't said, ask.
@@ -32,7 +32,7 @@ Format each entry as:
 
 ```
 **YYYY-MM-DD — Short title**
-One to three sentences. Raw observations only — the `portfolio-content` skill turns them into prose.
+One to three sentences. Raw observations only — a later writing pass turns them into prose.
 ```
 
-Blog posts, images, and drafts go in `blog/`. This folder is gitignored — nothing in it is committed to the repo.
+Draft writeups and images go in `.field-notes/`. This folder is gitignored — nothing in it is committed to the repo.
