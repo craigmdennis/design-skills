@@ -5,6 +5,36 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-08-12
+
+### prompts — three writing skills, installed by copy and paste
+
+A new top-level `prompts/` directory, alongside `plugins/`. Each file holds a
+short description and one fenced block. Pasting that block into a Claude Code
+session writes a writing skill into `~/.claude/skills/`, prints the path, and
+asks before touching anything else.
+
+Three genres, three skills, because each one makes the other two worse when
+applied to the wrong text. `conversation-prose` governs an agent's replies under
+ASD-STE100 and minimalism. `documentation-prose` governs skill files, READMEs,
+specs, and comments under third-person impersonal. `published-prose` governs
+prose published under an author's own name.
+
+`published-prose` is split in two. The skill carries rules about failures in
+writing, which are shareable. An interview of about twelve questions writes
+`voice-profile.md` next to it, holding spelling, punctuation, person, number
+policy, and banned words, which are not.
+
+`conversation-prose` states its rules as fourteen procedures instead of
+categories with example words. An example list is read as the rule and searched
+for, so anything absent from it passes; a procedure tests the sentence. It also
+writes `checks.md` for injection on every turn, and offers to configure the
+`UserPromptSubmit` hook that does the injecting.
+
+These install by paste, so an installed copy has no link back to this
+repository and no update reaches it. That is deliberate. The copy is the
+reader's to edit.
+
 ## 2026-08-08
 
 ### field-notes 0.3.0 — nothing offers itself unprompted
