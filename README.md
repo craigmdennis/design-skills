@@ -117,4 +117,4 @@ template. case-study edits your existing draft instead, and field-notes sets up 
 `.field-notes/` decision log the agent maintains every session. Each prompt in `prompts/`
 writes one skill file into your own environment. Nothing leaves your machine.
 
-Written by [Craig Dennis](https://craigmdennis.com).
+Created by [Craig Dennis](https://craigmdennis.com).
