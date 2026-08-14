@@ -20,6 +20,10 @@ test('conversation-prose exact detectors match the fixture', () => {
   checkFixture('conversation-exact');
 });
 
+test('documentation-prose exact detectors match the fixture', () => {
+  checkFixture('documentation-exact');
+});
+
 test('every detector has an id, a label, a tier, and skills', () => {
   for (const d of DETECTORS) {
     assert.ok(d.id && d.label, 'detector needs an id and a label');

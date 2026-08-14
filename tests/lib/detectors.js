@@ -12,6 +12,22 @@ function matchCount(text, re) {
   return found ? found.length : 0;
 }
 
+const DATE = /\b(?:\d{4}-\d{2}-\d{2}|(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4}|\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})\b/g;
+const DECISION_VERB = /\b(?:decided|decide|set by|set that|set the|confirmed|agreed|chose|approved|signed off)\b/i;
+const DECISION_WINDOW = 60;
+
+// A date is only a violation when it records who decided something. A release
+// date or a version date is a fact and stays.
+function countDecisionDates(text) {
+  let found = 0;
+  for (const match of text.matchAll(DATE)) {
+    const start = Math.max(0, match.index - DECISION_WINDOW);
+    const end = Math.min(text.length, match.index + match[0].length + DECISION_WINDOW);
+    if (DECISION_VERB.test(text.slice(start, end))) found += 1;
+  }
+  return found;
+}
+
 const DETECTORS = [
   {
     id: 'semicolon',
@@ -87,6 +103,45 @@ const DETECTORS = [
     // "rather than asking" is excluded here because the rather-than detector
     // already counts it. Detectors never count the same string twice.
     count: ctx => matchCount(ctx.text, /\b(?:I decided|I went ahead|I took the liberty|I chose to|I'm going to ask you|I am going to ask you)\b/gi)
+  },
+  {
+    id: 'first-person',
+    label: 'first person',
+    tier: 'exact',
+    skills: [DOCUMENTATION],
+    count: ctx =>
+      matchCount(ctx.text, /\b(?:I|I'm|I've|I'll|I'd)\b/g) +
+      matchCount(ctx.text, /\b(?:my|mine|we|we're|we've|we'll|our|ours)\b/gi)
+  },
+  {
+    id: 'your-possessive',
+    label: 'your',
+    tier: 'exact',
+    skills: [DOCUMENTATION],
+    // The imperative "you" is standard in instructions and stays permitted, so
+    // only the possessive is counted.
+    count: ctx => matchCount(ctx.text, /\byour\b/gi)
+  },
+  {
+    id: 'user-possessive',
+    label: "the user's, their",
+    tier: 'exact',
+    skills: [DOCUMENTATION],
+    count: ctx => matchCount(ctx.text, /\b(?:the user's|their)\b/gi)
+  },
+  {
+    id: 'decision-date',
+    label: 'a date recording a decision',
+    tier: 'exact',
+    skills: [DOCUMENTATION],
+    count: ctx => countDecisionDates(ctx.text)
+  },
+  {
+    id: 'agent-clause',
+    label: 'an agent in a subordinate clause',
+    tier: 'exact',
+    skills: [DOCUMENTATION],
+    count: ctx => matchCount(ctx.text, /\b(?:when|if|where|after|before)\s+(?:the user|the reader|you)\b/gi)
   }
 ];
 
