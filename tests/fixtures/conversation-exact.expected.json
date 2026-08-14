@@ -1,0 +1,13 @@
+{
+  "skill": "conversation-prose",
+  "counts": {
+    "semicolon": 2,
+    "long-sentence": 3,
+    "there-is": 2,
+    "rather-than": 1,
+    "hold": 2,
+    "two-word-verb": 4,
+    "self-evaluation": 4,
+    "permission-narration": 3
+  }
+}
