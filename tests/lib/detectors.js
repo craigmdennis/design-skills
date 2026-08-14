@@ -141,7 +141,11 @@ const DETECTORS = [
     label: 'an agent in a subordinate clause',
     tier: 'exact',
     skills: [DOCUMENTATION],
-    count: ctx => matchCount(ctx.text, /\b(?:when|if|where|after|before)\s+(?:the user|the reader|you)\b/gi)
+    // "you" is excluded. An agent in a subordinate clause is a violation, and
+    // the skill separately permits the imperative "you" as standard in
+    // instructions, so "before you run the build" is contested. The exact tier
+    // takes only cases that need no judgement. Recorded in tests/README.md.
+    count: ctx => matchCount(ctx.text, /\b(?:when|if|where|after|before)\s+(?:the user|the reader)\b/gi)
   }
 ];
 

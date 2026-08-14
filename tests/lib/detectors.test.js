@@ -43,3 +43,8 @@ test('code fences and block quotes are not counted', () => {
   const quoted = runDetectors('Nothing here.\n\n```\na; b; c;\n```\n\n> a; b;\n', 'conversation-prose');
   assert.strictEqual(quoted.counts.semicolon, plain.counts.semicolon);
 });
+
+test('agent-clause does not count the imperative you', () => {
+  const actual = runDetectors('Before you run the build, set the token.', 'documentation-prose');
+  assert.strictEqual(actual.counts['agent-clause'], 0);
+});
