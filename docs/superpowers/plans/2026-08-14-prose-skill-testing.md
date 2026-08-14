@@ -500,6 +500,7 @@ baseline test, and I went ahead with the migration because it seemed safer at
 the time and there was nobody available to ask about it.
 
 There is a placeholder in the config file. The stakeholder list is unchanged.
+The rule holds for every case in the suite.
 
 The check earned its keep. The design is elegant and the implementation is
 robust. That approach turned out to be exactly right.
@@ -527,7 +528,7 @@ Create `tests/fixtures/conversation-exact.expected.json`:
 {
   "skill": "conversation-prose",
   "counts": {
-    "semicolon": 3,
+    "semicolon": 2,
     "long-sentence": 3,
     "there-is": 2,
     "rather-than": 1,
@@ -540,6 +541,11 @@ Create `tests/fixtures/conversation-exact.expected.json`:
 ```
 
 Note for the implementer: run the detectors against the fixture once written, and correct this file to the counts the implementation produces only after checking each count by hand against the fixture text. A number changed to match a buggy detector defeats the fixture.
+
+Two counts to check with particular care, because both were wrong in an earlier draft of this plan:
+
+- `semicolon` is 2, not 3. The fixture holds four semicolons. The one in the inline code span and the one in the block quotation are removed by `stripQuoted`. The one in the first sentence and the one in the indented block at the end are counted, because `stripQuoted` removes fenced blocks and not indented ones.
+- `rather-than` is 1. The phrase sits across a line wrap in the fixture, and it matches only because `buildContext` collapses whitespace before the string detectors run. A count of 0 here means that collapse is missing.
 
 - [ ] **Step 2: Write the failing test**
 
@@ -692,8 +698,13 @@ const DETECTORS = [
 ];
 
 function buildContext(rawText) {
-  const text = stripQuoted(rawText);
-  return { text, sentences: splitSentences(text), words: countWords(text) };
+  const stripped = stripQuoted(rawText);
+  // Sentence splitting needs the line structure, because it removes heading and
+  // list markers anchored to the start of a line. String detectors need the
+  // opposite: a phrase broken across a line wrap ("rather\nthan") must still
+  // match, so they run against a whitespace-collapsed copy.
+  const text = stripped.replace(/\s+/g, ' ');
+  return { text, sentences: splitSentences(stripped), words: countWords(text) };
 }
 
 function runDetectors(rawText, skill) {
@@ -750,8 +761,11 @@ not counted.
 The user's configuration file is read first. Their settings override it.
 
 Priya Raman decided on 2026-03-14 that a documentation-only change skips
-review. Marcus Webb set the deploy rule on 2026-01-09 after an incident. The
-release on 2026-08-01 shipped an incremental index.
+review. Marcus Webb set the deploy rule on 2026-01-09 after an incident.
+
+The search index updates one document at a time and no longer rebuilds from
+nothing, which took the reindex from about ninety seconds to about three.
+The release on 2026-08-01 shipped that change.
 
 When the user asks a question, answer it. If the user passes a relative path,
 the function throws.
@@ -765,7 +779,7 @@ Create `tests/fixtures/documentation-exact.expected.json`:
 {
   "skill": "documentation-prose",
   "counts": {
-    "first-person": 4,
+    "first-person": 3,
     "your-possessive": 1,
     "user-possessive": 2,
     "decision-date": 2,
@@ -776,7 +790,10 @@ Create `tests/fixtures/documentation-exact.expected.json`:
 }
 ```
 
-Note for the implementer: `decision-date` expects 2, not 3. The release date on 2026-08-01 is a fact about a release and sits near no decision verb, so it is not counted. Confirm that by hand before changing anything.
+Two counts to check with particular care:
+
+- `decision-date` is 2, not 3. The release date on 2026-08-01 is a fact about a release and sits more than 60 characters from any decision verb, so it is not counted. The paragraph before it exists to create that distance; shortening it makes the fixture pass for the wrong reason.
+- `first-person` is 3: `I` once, `we` once, `My` once. The imperative `you` in "before you run the build" is permitted and is not counted by any detector.
 
 - [ ] **Step 2: Add the failing test case**
 
