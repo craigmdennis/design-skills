@@ -38,6 +38,32 @@ test('splitSentences splits on terminators', () => {
 
 test('splitSentences ignores headings and list markers', () => {
   const s = splitSentences('# A heading\n\n- One item.\n- Two items.');
-  assert.strictEqual(s.length, 2);
+  assert.strictEqual(s.length, 3);
+  assert.strictEqual(s[0], 'A heading.');
   assert.ok(!s[0].startsWith('#'));
+});
+
+test('splitSentences terminates headings without punctuation', () => {
+  const s = splitSentences('# Install\n\nRun the build first.');
+  assert.strictEqual(s.length, 2);
+  assert.ok(!s[0].includes('Run'));
+  assert.ok(!s[1].includes('Install'));
+});
+
+test('splitSentences terminates list items without punctuation', () => {
+  const s = splitSentences('- first item\n- second item');
+  assert.strictEqual(s.length, 2);
+});
+
+test('splitSentences preserves question marks in headings', () => {
+  const s = splitSentences('# Why?\n\nBecause it fails.');
+  assert.strictEqual(s.length, 2);
+  assert.strictEqual(s[0], 'Why?');
+});
+
+test('splitSentences handles ordered lists', () => {
+  const s = splitSentences('1. Run the build\n2. Check the size');
+  assert.strictEqual(s.length, 2);
+  assert.ok(!s[0].match(/^\d/));
+  assert.ok(!s[1].match(/^\d/));
 });

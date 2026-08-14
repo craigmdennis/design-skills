@@ -17,10 +17,14 @@ function countWords(text) {
 }
 
 function splitSentences(text) {
+  function terminate(line) {
+    return /[.!?]$/.test(line) ? line : `${line}.`;
+  }
+
   const flat = text
-    .replace(/^#{1,6}[ \t]+/gm, '')
-    .replace(/^[ \t]*[-*+][ \t]+/gm, '')
-    .replace(/^[ \t]*\d+\.[ \t]+/gm, '')
+    .replace(/^#{1,6}[ \t]+(.*?)[ \t]*$/gm, (whole, line) => terminate(line))
+    .replace(/^[ \t]*[-*+][ \t]+(.*?)[ \t]*$/gm, (whole, line) => terminate(line))
+    .replace(/^[ \t]*\d+\.[ \t]+(.*?)[ \t]*$/gm, (whole, line) => terminate(line))
     .replace(/\|/g, ' ');
   return flat
     .split(/(?<=[.!?])[ \t\n]+/)
