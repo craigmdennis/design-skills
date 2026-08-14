@@ -4,8 +4,10 @@ A prompt that installs a writing skill for prose published under an author's own
 name: blog posts, case studies, portfolio pages, strategy documents, resume and
 cover-letter copy, application answers, social posts.
 
-The skill removes the patterns that make text read as machine-generated, and it
-applies ASD-STE100 (Simplified Technical English) as its governing standard. It
+The skill removes the patterns that make text read as machine-generated. It
+borrows three rules from ASD-STE100 (Simplified Technical English) and takes
+nothing else from that standard, which is written for text that must not be
+misread and excludes writing where voice and persuasion are the point. It
 does not govern how an agent writes back in conversation, and it does not govern
 documentation. Those are two separate genres with opposite requirements in
 places; see `conversation-prose.md` and `documentation-prose.md` in this
@@ -141,15 +143,17 @@ and rewrite to remove them. Default to moderate intensity: preserve structure
 and ideas, rewrite sentences that sound generated. Adjust if asked for lighter
 or heavier treatment.
 
-## ASD-STE100 is the governing standard
+## Three rules borrowed from ASD-STE100
 
-ASD-STE100 (Simplified Technical English) is the governing standard for this
-skill. It is the controlled language used for aerospace and defence maintenance
-manuals: about 65 writing rules and a restricted dictionary. Where a rule below
-and STE disagree, STE takes priority, unless this file records a scoped
-exception.
+ASD-STE100 (Simplified Technical English) is a controlled language written for
+aerospace and defence maintenance manuals. It is not the governing standard for
+this skill and most of it does not apply to this genre. The standard exists for
+text that must not be misread, and it excludes writing where voice, nuance, and
+persuasion are the point.
 
-**The five rules that apply to everything here:**
+Three of its rules do solve failures that appear in this genre, so they are
+borrowed. Nothing else from the standard applies here, and no rule below is
+overridden by it.
 
 1. **One word carries one meaning, and one meaning gets one word.** Repeat the
    word. Do not swap in a synonym for variety. (This is the same instruction as
@@ -157,17 +161,20 @@ exception.
 2. **No idiom, metaphor, analogy, personification, or figurative phrasal verb.**
    Provenance decides: the author's own wording stays, the agent never generates
    any. Full detail in section 2.
-3. **Active voice, subject first.** The actor goes in the subject position.
-4. **One idea per sentence.**
-5. **Approved technical names are fine.** Real product and system names are
-   precise, so keep them. STE restricts general vocabulary, and this skill
-   already requires specificity.
+3. **Noun clusters take three words at most.** A stack of four or more marks
+   none of the relations between the words, so the reader has to guess them.
+   *"design system adoption evaluation framework"* becomes *"a framework for
+   evaluating how a design system is adopted"*.
 
-**Two rules are scoped instead of adopted whole.** Both are recorded in
-"Sentence architecture" below. The sentence-length ceiling applies to
-instructional content only, so narrative keeps its mixed rhythm. Subject-first
-stays a strong default in narrative under the two-condition test, and becomes
-absolute in instructional passages.
+**Punctuation here is voice and not standard.** STE permits the em dash and bans
+the semicolon. This genre often does the reverse. Both marks are settled in the
+voice profile, and the standard decides neither.
+
+**Instructional passages are the exception.** A numbered process, a how-to list,
+or a setup sequence is technical writing inside a published piece, and those
+passages take the standard's sentence rules: one instruction per sentence,
+around 20 words, subject first every time. Narrative does not. See "Sentence
+architecture".
 
 ### The replacement method
 
@@ -657,12 +664,10 @@ that…"*), and a mid-sentence appositive.
 **None of them is banned.** Good published prose uses all three well. They are a
 tell only under the two conditions below.
 
-**This is a deliberate divergence from ASD-STE100.** The standard makes
-subject-first mandatory with no exception. Published narrative keeps the
-two-condition test instead, because the surviving instances in real prose are
-the author's and they work. Apply STE's absolute rule to instructional passages
-only (numbered process steps, how-to lists); apply the two-condition test to
-narrative.
+**Instructional passages take the absolute rule.** Numbered process steps and
+how-to lists put the subject first every time. Narrative keeps the two-condition
+test instead, because the surviving instances in real prose are the author's and
+they work.
 
 **Condition 1: the fronted clause switches subject.** This is the reliable tell,
 because the dangling version is a thing people rarely write and models write
@@ -866,10 +871,10 @@ the variation.
 - **"held to", and intransitive "[the structure / process / bar] held"** for
   following or surviving a process. Say what happened: "I stuck to the process",
   "the structure worked", "we kept using it".
-- **Idioms, analogies, and metaphors: cut them, no exceptions.** ASD-STE100 is
-  the named authority. It bans idiom, metaphor, and figurative language
-  outright, and it requires one word to carry one meaning, which is the same
-  rule as the elegant-variation ban above. Typical figures that pile up in
+- **Idioms, analogies, and metaphors: cut them, no exceptions.** This is
+  borrowed rule 2, and one word carrying one meaning is borrowed rule 1, which
+  is the same rule as the elegant-variation ban above. Typical figures that
+  accumulate in
   drafts: a question a meeting "turns on", a rubric you "nod along to", "putting
   the same words in front of" someone, a matrix that "stays honest", "papering
   over the gap". Each one makes the reader decode an image instead of reading
@@ -1355,6 +1360,20 @@ reason. Natural writing has personality, rough edges, and opinions. It does not
 always flow perfectly. That is what makes it human.
 
 Applying these rules mechanically is doing it wrong.
+
+## Source and credit
+
+ASD-STE100 is maintained by the Simplified Technical English Maintenance Group
+(STEMG). Three of its rules are borrowed above and no part of its dictionary is
+reproduced, because the standard is free to obtain and is not free to
+redistribute. The standard can be requested at
+<https://www.asd-ste100.org/STE_downloads.html>.
+
+This skill is not an STE authoring tool and carries no endorsement from ASD or
+STEMG, which maintains the standard, produces no AI tools, and endorses none.
+The boundary that the standard excludes creative and persuasive writing is taken
+from the asd-ste100-skill by Dustin Yuchen Teng, MIT licensed:
+<https://github.com/danyuchn/asd-ste100-skill>.
 ===== END SKILL.md =====
 
 ===== INTERVIEW =====

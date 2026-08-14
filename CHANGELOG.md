@@ -5,6 +5,58 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-08-14
+
+### conversation-prose — four STE rules added, two declined, one claim corrected
+
+A fifteenth check: noun clusters take three words at most. A stack of four or
+more marks none of the relations between the words, so the reader has to guess
+them. It is the rule an agent breaks most often in this genre and it was absent.
+
+Three more rules of the standard, in the register section. Rule 8.1 bans the
+semicolon outright and permits every other mark, including the em dash. Words
+are not dropped to shorten a sentence: the subject, the verb, and the article
+stay. A sequence of three or more steps takes a vertical list, which check 13
+now allows for.
+
+Two rules are declined, with the reason recorded. The present perfect is
+permitted here, because "the job has completed" and "the job completed" are
+different statements and a reply reports status constantly. The six-sentence
+paragraph cap is a rule for a manual.
+
+Two corrections. The standard is now named by edition (Issue 9, January 2025:
+53 rules in 9 sections). The em-dash ban belongs to `published-prose` as a voice
+preference, and the skill says so, because the standard permits the mark.
+
+Every rule is now marked as structural or lexical. Structural rules describe the
+shape of a sentence and are enforceable from their description. Lexical rules
+are defined by the licensed dictionary, which is absent, so they are a direction
+of travel and compliance is never claimed.
+
+A closing section records that this applies a subset of the rules, implements
+nothing, carries no endorsement from ASD or STEMG, and is not for regulated
+technical publications. Two limits are added to the meta-rule: a draft that
+passes is sent unchanged, and shortening stops at one possible reading.
+
+### published-prose — STE demoted from governing standard to three borrowed rules
+
+The skill claimed ASD-STE100 as its governing standard, with the standard taking
+priority in any disagreement. It then scoped away the sentence-length ceiling and
+the subject-first rule, contradicted Rule 8.1 by requiring semicolons, and used
+none of the rest. The standard is written for text that must not be misread and
+excludes writing where voice and persuasion are the point, so the claim was
+removed.
+
+Three rules are borrowed and named as borrowed: one word for one meaning, no
+figurative language, and noun clusters of three words at most. Everything that
+existed only to reconcile the rest of the file with the standard is gone,
+including the scoped-exception apparatus and the divergence notes. Instructional
+passages inside a published piece still take the standard's sentence rules,
+which is now stated once instead of three times.
+
+The em dash and the semicolon are recorded as voice, because the standard
+permits the first and bans the second, and this genre does the reverse.
+
 ## 2026-08-12
 
 ### prompts — three writing skills, installed by copy and paste

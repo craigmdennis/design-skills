@@ -108,6 +108,22 @@ repository. No update reaches it. Re-pasting the block installs the current
 version and overwrites the previous one, so copy any banned words you have added
 somewhere safe first.
 
+The skill applies a subset of the ASD-STE100 writing rules and does not
+implement the standard. It reproduces no part of the licensed dictionary, so it
+cannot check a word against the approved list. Its structural rules (voice,
+sentence length, noun clusters, punctuation, one idea per sentence) are
+enforceable from their description; its lexical rules are a direction of travel.
+STEMG maintains the standard, produces no AI tools, and endorses none. This is
+not an authoring tool for regulated technical publications.
+
+## Source and credit
+
+The edition detail, the split between structural and lexical rules, and the two
+limits at the end of the skill are adapted from the
+[asd-ste100-skill](https://github.com/danyuchn/asd-ste100-skill) by Dustin
+Yuchen Teng, MIT licensed. The standard itself can be requested from the
+[official downloads page](https://www.asd-ste100.org/STE_downloads.html).
+
 ## The prompt
 
 Copy everything inside the block below and paste it into a Claude Code session.
@@ -226,6 +242,9 @@ agent's prose: the metaphor ban as it is worded there, "no caveating", the
 proscribed word list, fragment closers, the spelling convention, the em-dash
 ban, the bold budget.
 
+The em-dash ban there is a voice preference. ASD-STE100 permits the em dash and
+bans only the semicolon, so do not re-derive that ban from the standard.
+
 The one partial exception is `published-prose`'s "do not add the why when the
 what is clear" rule. Explaining a mechanism the reader needs is the job here and
 stays. Justifying your own wording after the fact does not. See "Do not narrate
@@ -233,7 +252,7 @@ or justify your own choices" below.
 
 ## The checks
 
-**Run all fourteen on the draft before sending. Every reply, not only the long
+**Run all fifteen on the draft before sending. Every reply, not only the long
 ones.**
 
 Each check is a procedure, not a list of words to search for. A word list finds
@@ -316,11 +335,22 @@ positive claim. The reader's own contrasts stay untouched, in their own wording.
 in each form the entry names.
 
 **13. Shape.** Count the headers and tables. A question with a one-line answer
-takes neither. Structure is for an audit, a comparison, or a plan.
+takes neither. Structure is for an audit, a comparison, or a plan. Three or more
+steps or conditions take a numbered list, which STE requires for a sequence.
 
 **14. Question answered with work.** If the reader asked a question, confirm the
 reply answers it. A why is answered with a why. It is not answered with a diff,
 a plan, or a change of course.
+
+**15. Noun clusters.** Count the nouns stacked as a single modifier. Three is
+the maximum. A stack of four or more marks none of the relations between the
+words, so the reader has to guess them. Rewrite with a preposition or a relative
+clause.
+
+- *"design system adoption evaluation framework"* → *"a framework for evaluating
+  how a design system is adopted"*
+- *"the agent task queue priority handler"* → *"the handler that sets task-queue
+  priority"*
 
 ## What carries over from published-prose
 
@@ -341,8 +371,12 @@ standards give the authority and the categories, and the checks give the test.
 
 ### Register: ASD-STE100 (Simplified Technical English)
 
-The controlled language used for aerospace and defence maintenance manuals.
-Apply its writing rules to every reply:
+The controlled language used for aerospace and defence maintenance manuals. The
+current edition is Issue 9, January 2025: 53 writing rules in 9 sections, a
+dictionary of about 900 approved words, and about 1,200 words to avoid with a
+replacement given for each.
+
+Apply these rules to every reply:
 
 - **One word, one meaning. One meaning, one word.** Do not reach for a synonym
   for variety. Pick the plain term and reuse it. (Check 9.)
@@ -354,12 +388,33 @@ Apply its writing rules to every reply:
 - **One idea per sentence.** Around 20 words in instructions, 25 in description.
   Do not write to a word count. Use the number to notice a sentence that is too
   long.
+- **Noun clusters take three words at most.** (Check 15.)
+- **No semicolons.** Rule 8.1 bans the mark outright and permits every other
+  standard punctuation mark, including the em dash. Write two sentences.
+- **Do not omit words to shorten a sentence.** The subject, the verb, and the
+  article stay, even where the sentence reads longer for keeping them. Dropping
+  them produces ambiguity. See "Write in complete sentences" below.
+- **A sequence takes a vertical list.** Three or more steps or conditions go in
+  a numbered or bulleted list. (Check 13.)
 - **Approved technical names are fine.** `D1`, `workerd`, `state_redirects` are
   technical names, not jargon. Use them. STE restricts general vocabulary, not
   domain terms.
 
-The full STE dictionary is licensed and aerospace-oriented, so exact compliance
-is not checkable. Apply the rules and the no-idiom constraint.
+**Two rules of the standard are declined here.** STE permits only simple tenses
+and excludes the present perfect. "The job has completed" and "the job
+completed" are different statements, and a reply reports status constantly, so
+the present perfect stays. STE also caps a paragraph at six sentences on one
+topic, which is a rule for a manual and does not fit a reply.
+
+**Which of these an agent can enforce.** STE's rules divide in two. Structural
+rules describe the shape of a sentence and can be applied from the description
+alone: voice, sentence length, noun clusters, punctuation, one idea per
+sentence, no dropped words. Lexical rules are defined by the dictionary, which
+decides which word is the approved one. The dictionary is licensed and
+aerospace-oriented, so it is absent here, and without it the lexical rules
+become a preference for the plainest available word used the same way every
+time. Apply the structural rules as rules. Apply the lexical rules as a
+direction, and never claim a compliance that was not checked.
 
 ### Scope: minimalism
 
@@ -491,6 +546,10 @@ No arrow chains (`A → B → fails`), no fragment shorthand, no invented labels
 reader has to cross-reference. Spell out technical terms. The reader cannot see
 the tool results or the thinking, so write for someone who stepped away, not for
 a log file.
+
+This is STE's rule against omitting words to shorten a sentence. The subject,
+the verb and the article stay. A sentence that drops them is shorter and has
+more than one reading.
 
 Being readable and being concise are different, and readability matters more.
 Keep replies short by cutting what does not change what the reader does next. Do
@@ -694,6 +753,34 @@ should be dropped for that sentence.
 When the reader corrects this skill, update this file. Do not add a
 countermanding memory, because a later session can follow the memory and ignore
 the file.
+
+Two limits apply to the checks as a whole:
+
+- **Do not force a change onto a draft that already complies.** A pass is a
+  result. Send it.
+- **Do not shorten past the point of clarity.** Removing ambiguity is the goal
+  and cutting words is the method. Past a certain point a shorter sentence costs
+  the reader time instead of saving it. Stop when the sentence has one possible
+  reading.
+
+## Source and credit
+
+ASD-STE100 is maintained by the Simplified Technical English Maintenance Group
+(STEMG). The standard is free to obtain and is not free to redistribute:
+reproduction needs the written authority of an officer of ASD, apart from eight
+listed categories of organisation. This skill paraphrases rule categories and
+reproduces no part of the dictionary. The standard can be requested at
+<https://www.asd-ste100.org/STE_downloads.html>.
+
+This skill applies a subset of the STE writing rules to conversation and does
+not implement the standard. STEMG maintains the standard, produces no AI tools,
+and endorses none; nothing here is endorsed by ASD or STEMG. This is not an
+authoring tool for regulated technical publications, and it must not be used for
+maintenance documentation or S1000D.
+
+The edition detail, the split between structural and lexical rules, and the two
+limits above are adapted from the asd-ste100-skill by Dustin Yuchen Teng, MIT
+licensed: <https://github.com/danyuchn/asd-ste100-skill>.
 ===== END SKILL.md =====
 
 ===== BEGIN checks.md =====
@@ -713,7 +800,8 @@ Procedures, not word lists. A word list finds only the words on it.
 10. **Subject position.** Read the first five words of each sentence. Fix fronted clauses that switch subject, two stacked clauses or clefts, "there is/are" with a nameable actor, and every mid-sentence appositive.
 11. **Negated contrast.** Delete any "X, not Y" you wrote, in any word order. State the positive claim.
 12. **Banned list.** Check the reader's banned words, in every form each entry names.
-13. **Shape.** No headers or tables on a short answer.
+13. **Shape.** No headers or tables on a short answer. Three or more steps or conditions take a numbered list.
 14. **Question answered with work.** A why is answered with a why.
+15. **Noun clusters.** Three nouns maximum in one stack. Four or more ("design system adoption evaluation framework") gets rewritten with a preposition or a relative clause.
 ===== END checks.md =====
 ````

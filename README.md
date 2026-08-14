@@ -68,7 +68,7 @@ worse, so they are separate skills and not settings on one skill.
 
 | Genre | Prompt | Standard |
 |---|---|---|
-| Replies, explanations, status updates, summaries, plans, review | [conversation-prose](prompts/conversation-prose.md) | ASD-STE100 and minimalism |
+| Replies, explanations, status updates, summaries, plans, review | [conversation-prose](prompts/conversation-prose.md) | ASD-STE100 (Issue 9) and minimalism |
 | Skill files, READMEs, specs, plans, code comments, changelogs | [documentation-prose](prompts/documentation-prose.md) | Third-person impersonal |
 | Prose published under an author's own name | [published-prose](prompts/published-prose.md) | The author's own voice, interviewed at install |
 
@@ -89,7 +89,7 @@ Two prompts do more than write one file:
   `~/.claude/skills/published-prose/voice-profile.md`, which the skill reads before it
   writes or edits. Personal preference is in that file. The skill itself carries only rules
   about failures in writing, which is what makes it shareable.
-- **conversation-prose** also writes `checks.md`, a one-page version of the fourteen checks
+- **conversation-prose** also writes `checks.md`, a one-page version of the fifteen checks
   the skill opens with, and offers to install a `UserPromptSubmit` hook that prints that
   file into context before every reply. The prompt gives the trade-offs and installs the
   hook only if you agree. Without it the skill still applies through the routing line, but
@@ -109,6 +109,22 @@ The cost is that a later correction in this repository will not reach an install
 Pasting the block a second time installs the current version and overwrites the previous
 one, along with any edits. Copy `voice-profile.md` and your banned-words list somewhere
 safe before doing that.
+
+### On ASD-STE100
+
+`conversation-prose` applies a subset of the ASD-STE100 writing rules (Issue 9, January
+2025) and does not implement the standard. The standard's dictionary is licensed and is not
+reproduced here, so nothing checks a word against the approved list. The rules that describe
+sentence shape — voice, sentence length, noun clusters, punctuation, one idea per sentence —
+are enforceable from their description. The rules that depend on the dictionary are a
+direction of travel. STEMG maintains the standard, produces no AI tools, and endorses none.
+None of this is endorsed by ASD or STEMG, and none of it is an authoring tool for regulated
+technical publications.
+
+The edition detail and the split between structural and lexical rules are adapted from the
+[asd-ste100-skill](https://github.com/danyuchn/asd-ste100-skill) by Dustin Yuchen Teng, MIT
+licensed. Request the standard itself from the
+[official downloads page](https://www.asd-ste100.org/STE_downloads.html).
 
 ## What's inside
 
