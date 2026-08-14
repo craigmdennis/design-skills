@@ -63,9 +63,14 @@ function scoreRun(runDir) {
     const exactAfter = exact.reduce((n, d) => n + d.after, 0);
     const perThousandBefore = wordsBefore ? (exactBefore / wordsBefore) * 1000 : 0;
     const perThousandAfter = wordsAfter ? (exactAfter / wordsAfter) * 1000 : 0;
-    const delta = perThousandBefore
-      ? ((perThousandAfter - perThousandBefore) / perThousandBefore) * 100
-      : 0;
+    let delta;
+    if (perThousandBefore) {
+      delta = ((perThousandAfter - perThousandBefore) / perThousandBefore) * 100;
+    } else if (perThousandAfter) {
+      delta = null;
+    } else {
+      delta = 0;
+    }
 
     results.push({
       skill, pairs: pairs.length, detectors,
@@ -96,7 +101,8 @@ function print(runDir, results) {
     console.log(`  ${pad('exact total', 38)}${padLeft(r.exactBefore, 8)}${padLeft(r.exactAfter, 9)}`);
     console.log(`  ${pad('words', 38)}${padLeft(r.wordsBefore, 8)}${padLeft(r.wordsAfter, 9)}`);
     console.log(`  ${pad('per 1,000 words', 38)}${padLeft(r.perThousandBefore.toFixed(1), 8)}${padLeft(r.perThousandAfter.toFixed(1), 9)}`);
-    console.log(`  ${pad('delta', 38)}${padLeft('', 8)}${padLeft(`${r.delta.toFixed(0)}%`, 9)}`);
+    const deltaText = r.delta === null ? 'n/a (no violations before)' : `${r.delta.toFixed(0)}%`;
+    console.log(`  ${pad('delta', 38)}${padLeft('', 8)}${padLeft(deltaText, 9)}`);
     console.log(`\n  approximate, excluded from the total`);
     for (const d of r.detectors.filter(x => x.tier === 'approximate')) {
       console.log(`  ${pad(d.label, 38)}${padLeft(d.before, 8)}${padLeft(d.after, 9)}`);
