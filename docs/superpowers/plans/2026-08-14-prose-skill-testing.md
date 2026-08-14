@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - All scripts are dependency-free CommonJS, `require()`-based, runnable with a bare `node` call. No `package.json` is added at the repository root. This matches the convention stated in `CLAUDE.md` for the field-notes hook scripts.
-- Node 18 or later, for the built-in test runner. Tests run with `node --test tests/lib/`.
+- Node 18 or later, for the built-in test runner. Tests run with `node --test "tests/**/*.test.js"`. The quotes are required: Node expands the pattern itself. A directory argument such as `node --test tests/lib/` fails on Node 26 with `Cannot find module`, so do not shorten the command to one.
 - Test files are named `<name>.test.js` and live beside the file they test.
 - Every document this plan creates is documentation, so it follows `documentation-prose`: third-person impersonal, no personal names, no dates recording who decided what, no metaphor, one word for one meaning, noun clusters of three words at most.
 - Corpus files are the exception. They contain personal names and decision dates deliberately, because those are the failures `documentation-prose` removes and the test needs them present in the input.
@@ -92,7 +92,7 @@ test('corpus files are self-contained', () => {
 
 - [ ] **Step 2: Run the test to verify it fails**
 
-Run: `node --test tests/lib/`
+Run: `node --test "tests/**/*.test.js"`
 Expected: FAIL, with `ENOENT` on `tests/corpus`.
 
 - [ ] **Step 3: Write the six conversation-prose corpus files**
@@ -342,7 +342,7 @@ Write the contributing guide.
 
 - [ ] **Step 5: Run the tests to verify they pass**
 
-Run: `node --test tests/lib/`
+Run: `node --test "tests/**/*.test.js"`
 Expected: PASS, 3 tests.
 
 - [ ] **Step 6: Commit**
@@ -1796,7 +1796,7 @@ git commit -m "feat: add the judging prompt"
 
 - [ ] **Step 1: Check the full test suite passes first**
 
-Run: `node --test tests/lib/`
+Run: `node --test "tests/**/*.test.js"`
 Expected: PASS, every test.
 
 - [ ] **Step 2: Produce the run**
@@ -1931,7 +1931,7 @@ answer agrees with the script.
 ## Running the tests of the harness itself
 
 ```
-node --test tests/lib/
+node --test "tests/**/*.test.js"
 ```
 
 Fixtures in `fixtures/` pair a file of known violations with the expected count
@@ -1990,7 +1990,7 @@ hook, and no instruction file stops instead of publishing a flattering number.
 
 - [ ] **Step 4: Verify the whole suite and the scorer**
 
-Run: `node --test tests/lib/`
+Run: `node --test "tests/**/*.test.js"`
 Expected: PASS, every test.
 
 Run: `node tests/score.js tests/runs/<date>`
