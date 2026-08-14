@@ -48,3 +48,16 @@ test('agent-clause does not count the imperative you', () => {
   const actual = runDetectors('Before you run the build, set the token.', 'documentation-prose');
   assert.strictEqual(actual.counts['agent-clause'], 0);
 });
+
+test('approximate detectors match the fixture', () => {
+  checkFixture('approximate');
+});
+
+test('approximate detectors are marked as approximate', () => {
+  const ids = ['noun-cluster', 'fronted-clause', 'cleft', 'animacy', 'em-dash'];
+  for (const id of ids) {
+    const d = DETECTORS.find(x => x.id === id);
+    assert.ok(d, `${id} is missing`);
+    assert.strictEqual(d.tier, 'approximate', `${id} must be approximate`);
+  }
+});

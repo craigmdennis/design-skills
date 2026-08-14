@@ -28,6 +28,47 @@ function countDecisionDates(text) {
   return found;
 }
 
+// Every detector below needs part-of-speech knowledge that a dependency-free
+// script does not have, so each one over-counts or under-counts. They are
+// printed for information and excluded from the headline total.
+
+const FUNCTION_WORDS = new Set([
+  'a', 'an', 'the', 'and', 'or', 'but', 'of', 'for', 'in', 'on', 'at', 'to',
+  'from', 'with', 'by', 'as', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
+  'has', 'have', 'had', 'do', 'does', 'did', 'will', 'would', 'can', 'could',
+  'should', 'may', 'might', 'must', 'that', 'this', 'these', 'those', 'it',
+  'its', 'they', 'their', 'them', 'we', 'our', 'you', 'your', 'i', 'my', 'he',
+  'she', 'his', 'her', 'not', 'no', 'if', 'when', 'while', 'than', 'then', 'so',
+  'because', 'which', 'who', 'whom', 'whose', 'what', 'where', 'how', 'all',
+  'any', 'each', 'every', 'some', 'more', 'most', 'other', 'into', 'over',
+  'under', 'after', 'before', 'between', 'through', 'during', 'about',
+  'against', 'up', 'down', 'out', 'off', 'again', 'further', 'once', 'here',
+  'there', 'both', 'few', 'such', 'only', 'own', 'same', 'too', 'very'
+]);
+
+const SUBORDINATORS = /^(?:Having|While|Although|Though|When|Since|After|Before|If|Because|Once|Given|Following|Whereas|Unless|Where|As)\b[^.!?]*?,/;
+const PARTICIPLE_OPENER = /^[A-Z][a-z]+ing\b[^.!?]*?,/;
+const CLEFT = /^(?:What\b[^.!?]*?\b(?:is|was|are|were)\b|It(?:'s| is| was)\b[^.!?]*?\bthat\b)/;
+const NOUN_SUBJECT_BEFORE_VERB = /\b(?:the|a|an|this|that|these|those)\s+(?:[a-z][\w-]*\s+){0,2}(?:wants|knows|thinks|decides|refuses|agrees|tries|promises|cares|likes|enjoys|suffers|wins|loses|beats|earns|deserves|expects|believes|remembers|forgets|waits|hopes|admits|insists)\b/gi;
+
+function countNounClusters(sentences) {
+  let found = 0;
+  for (const sentence of sentences) {
+    const tokens = sentence.split(/[^A-Za-z0-9'-]+/).filter(Boolean);
+    let run = 0;
+    for (const token of tokens) {
+      if (FUNCTION_WORDS.has(token.toLowerCase())) {
+        if (run >= 4) found += 1;
+        run = 0;
+      } else {
+        run += 1;
+      }
+    }
+    if (run >= 4) found += 1;
+  }
+  return found;
+}
+
 const DETECTORS = [
   {
     id: 'semicolon',
@@ -146,6 +187,43 @@ const DETECTORS = [
     // instructions, so "before you run the build" is contested. The exact tier
     // takes only cases that need no judgement. Recorded in tests/README.md.
     count: ctx => matchCount(ctx.text, /\b(?:when|if|where|after|before)\s+(?:the user|the reader)\b/gi)
+  },
+  {
+    id: 'noun-cluster',
+    label: 'noun cluster of four or more',
+    tier: 'approximate',
+    skills: BOTH,
+    count: ctx => countNounClusters(ctx.sentences)
+  },
+  {
+    id: 'fronted-clause',
+    label: 'fronted clause opening',
+    tier: 'approximate',
+    skills: BOTH,
+    count: ctx => ctx.sentences.filter(s => SUBORDINATORS.test(s) || PARTICIPLE_OPENER.test(s)).length
+  },
+  {
+    id: 'cleft',
+    label: 'cleft opening',
+    tier: 'approximate',
+    skills: BOTH,
+    count: ctx => ctx.sentences.filter(s => CLEFT.test(s)).length
+  },
+  {
+    id: 'animacy',
+    label: 'a living-actor verb on a thing',
+    tier: 'approximate',
+    skills: BOTH,
+    count: ctx => matchCount(ctx.text, NOUN_SUBJECT_BEFORE_VERB)
+  },
+  {
+    id: 'em-dash',
+    label: 'em dash (information only, never a violation)',
+    tier: 'approximate',
+    skills: BOTH,
+    // ASD-STE100 permits the em dash. Only published-prose bans it, as a voice
+    // preference, and published-prose is out of scope for this harness.
+    count: ctx => matchCount(ctx.text, /—/g)
   }
 ];
 
