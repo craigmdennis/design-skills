@@ -3,7 +3,8 @@ const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('node:fs');
 const {
-  makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated, assertAuthAvailable
+  makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated, assertAuthAvailable,
+  probePrompt, CLAUDE_BIN
 } = require('./isolation');
 
 test('makeCleanConfigDir creates a directory with no CLAUDE.md, hooks, or skills', () => {
@@ -30,8 +31,17 @@ test('nothing is copied from the real configuration directory', () => {
 });
 
 test('assertAuthAvailable names the variable it found', () => {
-  assert.strictEqual(assertAuthAvailable({ CLAUDE_CODE_OAUTH_TOKEN: 'x' }), 'CLAUDE_CODE_OAUTH_TOKEN');
   assert.strictEqual(assertAuthAvailable({ ANTHROPIC_API_KEY: 'x' }), 'ANTHROPIC_API_KEY');
+});
+
+test('assertAuthAvailable rejects a setup-token credential', () => {
+  // Every call passes --bare, which reads neither OAuth nor the keychain, so
+  // that token fails inside the CLI with "Not logged in". Accepting it here
+  // would start the run and fail one call later with a message about login.
+  assert.throws(
+    () => assertAuthAvailable({ CLAUDE_CODE_OAUTH_TOKEN: 'x' }),
+    /no ANTHROPIC_API_KEY/
+  );
 });
 
 test('assertAuthAvailable explains how to get a credential when none is set', () => {
@@ -72,56 +82,46 @@ test('cleanEnv points the CLI at the throwaway directory', () => {
   }
 });
 
-test('assertIsolated throws when the probe names a prose skill, proven by the pattern reason', () => {
-  // The reply also affirms NONE, so this can only fail by matching the
-  // contaminant pattern, not by lacking the affirmation.
+test('assertIsolated throws when the probe describes the skill under test', () => {
   assert.throws(
-    () => assertIsolated('Loaded skills: conversation-prose. NONE else.'),
-    /the probe returned/
+    () => assertIsolated('Check 8 is Signposting and significance.', 'conversation-prose'),
+    /the probe described conversation-prose/
   );
 });
 
-test('assertIsolated throws when the probe names an injection point, proven by the pattern reason', () => {
+test('assertIsolated names the skill it asked about in the message', () => {
   assert.throws(
-    () => assertIsolated('A UserPromptSubmit hook injected checks.md. NONE else.'),
-    /the probe returned/
+    () => assertIsolated('It bans metaphor and idiom.', 'documentation-prose'),
+    /documentation-prose/
   );
 });
 
-test('assertIsolated throws when the probe names a contaminant with no NONE affirmation', () => {
-  assert.throws(() => assertIsolated('A UserPromptSubmit hook injected checks.md'), /not isolated/i);
+test('assertIsolated passes when the model reports no such skill', () => {
+  assert.doesNotThrow(() => assertIsolated('NO SUCH SKILL', 'conversation-prose'));
 });
 
-test('assertIsolated throws when the probe names an unrelated skill that no pattern lists', () => {
-  assert.throws(
-    () => assertIsolated('Loaded skill: some-unrelated-helper'),
-    /did not report an empty context/
+test('assertIsolated passes when the denial carries surrounding prose', () => {
+  assert.doesNotThrow(
+    () => assertIsolated('I have no such skill in my context: NO SUCH SKILL', 'conversation-prose')
   );
 });
 
-test('assertIsolated throws when an unlisted contaminant also contains the word NONE', () => {
-  // The word NONE appearing anywhere is not enough: the reply names a skill no
-  // pattern lists, so it must fail even though it also says NONE elsewhere.
+test('assertIsolated throws on a self-report that lists context instead of answering', () => {
+  // A self-report probe cannot separate a clean context from a clean context
+  // plus harness text, because the model counts its own system prompt. Only the
+  // exact denial passes.
   assert.throws(
-    () => assertIsolated('Loaded skill: some-unrelated-helper. NONE else.'),
-    /did not report an empty context/
+    () => assertIsolated('Instruction files: none. Skills: none loaded.', 'conversation-prose'),
+    /not isolated/i
   );
 });
 
-test('assertIsolated passes on a clean probe', () => {
-  assert.doesNotThrow(() => assertIsolated('NONE'));
+test('probePrompt names the skill and demands the exact denial', () => {
+  const prompt = probePrompt('documentation-prose');
+  assert.match(prompt, /documentation-prose/);
+  assert.match(prompt, /NO SUCH SKILL/);
 });
 
-test('assertIsolated passes when the reply is NONE with an ordinary full stop', () => {
-  assert.doesNotThrow(() => assertIsolated('none.'));
-});
-
-test('assertIsolated throws on a sentence that means empty but is not the word NONE', () => {
-  // Deliberate limit: the check requires the exact reply the probe asked for,
-  // not any sentence meaning the same thing. A clean run worded differently
-  // stops and needs a rerun, which is the safe failure direction.
-  assert.throws(
-    () => assertIsolated('There are none.'),
-    /did not report an empty context/
-  );
+test('CLAUDE_BIN prefers the real binary over a wrapper on PATH', () => {
+  assert.strictEqual(CLAUDE_BIN, process.env.CLAUDE_CODE_EXECPATH || 'claude');
 });

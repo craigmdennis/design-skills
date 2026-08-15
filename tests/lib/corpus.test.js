@@ -7,10 +7,19 @@ const path = require('node:path');
 const CORPUS = path.join(__dirname, '..', 'corpus');
 const SKILLS = ['conversation-prose', 'documentation-prose'];
 
-test('each skill has six corpus files', () => {
+test('each skill has at least six corpus files, numbered from 01 with no gaps', () => {
   for (const skill of SKILLS) {
-    const files = fs.readdirSync(path.join(CORPUS, skill)).filter(f => f.endsWith('.md'));
-    assert.strictEqual(files.length, 6, `${skill} should have 6 corpus files`);
+    const files = fs.readdirSync(path.join(CORPUS, skill)).filter(f => f.endsWith('.md')).sort();
+    assert.ok(files.length >= 6, `${skill} should have at least 6 corpus files`);
+
+    // The runner takes each output's identifier from the first two characters
+    // of the filename, so a duplicate or a gap would silently overwrite a pair.
+    const ids = files.map(f => f.slice(0, 2));
+    assert.deepStrictEqual(
+      ids,
+      files.map((f, i) => String(i + 1).padStart(2, '0')),
+      `${skill} filenames should number from 01 with no gaps and no duplicates`
+    );
   }
 });
 

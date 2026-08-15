@@ -13,20 +13,29 @@ const CONFIG_DIR_VAR = 'CLAUDE_CONFIG_DIR';
 // does not carry the account token either; on the machine this was built for it
 // held only a plugin's OAuth state. So the credential comes from the
 // environment and nothing is copied to disk.
-const TOKEN_VARS = ['CLAUDE_CODE_OAUTH_TOKEN', 'ANTHROPIC_API_KEY'];
+// Only ANTHROPIC_API_KEY works. Every call passes --bare, which reads neither
+// OAuth nor the keychain, so a token from `claude setup-token` fails inside the
+// CLI with "Not logged in" and exit 1. Accepting that token here would let the
+// run start and fail one call later with a message about login.
+const TOKEN_VARS = ['ANTHROPIC_API_KEY'];
 
-const PROBE_PROMPT =
-  'List by name every skill, instruction file, and injected reminder currently ' +
-  'in your context. If there are none, reply with the single word NONE.';
+// The CLI on PATH may be a wrapper that injects its own instructions and a
+// project briefing. On the machine this was built for, that wrapper's briefing
+// quoted the skill under test, so a probe through it described the skill while
+// the same probe through the real binary reported no such skill.
+// CLAUDE_CODE_EXECPATH names the real binary.
+const CLAUDE_BIN = process.env.CLAUDE_CODE_EXECPATH || 'claude';
 
-const CONTAMINANTS = [
-  /conversation-prose/i,
-  /documentation-prose/i,
-  /published-prose/i,
-  /UserPromptSubmit/i,
-  /SessionStart/i,
-  /CLAUDE\.md/i
-];
+// A self-report probe cannot separate a clean context from a clean context plus
+// harness text. Asked to list what it carries, the model counts its own system
+// prompt and reports that something is present, whatever the configuration.
+// This asks a question that only a context carrying the skill can answer, which
+// is the one contaminant that would invalidate the measurement.
+function probePrompt(skill) {
+  return `Answer in one short sentence. What does the ${skill} writing skill ` +
+    'say? If you have no such skill in your context, answer exactly: ' +
+    'NO SUCH SKILL';
+}
 
 // The directory holds an empty settings file and nothing else. Copying anything
 // from the real configuration directory would defeat the isolation this module
@@ -51,11 +60,12 @@ function assertAuthAvailable(env) {
   const found = TOKEN_VARS.find(name => source[name]);
   if (!found) {
     throw new Error(
-      'no credential in the environment, so the isolated run cannot ' +
-      'authenticate. Run `claude setup-token` and export the result as ' +
-      'CLAUDE_CODE_OAUTH_TOKEN, or export ANTHROPIC_API_KEY. The login the ' +
-      'interactive CLI uses lives in the platform keychain, which an isolated ' +
-      'configuration directory cannot see.'
+      'no ANTHROPIC_API_KEY, so the isolated run cannot authenticate. Put the ' +
+      'key in .env.test at the repository root, as ANTHROPIC_API_KEY=sk-ant-… ' +
+      'on one line, and the runner loads it. Get a key from ' +
+      'console.anthropic.com. A token from `claude setup-token` does not work ' +
+      'here: every call passes --bare, which reads neither OAuth nor the ' +
+      'platform keychain.'
     );
   }
   return found;
@@ -65,25 +75,11 @@ function cleanEnv(configDir) {
   return Object.assign({}, process.env, { [CONFIG_DIR_VAR]: configDir });
 }
 
-function assertIsolated(probeOutput) {
-  for (const pattern of CONTAMINANTS) {
-    if (pattern.test(probeOutput)) {
-      throw new Error(
-        `the run is not isolated: the probe returned ${pattern}. ` +
-        'A before call that already has a skill loaded produces a false number. ' +
-        'See docs/superpowers/notes/2026-08-14-cli-isolation.md'
-      );
-    }
-  }
-
-  // The probe asks for the single word NONE when nothing is loaded. Requiring
-  // the whole reply to be that word catches a contaminant no pattern above
-  // names. A substring test does not: a reply that lists an untracked skill and
-  // ends "otherwise NONE" would pass.
-  if (!/^none[.!]?$/i.test(probeOutput.trim())) {
+function assertIsolated(probeOutput, skill) {
+  if (!/NO SUCH SKILL/i.test(probeOutput)) {
     throw new Error(
-      'the run is not isolated: the probe did not report an empty context. ' +
-      `It replied: ${probeOutput.slice(0, 200)}. ` +
+      `the run is not isolated: the probe described ${skill} instead of ` +
+      `reporting no such skill. It replied: ${probeOutput.slice(0, 200)}. ` +
       'A before call that already has a skill loaded produces a false number. ' +
       'See docs/superpowers/notes/2026-08-14-cli-isolation.md'
     );
@@ -92,5 +88,5 @@ function assertIsolated(probeOutput) {
 
 module.exports = {
   makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated,
-  assertAuthAvailable, PROBE_PROMPT
+  assertAuthAvailable, probePrompt, CLAUDE_BIN
 };
