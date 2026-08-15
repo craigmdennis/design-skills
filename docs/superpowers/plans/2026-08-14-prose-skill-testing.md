@@ -1323,8 +1323,9 @@ git commit -m "feat: add the run scorer"
 **Interfaces:**
 - Consumes: nothing.
 - Produces:
-  - `makeCleanConfigDir() => string` — creates a throwaway configuration directory holding an empty settings file and a copy of the credential, and returns its path.
+  - `makeCleanConfigDir() => string` — creates a throwaway configuration directory holding an empty settings file and nothing else, and returns its path.
   - `removeConfigDir(dir: string) => void` — deletes that directory. Safe to call twice and on a path that does not exist.
+  - `assertAuthAvailable(env?: object) => string` — returns the name of the environment variable carrying the credential, or throws with instructions. It never returns or prints the value.
   - `cleanEnv(configDir: string) => object` — an environment object for `child_process.spawnSync`.
   - `assertIsolated(probeOutput: string) => void` — throws when the probe shows a skill, a hook, or a routing line reached the call.
   - `PROBE_PROMPT: string` — the prompt Task 8 sends before any corpus prompt.
@@ -1336,7 +1337,8 @@ The controller established this empirically against CLI 2.1.232, so no search is
 - `CLAUDE_CONFIG_DIR` redirects the configuration directory. A run with it set wrote its session files into the throwaway directory instead of `~/.claude`, which is the isolation the harness needs.
 - An isolated configuration directory cannot see the credentials in `~/.claude/.credentials.json`, so the run fails with `Not logged in · Please run /login`.
 - `--bare` skips hooks, auto-memory, and CLAUDE.md discovery, and its help states that OAuth and the keychain are never read under it. It therefore needs `ANTHROPIC_API_KEY`, which is not set on this machine.
-- The route chosen, with the repository owner's explicit consent: copy only `~/.claude/.credentials.json` into the throwaway directory, and delete the whole directory when the run ends.
+- Copying `~/.claude/.credentials.json` into the throwaway directory does not authenticate the run either. That file was found to hold only a plugin's OAuth state, and the account login lives in the platform keychain, which no file copy carries.
+- The route chosen: the credential comes from the environment, in `CLAUDE_CODE_OAUTH_TOKEN` or `ANTHROPIC_API_KEY`. `claude setup-token` produces the first against a subscription. Nothing is copied to disk, and `cleanEnv` passes the whole environment through, so the variable reaches the isolated call unchanged.
 
 Record the CLI version from `claude --version` alongside these.
 
@@ -1349,7 +1351,9 @@ Create `tests/lib/isolation.test.js`:
 const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('node:fs');
-const { makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated } = require('./isolation');
+const {
+  makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated, assertAuthAvailable
+} = require('./isolation');
 
 test('makeCleanConfigDir creates a directory with no CLAUDE.md, hooks, or skills', () => {
   const dir = makeCleanConfigDir();
@@ -1364,29 +1368,37 @@ test('makeCleanConfigDir creates a directory with no CLAUDE.md, hooks, or skills
   }
 });
 
-test('the copied credential is present and owner-readable only', () => {
+test('nothing is copied from the real configuration directory', () => {
   const dir = makeCleanConfigDir();
   try {
-    const target = `${dir}/.credentials.json`;
-    assert.ok(fs.existsSync(target), 'the run cannot authenticate without it');
-    assert.strictEqual(fs.statSync(target).mode & 0o777, 0o600);
+    assert.deepStrictEqual(fs.readdirSync(dir).sort(), ['settings.json']);
     assert.strictEqual(fs.statSync(dir).mode & 0o777, 0o700);
   } finally {
     removeConfigDir(dir);
   }
 });
 
-test('the credential is the only thing copied from the real configuration', () => {
+test('assertAuthAvailable names the variable it found', () => {
+  assert.strictEqual(assertAuthAvailable({ CLAUDE_CODE_OAUTH_TOKEN: 'x' }), 'CLAUDE_CODE_OAUTH_TOKEN');
+  assert.strictEqual(assertAuthAvailable({ ANTHROPIC_API_KEY: 'x' }), 'ANTHROPIC_API_KEY');
+});
+
+test('assertAuthAvailable explains how to get a credential when none is set', () => {
+  assert.throws(() => assertAuthAvailable({}), /setup-token/);
+  assert.throws(() => assertAuthAvailable({}), /keychain/);
+});
+
+test('cleanEnv carries a credential through from the environment', () => {
   const dir = makeCleanConfigDir();
   try {
-    const entries = fs.readdirSync(dir).sort();
-    assert.deepStrictEqual(entries, ['.credentials.json', 'settings.json']);
+    const env = cleanEnv(dir);
+    assert.strictEqual(env.PATH, process.env.PATH, 'the environment should pass through');
   } finally {
     removeConfigDir(dir);
   }
 });
 
-test('removeConfigDir deletes the directory and the credential in it', () => {
+test('removeConfigDir deletes the directory', () => {
   const dir = makeCleanConfigDir();
   removeConfigDir(dir);
   assert.ok(!fs.existsSync(dir));
@@ -1434,12 +1446,12 @@ const path = require('node:path');
 // flattering number.
 const CONFIG_DIR_VAR = 'CLAUDE_CONFIG_DIR';
 
-// An isolated configuration directory cannot see the credentials in the real
-// one, so a run inside it fails with "Not logged in". Only this one file is
-// copied across, with owner-only permissions, and removeConfigDir deletes the
-// whole directory when the run ends. Nothing else from the real configuration
-// directory is copied, which is what keeps the run isolated.
-const CREDENTIALS = '.credentials.json';
+// An isolated configuration directory cannot see the login the interactive CLI
+// uses, which lives in the platform keychain. `~/.claude/.credentials.json`
+// does not carry the account token either; on the machine this was built for it
+// held only a plugin's OAuth state. So the credential comes from the
+// environment and nothing is copied to disk.
+const TOKEN_VARS = ['CLAUDE_CODE_OAUTH_TOKEN', 'ANTHROPIC_API_KEY'];
 
 const PROBE_PROMPT =
   'List by name every skill, instruction file, and injected reminder currently ' +
@@ -1454,30 +1466,37 @@ const CONTAMINANTS = [
   /CLAUDE\.md/i
 ];
 
+// The directory holds an empty settings file and nothing else. Copying anything
+// from the real configuration directory would defeat the isolation this module
+// exists to provide.
 function makeCleanConfigDir() {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-test-'));
   fs.chmodSync(dir, 0o700);
   fs.writeFileSync(path.join(dir, 'settings.json'), '{}\n');
-
-  const source = path.join(os.homedir(), '.claude', CREDENTIALS);
-  if (!fs.existsSync(source)) {
-    throw new Error(
-      `no credentials at ${source}. The isolated run cannot authenticate. ` +
-      'Log in with the CLI, or set ANTHROPIC_API_KEY and use --bare instead.'
-    );
-  }
-  const target = path.join(dir, CREDENTIALS);
-  fs.copyFileSync(source, target);
-  fs.chmodSync(target, 0o600);
-
   return dir;
 }
 
 // Every exit path deletes the directory: the end of a run, a thrown error, and
-// an interrupted process. A copied credential left behind is the failure this
-// guards against.
+// an interrupted process. The CLI writes session transcripts into it.
 function removeConfigDir(dir) {
   if (dir && fs.existsSync(dir)) fs.rmSync(dir, { recursive: true, force: true });
+}
+
+// Returns the name of the variable carrying the credential, never its value.
+// The caller may print the name.
+function assertAuthAvailable(env) {
+  const source = env || process.env;
+  const found = TOKEN_VARS.find(name => source[name]);
+  if (!found) {
+    throw new Error(
+      'no credential in the environment, so the isolated run cannot ' +
+      'authenticate. Run `claude setup-token` and export the result as ' +
+      'CLAUDE_CODE_OAUTH_TOKEN, or export ANTHROPIC_API_KEY. The login the ' +
+      'interactive CLI uses lives in the platform keychain, which an isolated ' +
+      'configuration directory cannot see.'
+    );
+  }
+  return found;
 }
 
 function cleanEnv(configDir) {
@@ -1497,7 +1516,8 @@ function assertIsolated(probeOutput) {
 }
 
 module.exports = {
-  makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated, PROBE_PROMPT
+  makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated,
+  assertAuthAvailable, PROBE_PROMPT
 };
 ```
 
@@ -1528,7 +1548,9 @@ Expected: output containing `NONE`, or output naming no prose skill and no hook.
 
 This makes one real model call and costs tokens. Run it once.
 
-If the output says `Not logged in`, the credential copy failed. Check that `~/.claude/.credentials.json` exists and that `makeCleanConfigDir` copied it.
+The probe needs a credential in the environment. Run `claude setup-token` and export the result as `CLAUDE_CODE_OAUTH_TOKEN`, or export `ANTHROPIC_API_KEY`, before running it.
+
+If the output says `Not logged in`, no credential reached the call. Confirm one of those two variables is set in the shell that runs the probe. Do not fall back to copying anything out of `~/.claude`; that was tried and the account token is not in any file there.
 
 If the output names `conversation-prose`, `documentation-prose`, or a hook, the isolation is not working. Record what you saw in the note and report BLOCKED rather than continuing, because every number the harness produces after that point would be measured against a before-text that already had the skill applied.
 
@@ -1550,7 +1572,7 @@ git commit -m "feat: isolate test runs from the local agent configuration"
 - Test: `tests/lib/run.test.js`
 
 **Interfaces:**
-- Consumes: `makeCleanConfigDir`, `removeConfigDir`, `cleanEnv`, `assertIsolated`, `PROBE_PROMPT` from `./lib/isolation`.
+- Consumes: `makeCleanConfigDir`, `removeConfigDir`, `cleanEnv`, `assertIsolated`, `assertAuthAvailable`, `PROBE_PROMPT` from `./lib/isolation`.
 - Produces:
   - `REWRITE_INSTRUCTION: string`
   - `buildAfterPrompt(skillBody: string, beforeText: string) => string`
@@ -1603,7 +1625,8 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { execFileSync, spawnSync } = require('node:child_process');
 const {
-  makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated, PROBE_PROMPT
+  makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated,
+  assertAuthAvailable, PROBE_PROMPT
 } = require('./lib/isolation');
 
 const SKILLS = ['conversation-prose', 'documentation-prose'];
@@ -1687,11 +1710,17 @@ function main(argv) {
   const runDir = outIndex >= 0 ? args[outIndex + 1] : path.join(__dirname, 'runs', today());
   const dryRun = args.includes('--dry-run');
 
+  // Fail before creating anything if the run cannot authenticate. An isolated
+  // configuration directory cannot see the keychain login the interactive CLI
+  // uses, so the credential comes from the environment.
+  const credentialVar = assertAuthAvailable();
+  console.log(`credential from ${credentialVar}`);
+
   const started = Date.now();
   const configDir = makeCleanConfigDir();
 
-  // The throwaway directory holds a copy of the credential, so every exit path
-  // deletes it: the end of the run, a thrown error, and an interrupted process.
+  // Every exit path deletes the directory: the end of the run, a thrown error,
+  // and an interrupted process.
   let removed = false;
   const cleanUp = () => {
     if (removed) return;
