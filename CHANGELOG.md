@@ -5,6 +5,45 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-08-15
+
+### A measured before and after, regenerable by anyone
+
+`tests/` holds a harness that answers thirteen fixed prompts twice, once with no
+skill loaded and once with the skill applied as a rewrite pass, and scores both.
+`node tests/all.js` runs the corpus, the score, the judge, and the report against
+one directory. `--plan` prints the call count and a cost estimate taken from what
+earlier runs recorded.
+
+Two scores. Eighteen detectors counted by script, of which thirteen are exact and
+produce the headline figure and five are approximate and are printed apart. A
+second score is marked by a Claude instance against the skill's own checks, three
+rounds, reported as a range.
+
+The measured result: `conversation-prose` 13.9 to 5.4 violations per 1,000 words,
+`documentation-prose` 24.6 to 3.9. Checks passed rose from 61.5-65.6% to 99.0%
+and from 69.8-71.4% to 95.2-96.8%.
+
+The judge is blinded. The two texts arrive as TEXT A and TEXT B, and nothing in
+the prompt says which one a skill produced. Labelling them raised the measured
+improvement from 32-36 points to 38. Which slot the after text takes flips
+between rounds, so the same text is marked from both positions and the gap is
+reported; it measured 1.0 point of 96. A control judges each before text against
+a copy of itself.
+
+The before texts are committed under `tests/baseline/`, with a hash of every
+corpus prompt, so the figures reproduce from fixed inputs and anyone can drop
+their own prose in and measure it. The reference run behind the published figures
+is committed too.
+
+### documentation-prose — a compact checks file
+
+The prompt now installs two files: the skill body and a one-page `checks.md`
+carrying eighteen numbered checks, for injection on every turn through the
+`UserPromptSubmit` hook. `conversation-prose` already worked this way. Checks 16
+to 18 apply to change documents only, and the file states that any other document
+passes all three, so the denominator stays fixed.
+
 ## 2026-08-14
 
 ### conversation-prose — four STE rules added, two declined, one claim corrected
