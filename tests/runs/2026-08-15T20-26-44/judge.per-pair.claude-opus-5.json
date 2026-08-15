@@ -1,0 +1,520 @@
+{
+  "rounds": 3,
+  "batch": false,
+  "control": false,
+  "blinded": true,
+  "calls": 39,
+  "model": "claude-opus-5",
+  "costUSD": 3.9231,
+  "results": [
+    {
+      "skill": "conversation-prose",
+      "pairs": 6,
+      "rows": [
+        {
+          "round": 1,
+          "before": 63,
+          "after": 95,
+          "a": 80,
+          "b": 78,
+          "denominator": 96,
+          "unparsed": 0
+        },
+        {
+          "round": 2,
+          "before": 59,
+          "after": 95,
+          "a": 78,
+          "b": 76,
+          "denominator": 96,
+          "unparsed": 0
+        },
+        {
+          "round": 3,
+          "before": 59,
+          "after": 95,
+          "a": 76,
+          "b": 78,
+          "denominator": 96,
+          "unparsed": 0
+        }
+      ]
+    },
+    {
+      "skill": "documentation-prose",
+      "pairs": 7,
+      "rows": [
+        {
+          "round": 1,
+          "before": 88,
+          "after": 122,
+          "a": 99,
+          "b": 111,
+          "denominator": 126,
+          "unparsed": 0
+        },
+        {
+          "round": 2,
+          "before": 90,
+          "after": 120,
+          "a": 112,
+          "b": 98,
+          "denominator": 126,
+          "unparsed": 0
+        },
+        {
+          "round": 3,
+          "before": 88,
+          "after": 122,
+          "a": 99,
+          "b": 111,
+          "denominator": 126,
+          "unparsed": 0
+        }
+      ]
+    }
+  ],
+  "positionSplit": {
+    "inA": {
+      "calls": 19,
+      "after": 96.91358024691358,
+      "before": 66.9753086419753
+    },
+    "inB": {
+      "calls": 20,
+      "after": 97.953216374269,
+      "before": 67.2514619883041
+    }
+  },
+  "marks": [
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "01",
+      "afterSlot": "b",
+      "a": 10,
+      "b": 16,
+      "before": 10,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "02",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 12,
+      "before": 12,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "03",
+      "afterSlot": "b",
+      "a": 11,
+      "b": 16,
+      "before": 11,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "04",
+      "afterSlot": "a",
+      "a": 15,
+      "b": 6,
+      "before": 6,
+      "after": 15,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "05",
+      "afterSlot": "b",
+      "a": 12,
+      "b": 16,
+      "before": 12,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "06",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 12,
+      "before": 12,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "01",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 10,
+      "before": 10,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "02",
+      "afterSlot": "b",
+      "a": 12,
+      "b": 16,
+      "before": 12,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "03",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 7,
+      "before": 7,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "04",
+      "afterSlot": "b",
+      "a": 6,
+      "b": 16,
+      "before": 6,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "05",
+      "afterSlot": "a",
+      "a": 15,
+      "b": 11,
+      "before": 11,
+      "after": 15,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "06",
+      "afterSlot": "b",
+      "a": 13,
+      "b": 16,
+      "before": 13,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "01",
+      "afterSlot": "b",
+      "a": 10,
+      "b": 16,
+      "before": 10,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "02",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 13,
+      "before": 13,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "03",
+      "afterSlot": "b",
+      "a": 8,
+      "b": 16,
+      "before": 8,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "04",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 7,
+      "before": 7,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "05",
+      "afterSlot": "b",
+      "a": 11,
+      "b": 16,
+      "before": 11,
+      "after": 16,
+      "denominator": 16
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "06",
+      "afterSlot": "a",
+      "a": 15,
+      "b": 10,
+      "before": 10,
+      "after": 15,
+      "denominator": 16
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 1,
+      "pair": "01",
+      "afterSlot": "b",
+      "a": 10,
+      "b": 17,
+      "before": 10,
+      "after": 17,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 1,
+      "pair": "02",
+      "afterSlot": "a",
+      "a": 18,
+      "b": 16,
+      "before": 16,
+      "after": 18,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 1,
+      "pair": "03",
+      "afterSlot": "b",
+      "a": 14,
+      "b": 18,
+      "before": 14,
+      "after": 18,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 1,
+      "pair": "04",
+      "afterSlot": "a",
+      "a": 17,
+      "b": 15,
+      "before": 15,
+      "after": 17,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 1,
+      "pair": "05",
+      "afterSlot": "b",
+      "a": 14,
+      "b": 18,
+      "before": 14,
+      "after": 18,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 1,
+      "pair": "06",
+      "afterSlot": "a",
+      "a": 17,
+      "b": 10,
+      "before": 10,
+      "after": 17,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 1,
+      "pair": "07",
+      "afterSlot": "b",
+      "a": 9,
+      "b": 17,
+      "before": 9,
+      "after": 17,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 2,
+      "pair": "01",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 10,
+      "before": 10,
+      "after": 16,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 2,
+      "pair": "02",
+      "afterSlot": "b",
+      "a": 16,
+      "b": 18,
+      "before": 16,
+      "after": 18,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 2,
+      "pair": "03",
+      "afterSlot": "a",
+      "a": 17,
+      "b": 13,
+      "before": 13,
+      "after": 17,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 2,
+      "pair": "04",
+      "afterSlot": "b",
+      "a": 14,
+      "b": 17,
+      "before": 14,
+      "after": 17,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 2,
+      "pair": "05",
+      "afterSlot": "a",
+      "a": 18,
+      "b": 14,
+      "before": 14,
+      "after": 18,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 2,
+      "pair": "06",
+      "afterSlot": "b",
+      "a": 14,
+      "b": 17,
+      "before": 14,
+      "after": 17,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 2,
+      "pair": "07",
+      "afterSlot": "a",
+      "a": 17,
+      "b": 9,
+      "before": 9,
+      "after": 17,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 3,
+      "pair": "01",
+      "afterSlot": "b",
+      "a": 9,
+      "b": 17,
+      "before": 9,
+      "after": 17,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 3,
+      "pair": "02",
+      "afterSlot": "a",
+      "a": 18,
+      "b": 16,
+      "before": 16,
+      "after": 18,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 3,
+      "pair": "03",
+      "afterSlot": "b",
+      "a": 14,
+      "b": 17,
+      "before": 14,
+      "after": 17,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 3,
+      "pair": "04",
+      "afterSlot": "a",
+      "a": 17,
+      "b": 14,
+      "before": 14,
+      "after": 17,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 3,
+      "pair": "05",
+      "afterSlot": "b",
+      "a": 14,
+      "b": 18,
+      "before": 14,
+      "after": 18,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 3,
+      "pair": "06",
+      "afterSlot": "a",
+      "a": 18,
+      "b": 12,
+      "before": 12,
+      "after": 18,
+      "denominator": 18
+    },
+    {
+      "skill": "documentation-prose",
+      "round": 3,
+      "pair": "07",
+      "afterSlot": "b",
+      "a": 9,
+      "b": 17,
+      "before": 9,
+      "after": 17,
+      "denominator": 18
+    }
+  ]
+}

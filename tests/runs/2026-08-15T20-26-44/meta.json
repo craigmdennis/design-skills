@@ -1,0 +1,14 @@
+{
+  "models": [
+    "claude-haiku-4-5-20251001",
+    "claude-opus-5"
+  ],
+  "modelPinned": "claude-opus-5",
+  "calls": 8,
+  "baseline": "tests/baseline",
+  "costUSD": 0.4874,
+  "date": "2026-08-15",
+  "cli": "2.1.232 (Claude Code)",
+  "corpusCommit": "d8f7993",
+  "instructionHash": "64531d4d59d4"
+}

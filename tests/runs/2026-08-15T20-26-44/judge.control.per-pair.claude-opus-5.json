@@ -1,0 +1,41 @@
+{
+  "rounds": 1,
+  "batch": false,
+  "control": true,
+  "blinded": true,
+  "calls": 13,
+  "model": "claude-opus-5",
+  "costUSD": 1.1247,
+  "results": [
+    {
+      "skill": "conversation-prose",
+      "pairs": 6,
+      "rows": [
+        {
+          "round": 1,
+          "before": 57,
+          "after": 57,
+          "a": 57,
+          "b": 57,
+          "denominator": 96,
+          "unparsed": 0
+        }
+      ]
+    },
+    {
+      "skill": "documentation-prose",
+      "pairs": 7,
+      "rows": [
+        {
+          "round": 1,
+          "before": 94,
+          "after": 94,
+          "a": 94,
+          "b": 94,
+          "denominator": 126,
+          "unparsed": 0
+        }
+      ]
+    }
+  ]
+}
