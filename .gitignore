@@ -1,3 +1,8 @@
 .DS_Store
 .field-notes/
 tmp/
+.env.test
+
+# Every run is scratch. The reference run behind the published figure is the one
+# exception, and it is added by name with `git add -f` when it is chosen.
+tests/runs/*
