@@ -180,6 +180,44 @@ function build(runDir) {
     `($${corpusCost.toFixed(2)} corpus, $${judgeCost.toFixed(2)} judging` +
     `${controlCost ? `, $${controlCost.toFixed(2)} control` : ''}) |`);
   out.push('');
+  // The harness reads the skill from ~/.claude/skills/, and prompts/ holds what
+  // a reader installs. A figure produced against a drifted copy describes a
+  // skill that is not in this repository, so a mismatch is named here.
+  const fingerprints = Object.entries((meta.skills || {}))
+    .map(([skill, entry]) => [skill, entry.fingerprint])
+    .filter(([, print]) => print);
+  if (fingerprints.length) {
+    out.push('The skill measured, and whether a reader installing from `prompts/` gets the same checks:');
+    out.push('');
+    out.push('| skill | installed SKILL.md | installed checks.md | checks | same checks as `prompts/` |');
+    out.push('|---|---|---|---:|---|');
+    for (const [skill, print] of fingerprints) {
+      const same = print.checksMatchPublished === null
+        ? 'not comparable'
+        : (print.checksMatchPublished ? 'yes' : '**no**');
+      out.push(
+        `| ${skill} | \`${print.installed['SKILL.md'] || 'missing'}\` ` +
+        `| \`${print.installed['checks.md'] || 'none'}\` | ${print.checkCount ?? 'n/a'} | ${same} |`
+      );
+    }
+    out.push('');
+    out.push(
+      'The published copy is de-personalised and re-wrapped, so its bytes never ' +
+      'match the installed one. The check list is what has to match, because the ' +
+      'judge marks against it and it sets every denominator above.'
+    );
+    out.push('');
+    if (fingerprints.some(([, p]) => p.checksMatchPublished === false)) {
+      out.push(
+        'A skill marked **no** was measured against a check list that differs from ' +
+        'the one in `prompts/`. The figures describe the locally installed copy, ' +
+        'and a reader installing from this repository would be measuring something ' +
+        'else.'
+      );
+      out.push('');
+    }
+  }
+
   if (!meta.skills && scores.length > 1) {
     out.push(
       'The corpus figure covers one skill. Each skill is a separate invocation of ' +

@@ -106,6 +106,59 @@ function readSkillBody(skill) {
   return fs.readFileSync(file, 'utf8');
 }
 
+// The numbered check titles, which are what the judge marks against and what
+// sets the denominator of every judged figure.
+function checkTitles(text) {
+  if (!text) return null;
+  return [...text.matchAll(/^\s*(\d+)\.\s+\*\*(.+?)\.?\*\*/gm)].map(m => `${m[1]} ${m[2]}`);
+}
+
+// The text between two markers in a prompt file, which is what a reader
+// installs when they paste it.
+function embedded(promptText, name) {
+  const start = promptText.indexOf(`===== BEGIN ${name} =====`);
+  const end = promptText.indexOf(`===== END ${name} =====`);
+  if (start < 0 || end <= start) return null;
+  return promptText.slice(start + `===== BEGIN ${name} =====`.length, end).trim();
+}
+
+// The skill under test comes from ~/.claude/skills/, and prompts/ holds what a
+// reader installs. The bytes of the two never match: the published copy is
+// de-personalised and re-wrapped on purpose. What has to match is the check
+// list, because that is what the judge marks against and what sets every
+// denominator. A figure produced against a different check list describes a
+// skill nobody can install from this repository.
+function skillFingerprint(skill) {
+  const digest = file => (fs.existsSync(file)
+    ? crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex').slice(0, 12)
+    : null);
+
+  const installedChecksFile = path.join(SKILL_HOME, skill, 'checks.md');
+  const installedChecks = fs.existsSync(installedChecksFile)
+    ? fs.readFileSync(installedChecksFile, 'utf8')
+    : null;
+
+  const prompt = path.join(__dirname, '..', 'prompts', `${skill}.md`);
+  const publishedChecks = fs.existsSync(prompt)
+    ? embedded(fs.readFileSync(prompt, 'utf8'), 'checks.md')
+    : null;
+
+  const installedTitles = checkTitles(installedChecks);
+  const publishedTitles = checkTitles(publishedChecks);
+
+  return {
+    installed: {
+      'SKILL.md': digest(path.join(SKILL_HOME, skill, 'SKILL.md')),
+      'checks.md': digest(installedChecksFile)
+    },
+    checkCount: installedTitles ? installedTitles.length : null,
+    publishedCheckCount: publishedTitles ? publishedTitles.length : null,
+    checksMatchPublished: installedTitles && publishedTitles
+      ? JSON.stringify(installedTitles) === JSON.stringify(publishedTitles)
+      : null
+  };
+}
+
 function today() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -318,7 +371,14 @@ function mergeMeta(file, skill, fresh) {
   }
 
   const skills = Object.assign({}, existing && existing.skills);
-  skills[skill] = { calls: fresh.calls, costUSD: fresh.costUSD, models: fresh.models };
+  skills[skill] = {
+    calls: fresh.calls,
+    costUSD: fresh.costUSD,
+    models: fresh.models,
+    // Each skill has its own installed files, so the fingerprint belongs to the
+    // skill and not to the run.
+    fingerprint: fresh.skillFingerprint || null
+  };
 
   const totals = Object.values(skills).reduce(
     (sum, entry) => ({
@@ -328,12 +388,14 @@ function mergeMeta(file, skill, fresh) {
     { calls: 0, costUSD: 0 }
   );
 
-  return Object.assign({}, fresh, {
+  const merged = Object.assign({}, fresh, {
     models: [...new Set(Object.values(skills).flatMap(entry => entry.models))].sort(),
     calls: totals.calls,
     costUSD: Number(totals.costUSD.toFixed(4)),
     skills
   });
+  delete merged.skillFingerprint;
+  return merged;
 }
 
 function main(argv) {
@@ -509,7 +571,8 @@ function main(argv) {
       date: today(),
       cli: cliVersion(env),
       corpusCommit: gitCommit(),
-      instructionHash: crypto.createHash('sha256').update(REWRITE_INSTRUCTION).digest('hex').slice(0, 12)
+      instructionHash: crypto.createHash('sha256').update(REWRITE_INSTRUCTION).digest('hex').slice(0, 12),
+      skillFingerprint: skillFingerprint(skill)
     });
     fs.writeFileSync(path.join(runDir, 'meta.json'), `${JSON.stringify(meta, null, 2)}\n`);
 
@@ -546,5 +609,5 @@ if (require.main === module) {
 module.exports = {
   buildAfterPrompt, REWRITE_INSTRUCTION, stamp, assertRunDirFree, readBaseline,
   assertBaselineComplete, assertBaselineCorpusMatches, assertBaselineModelMatches,
-  corpusHash, corpusFileHashes, baselineWorkList, pinnedModel, mergeMeta
+  corpusHash, corpusFileHashes, baselineWorkList, pinnedModel, mergeMeta, skillFingerprint
 };

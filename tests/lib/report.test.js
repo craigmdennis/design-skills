@@ -179,3 +179,40 @@ test('the report states what the figures do not show', () => {
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test('the report names a skill measured against a different check list', () => {
+  const dir = makeRun();
+  try {
+    const meta = JSON.parse(fs.readFileSync(path.join(dir, 'meta.json'), 'utf8'));
+    meta.skills['conversation-prose'].fingerprint = {
+      installed: { 'SKILL.md': 'aaaaaaaaaaaa', 'checks.md': 'bbbbbbbbbbbb' },
+      checkCount: 16, publishedCheckCount: 15, checksMatchPublished: false
+    };
+    fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify(meta));
+
+    const report = build(dir);
+    assert.match(report, /\| \*\*no\*\* \|/);
+    assert.match(report, /differs from the one in `prompts\/`/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('the report confirms the check list a reader would install', () => {
+  const dir = makeRun();
+  try {
+    const meta = JSON.parse(fs.readFileSync(path.join(dir, 'meta.json'), 'utf8'));
+    meta.skills['conversation-prose'].fingerprint = {
+      installed: { 'SKILL.md': 'aaaaaaaaaaaa', 'checks.md': 'bbbbbbbbbbbb' },
+      checkCount: 16, publishedCheckCount: 16, checksMatchPublished: true
+    };
+    fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify(meta));
+
+    const report = build(dir);
+    assert.match(report, /\| yes \|/);
+    assert.ok(!/differs from the one in/.test(report));
+    assert.match(report, /\| 16 \|/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});

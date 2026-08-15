@@ -7,7 +7,7 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const {
   buildAfterPrompt, REWRITE_INSTRUCTION, stamp, assertRunDirFree, assertBaselineComplete,
-  assertBaselineCorpusMatches, corpusHash, pinnedModel, mergeMeta
+  assertBaselineCorpusMatches, corpusHash, pinnedModel, mergeMeta, skillFingerprint
 } = require('../run');
 
 const RUN_JS = path.join(__dirname, '..', 'run.js');
@@ -240,5 +240,45 @@ test('merging into a corrupt metadata file starts over instead of throwing', () 
     assert.strictEqual(meta.calls, 2);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('a fingerprint is stored per skill, not per run', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-meta-'));
+  try {
+    const file = path.join(dir, 'meta.json');
+    fs.writeFileSync(file, JSON.stringify(mergeMeta(file, 'a', {
+      models: ['m'], calls: 1, costUSD: 0.1,
+      skillFingerprint: { installed: { 'SKILL.md': 'aaa' }, checksMatchPublished: true }
+    })));
+    const meta = mergeMeta(file, 'b', {
+      models: ['m'], calls: 1, costUSD: 0.1,
+      skillFingerprint: { installed: { 'SKILL.md': 'bbb' }, checksMatchPublished: true }
+    });
+
+    assert.strictEqual(meta.skills.a.fingerprint.installed['SKILL.md'], 'aaa',
+      'the second skill did not overwrite the first');
+    assert.strictEqual(meta.skills.b.fingerprint.installed['SKILL.md'], 'bbb');
+    assert.ok(!('skillFingerprint' in meta), 'it does not sit at the top level');
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('the published prompt installs the same checks the figures are measured against', t => {
+  // The harness reads the skill from ~/.claude/skills/ and the README publishes
+  // figures from it. A reader installs from prompts/. If the two check lists
+  // ever diverge, the published figure describes a skill nobody can install.
+  for (const skill of ['conversation-prose', 'documentation-prose']) {
+    const print = skillFingerprint(skill);
+    if (!print.installed['checks.md']) {
+      t.diagnostic(`${skill} is not installed with a checks.md, so nothing was compared`);
+      continue;
+    }
+    assert.strictEqual(
+      print.checksMatchPublished, true,
+      `${skill}: the installed checks (${print.checkCount}) and the checks in ` +
+      `prompts/${skill}.md (${print.publishedCheckCount}) are not the same list`
+    );
   }
 });
