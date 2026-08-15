@@ -16,12 +16,20 @@ under an author's own name. Those are two separate genres; see
 ## What the prompt does
 
 1. Writes `~/.claude/skills/documentation-prose/SKILL.md`.
-2. Prints the full path.
-3. Offers a routing line for `~/.claude/CLAUDE.md`, and adds it only on
+2. Writes `~/.claude/skills/documentation-prose/checks.md`, a one-page version of
+   the eighteen checks.
+3. Prints both paths.
+4. Offers a routing line for `~/.claude/CLAUDE.md`, and adds it only on
    confirmation.
 
 There is no interview. The skill is complete as installed, because a
 documentation register carries no personal preferences by design.
+
+The eighteen checks appear twice: as procedures in `SKILL.md`, and as one line
+each in `checks.md`. A session loads the long file once. The short file is small
+enough to inject on every turn, through the same `UserPromptSubmit` hook that
+`conversation-prose.md` describes. Edit both together, and confirm the two
+agree.
 
 ## Why the routing line matters
 
@@ -53,22 +61,25 @@ following, and nothing else.
    file includes before-and-after examples containing the exact wording a rule
    bans; those have to be reproduced exactly for the rules to be usable.
 
-3. Print the full path of the file.
+3. Write the text between BEGIN checks.md and END checks.md to
+   ~/.claude/skills/documentation-prose/checks.md, verbatim.
 
-4. Ask whether to add these two lines to ~/.claude/CLAUDE.md, and add them only
+4. Print the full path of both files.
+
+5. Ask whether to add these two lines to ~/.claude/CLAUDE.md, and add them only
    if I say yes:
 
    When writing or editing documentation of any kind, use the
    documentation-prose skill. This applies whether or not the skill was
    invoked.
 
-5. Stop. Do not create or change any other file. Do not change settings. Do not
+6. Stop. Do not create or change any other file. Do not change settings. Do not
    install anything else.
 
 ===== BEGIN SKILL.md =====
 ---
 name: documentation-prose
-description: Use when writing or editing documentation of any kind — skill files, README files, specs, plans, architecture notes, code comments, API reference, contributing guides, changelogs, runbooks. Applies third-person impersonal voice, the register of specifications and reference manuals. Governs documentation only; it does not govern conversational replies or prose published under an author's own name.
+description: Use when writing or editing documentation of any kind — skill files, README files, specs, plans, architecture notes, code comments, API reference, contributing guides, changelogs, runbooks, and pull request titles and bodies. Applies third-person impersonal voice, the register of specifications and reference manuals. Governs documentation only; it does not govern conversational replies or prose published under an author's own name.
 ---
 
 # Documentation prose
@@ -77,7 +88,10 @@ description: Use when writing or editing documentation of any kind — skill fil
 
 This skill governs documentation: skill files, README files, specifications,
 implementation plans, architecture notes, code comments, API reference,
-contributing guides, changelogs, and runbooks.
+contributing guides, changelogs, runbooks, and pull request titles and bodies.
+
+A pull request body is documentation, and the register applies to it in full. It
+also has a shape of its own. See "Change documents" below.
 
 It does not govern two other genres:
 
@@ -89,6 +103,86 @@ It does not govern two other genres:
   the `published-prose` skill where it is installed.
 
 Both companion skills are optional. This one is complete on its own.
+
+## The checks
+
+**Run all eighteen on the draft before saving.**
+
+Each check is a procedure, not a list of words to search for. A word list finds
+only the words on it. Where a check gives example words, they illustrate the
+class. Apply the procedure.
+
+Every check applies to every sentence and to every clause, including headings,
+table cells, and code comments.
+
+**1. Personal name.** Search for every personal name, and every possessive
+referring to a person. Replace with the functional role, or delete the sentence.
+A name inside a quoted example becomes `[Name]`.
+
+**2. Decision date.** Search for every date. If it records who decided something
+or when something was agreed, delete it. Version control holds that history with
+an author and a timestamp.
+
+**3. Agent in a subordinate clause.** Read each subordinate clause. If it names
+the person acting, use the agentless passive. The main clause stays imperative.
+
+**4. Possessive determiner.** Search for *the user's, their, his, her, my, our*.
+Delete the determiner. Where the noun then works as a general one, drop the
+article too.
+
+**5. Heading naming an owner.** Read every heading and label. It states what the
+section covers, and never whose it is.
+
+**6. First and second person.** Search for *I, we, my, our, your* referring to
+the document's owner. Delete them. The imperative *you* is standard in
+instructions and stays.
+
+**7. Figurative language.** For each content word, ask whether it names what
+physically happened. Metaphor, idiom, analogy, and personification all go,
+including figurative phrasal verbs, which read as ordinary English.
+
+**8. Replacement that kept the image.** For every phrase replaced under check 7,
+ask whether the new wording carries the original picture. Apply the replacement
+method below.
+
+**9. Synonym for variety.** For each concept that appears twice, check that both
+instances use the same word. Reuse the first term.
+
+**10. One term per role.** Pick one term for each role in the document and
+repeat it. Varying it makes a reader ask whether two roles are meant.
+
+**11. One idea per sentence.** Around 20 words in an instruction. Use the number
+to notice a sentence carrying two ideas, and split it.
+
+**12. Active voice, subject first.** The main clause is active with its subject
+first. The agentless passive appears only in a subordinate clause, where check 3
+puts it.
+
+**13. Plainest accurate word.** Use the short common word. "Use" instead of
+"utilize", "help" instead of "facilitate".
+
+**14. Cross-reference a reader may not have.** Search for every reference to
+another file. A shared document stands alone, so a pointer to a personal
+instruction file gets removed, or replaced with the content it names.
+
+**15. Quoted material is exempt.** Verbatim quotations, before-and-after pairs,
+banned phrases a rule prints, code samples, and command output are reference.
+Checks 1 to 14 do not apply inside them.
+
+Checks 16 to 18 apply to a change document: a pull request body, a changelog
+entry, or a release note. Any other document passes all three.
+
+**16. A state that exists only inside the branch.** An approach tried and
+reverted, a defect introduced and fixed, a diagnostic method. Keep the mechanism
+a reviewer needs and remove the incident.
+
+**17. A mechanism named by route or folder.** Every mechanism the change touches
+gets a term, defined once and reused.
+
+**18. A missing out-of-scope part.** Where the change leaves a related mechanism
+unchanged, the document says so and gives the reason.
+
+The sections below explain the checks and give the worked examples.
 
 ## The standard
 
@@ -197,6 +291,67 @@ Then write that. The verb is almost always one of a small plain set: `is`, `has`
 | "That kills a habit" | "That removes a habit" | "This rule stops a behaviour." |
 | "where a comparison earns its place" | "where a comparison does real work" | "where a comparison helps the reader understand" |
 
+## Change documents
+
+A pull request body, a changelog entry, and a release note all describe a
+change. Each one has a defined shape, given below.
+
+### Every sentence describes the merged state
+
+A change document describes the code as it will exist after the change is
+merged. A reader treats each described state as real and reachable, so each
+sentence must name something they can observe: in the merged code, in the
+branch it replaces, or in the tracker.
+
+| Sentence describes | Include |
+|---|---|
+| The behaviour after merge | Yes |
+| The behaviour before, on the target branch | Yes, where the change replaces it |
+| A mechanism that explains a line of code | Yes |
+| An approach tried and reverted inside the branch | No |
+| A defect introduced and fixed inside the branch | No |
+| The method used to diagnose something | No |
+| Confirmation that a related mechanism did not change | State it as unchanged |
+
+State the mechanism a reviewer needs, and leave out the incident that revealed
+it. "sharp converts a transparent alpha channel to black" explains the call to
+`flatten`. "11 cards rendered as a black rectangle" describes a build that no
+reader can produce from the merged code.
+
+A warning about an approach that fails belongs in a code comment at the
+declaration it applies to, where it reaches whoever is about to repeat the
+mistake. A change document is read once.
+
+### Name every mechanism involved
+
+Where a change involves two mechanisms, the document names each one, defines
+each term once, and reuses those terms throughout.
+
+Refer to a mechanism by a term, not by a route or a folder. A body that
+describes "extending the `/x/` generator" in one paragraph and "the crop in
+`Base`" in another reads as one mechanism to anyone who has not opened both
+files.
+
+| Before | After |
+|---|---|
+| "extends the `/x/` generator" | "**The generated card.** Company pages under `/x/` serve a card rendered at build time." |
+| "previously passed the hero image to `Base`" | "**The hero crop.** Every other page passes an image to `Base`, which crops it." |
+| "the `/x/` cards are unchanged" | "the company cards are unchanged" |
+
+### The parts, in order
+
+1. **The mechanisms involved.** Each mechanism the change affects, each with a
+   term defined once, and a statement of which one the change alters.
+2. **What the change does**, in the merged state.
+3. **The behaviour a reviewer checks**: resolution order, conditions, edge
+   cases, and the reason for each.
+4. **Verification**: outcomes a reviewer can reproduce.
+5. **The files**, each with the path and what it now contains.
+6. **What is out of scope**, and the reason.
+
+Parts 1 and 6 are the ones most often left out, and they are the two that stop
+a reviewer misreading an unchanged mechanism as an oversight.
+
 ## Quoted examples are exempt
 
 Quoted material is reference. Do not rewrite it.
@@ -210,25 +365,43 @@ replace it with a bracketed placeholder such as `[Name]`. Where the name is the
 point, such as an example showing why a quotation cannot be published, keep the
 placeholder and say why it is there.
 
-## Self-check
+## The compact checks file
 
-Before saving any documentation, scan for:
+`checks.md` beside this file states the same eighteen checks in one line each.
+It is short enough to inject on every turn, where this file is long enough that
+a session loads it once. Edit both together, and confirm the two agree.
 
-- **A personal name**, or a possessive referring to one. Delete or replace with
-  the functional role.
-- **A date recording who decided something.** Delete it. Version control has it.
-- **An agent that can be deleted** from a subordinate clause. "when the user
-  asks" becomes "when asked".
-- **A heading naming an owner** instead of stating what the section covers.
-- **Any metaphor, idiom, or personification**, including quiet ones and
-  figurative phrasal verbs.
-- **A replacement that kept the original image.** Run the replacement method
-  again.
-- **A synonym used to avoid repeating a word.** Reuse the first term.
-- **A cross-reference to a file the reader may not have**, such as a personal
-  instruction file. A shared document must stand alone.
-- **First or second person** referring to the document's owner. "I decided",
-  "as we agreed", "my preference". The exception is the imperative "you", which
-  is standard in instructions and stays.
+## Editing this file
+
+Every edit to this file runs the eighteen checks over the whole file, including
+the text the edit did not touch.
 ===== END SKILL.md =====
+
+===== BEGIN checks.md =====
+# documentation-prose: run these on the draft before saving
+
+Procedures, not word lists. A word list finds only the words on it. Run every check on every sentence and on every clause, including headings, table cells, and code comments.
+
+1. **Personal name.** Every personal name, and every possessive referring to a person. Replace with the functional role (the author, the reader, the caller, the maintainer), or delete the sentence. A name inside a quoted example becomes [Name].
+2. **Decision date.** Every date. If it records who decided something or when something was agreed, delete it. Version control holds that history with an author and a timestamp.
+3. **Agent in a subordinate clause.** Read each subordinate clause. If it names the person acting, use the agentless passive: "when the user asks a question" becomes "when asked a question". The main clause stays imperative.
+4. **Possessive determiner.** The user's, their, his, her, my, our. Delete the determiner. Where the noun then works as a general one, drop the article too: "the user's prose" becomes "the prose".
+5. **Heading naming an owner.** Every heading and label states what the section covers, never whose it is.
+6. **First and second person.** I, we, my, our, your, referring to the document's owner. Delete them. The imperative "you" is standard in instructions and stays.
+7. **Figurative language.** Does each content word name what physically happened? Metaphor, idiom, analogy, and personification all go, including figurative phrasal verbs, which read as ordinary English: "glossed over", "went the same way", "bolt on".
+8. **Replacement that kept the image.** For every phrase replaced under check 7, ask whether the new wording carries the original picture. Answer who did it, what they did, and to what, then write that.
+9. **Synonym for variety.** One concept, one word. Reuse the first term.
+10. **One term per role.** One term for each role in the document, repeated. Varying it makes a reader ask whether two roles are meant.
+11. **One idea per sentence.** Around 20 words in an instruction. Use the number to notice a sentence carrying two ideas, and split it.
+12. **Active voice, subject first.** The main clause is active with its subject first. The agentless passive appears only in a subordinate clause, where check 3 puts it.
+13. **Plainest accurate word.** The short common word. "Use" instead of "utilize", "help" instead of "facilitate".
+14. **Cross-reference a reader may not have.** Every reference to another file. A shared document stands alone, so a pointer to a personal instruction file gets removed or replaced with the content it names.
+15. **Quoted material is exempt.** Verbatim quotations, before-and-after pairs, banned phrases a rule prints, code samples, and command output are reference. Checks 1 to 14 do not apply inside them.
+
+Checks 16 to 18 apply to a change document: a pull request body, a changelog entry, or a release note. Any other document passes all three.
+
+16. **A state that exists only inside the branch.** An approach tried and reverted, a defect introduced and fixed, a diagnostic method. Keep the mechanism a reviewer needs and remove the incident.
+17. **A mechanism named by route or folder.** Every mechanism the change touches gets a term, defined once and reused. "extending the /x/ generator" names a route, not a mechanism.
+18. **A missing out-of-scope part.** Where the change leaves a related mechanism unchanged, the document says so and gives the reason.
+===== END checks.md =====
 ````

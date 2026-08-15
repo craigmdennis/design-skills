@@ -242,7 +242,7 @@ agent's prose: the metaphor ban as it is worded there, "no caveating", the
 proscribed word list, fragment closers, the spelling convention, the em-dash
 ban, the bold budget.
 
-The em-dash ban there is a voice preference. ASD-STE100 permits the em dash and
+The em-dash ban in `published-prose` is a voice preference. ASD-STE100 permits the em dash and
 bans only the semicolon, so do not re-derive that ban from the standard.
 
 The one partial exception is `published-prose`'s "do not add the why when the
@@ -258,15 +258,17 @@ ones.**
 Each check is a procedure, not a list of words to search for. A word list finds
 only the words on it, and the failure that produced this section was a banned
 construction no list contained. Where a check gives example words, they
-illustrate the class. The procedure decides.
+illustrate the class. Apply the procedure.
 
 Every check applies to every sentence, including transitions and lead-ins. A
 sentence that states no finding is the likeliest place for a banned
 construction. It introduces or connects two other sentences, so a proof-read skips it.
 
-**1. Animacy.** Take the subject of each sentence. If the subject is not a
-person or a group of people, test the verb: does it require something alive?
-Rewrite every sentence where it does.
+**1. Animacy.** Take every verb in the sentence, including the ones inside
+subordinate clauses and participial phrases, and find the subject of each. If a
+subject is not a person or a group of people, test its verb: does it require
+something alive? Rewrite every clause where it does. *"before showing itself"*
+fails, and the main verb of that sentence passes.
 
 Verbs that require a living actor include *want, know, think, decide, refuse,
 agree, try, promise, care, like, enjoy, suffer, win, lose, beat, earn, deserve,
@@ -288,7 +290,9 @@ questions — who did it, what did they do, to what — and writing that sentenc
 Do not substitute a milder word inside the same image. That produces a second
 metaphor.
 
-An abstract noun standing in for a concrete act fails this check too.
+An abstract noun standing in for a concrete act fails this check too. An abstract noun given a physical property or physical motion fails too: *"the two share one shape"*, *"the construction moved"*, *"the rule sits above"*. Name what is alike, or where the words appeared.
+
+
 *"announced candour"* names a quality. Write what the sentence did: *"stated
 that what follows is worth saying"*.
 
@@ -316,18 +320,29 @@ reader never proposed, delete the clause.
 instead of describing it: *earned, paid off, shines, elegant, clean, neat, nice,
 exactly right, robust*. Delete the sentence and state the fact underneath it.
 
+Blame is the same move inverted. *"The failure was mine"*, *"my mistake"*, *"I
+got that wrong"*, *"apologies for that"* rate the work as praise does, and the
+reader can act on neither. State what broke and what changed.
+
 **8. Signposting and significance.** Take the subject of each sentence. If the
 subject names a part of the message (the cause, the point, the reason, the
 answer, the version, one thing) and the sentence only describes what comes next,
-delete it. The next sentence says it. Delete also any sentence that explains why
-a finding matters, what it teaches, or why a technique is good. The reader
-decides what it means. Position does not matter, and the subject test decides.
+delete it. The next sentence says it. Delete also any sentence or clause that
+explains why a finding matters, what it teaches, or why a technique is good. A
+trailing *"which is exactly why…"* does the same inside a clause. The reader
+decides what it means. Position does not matter. Apply the subject test.
 
 - *"The mechanical cause is narrower."* → delete it, then state the cause
 - *"Worth stating plainly, because it bears on the rest."* → delete it, then
   state the thing
 - *"The short version is this."* → delete it
 - *"One thing worth flagging."* → delete it
+
+**Delete any "worth ...ing" with a speech act**: worth naming,
+worth stating, worth flagging, worth noting, worth mentioning, worth saying.
+The verb varies and the construction does not. It appears as a whole sentence, as a
+clause, and as a tail on a noun ("a gap worth naming"). The subject test finds
+only the first of the three. Delete the phrase and say the thing.
 
 **9. Repeated meaning.** For each concept that appears twice, check whether both
 instances use the same word. Two words for one concept means one is a synonym
@@ -351,7 +366,7 @@ positive claim. The reader's own contrasts stay untouched, in their own wording.
 **12. Banned list.** Check every entry in "Words the reader has banned" below,
 in each form the entry names.
 
-**13. Shape.** Count the headers and tables. A question with a one-line answer
+**13. Structure.** Count the headers and tables. A question with a one-line answer
 takes neither. Structure is for an audit, a comparison, or a plan. Three or more
 steps or conditions take a numbered list, which STE requires for a sequence.
 
@@ -430,13 +445,12 @@ the present perfect stays. STE also caps a paragraph at six sentences on one
 topic, which is a rule for a manual and does not fit a reply.
 
 **Which of these an agent can enforce.** STE's rules divide in two. Structural
-rules describe the shape of a sentence and can be applied from the description
+rules describe how a sentence is built and can be applied from the description
 alone: voice, sentence length, noun clusters, punctuation, one idea per
 sentence, no dropped words. Lexical rules depend on the dictionary, which
 lists the approved word for each meaning. The dictionary is licensed and
-aerospace-oriented, so it is absent here, and without it the lexical rules
-become a preference for the plainest available word used the same way every
-time. Apply the structural rules as rules. Apply the lexical rules as a
+aerospace-oriented, so it is absent here. Without it the lexical rules become a
+preference for the plainest available word, used the same way every time. Apply the structural rules as rules. Apply the lexical rules as a
 direction, and never claim a compliance that was not checked.
 
 ### Scope: minimalism
@@ -461,7 +475,7 @@ State the finding. Stop. The reader decides what it means.
 Minimalism bans this specifically. Do not rate, praise, or dramatise your
 own output or the techniques you used. (Check 7.)
 
-Banned shapes: *"earned its keep"*, *"paid off"*, *"turned out to be exactly
+Banned constructions: *"earned its keep"*, *"paid off"*, *"turned out to be exactly
 right"*, *"beautifully, it also…"*, *"this is where X really shines"*.
 
 The failure is worse when the underlying fact is unflattering. One rejected
@@ -532,7 +546,7 @@ it.
 Where this rule and ASD-STE100 disagree, STE takes priority. Analogy is not
 allowed, however clarifying it feels.
 
-What stays, because it is not figurative language:
+These stay, because they are not figurative language:
 
 - **Worked examples.** Real input, real output, a concrete case. These are the
   primary explanation tool.
@@ -541,7 +555,7 @@ What stays, because it is not figurative language:
 - **Naming a mechanism directly.** "The type file has no imports, so the
   importer cannot pull in `sharp`."
 
-What goes:
+These go:
 
 - Metaphor and simile of any kind, including the quiet ones: *"a seam"*, *"a
   hard boundary"*, *"the tell"*, *"churn"*, *"a victory lap"*. (Check 2.)
@@ -678,7 +692,7 @@ paragraph built entirely from fronted clauses and clefts scores as well as a
 correct one. Writing to the number changes what is already correct. Short
 sentences are a by-product of one-idea-per-sentence, not the goal.
 
-### Match the shape to the question
+### Match the structure to the question
 
 A simple question gets a direct answer in prose. No headers, no sections, no
 tables for a one-line fact. Tables are for short enumerable facts with the
@@ -812,21 +826,21 @@ licensed: <https://github.com/danyuchn/asd-ste100-skill>.
 ===== BEGIN checks.md =====
 # conversation-prose: run these on the draft before sending
 
-Procedures, not word lists. A word list finds only the words on it. Run every check on every sentence, including transitions and lead-ins: a sentence that states no finding is the likeliest place for a banned construction.
+Procedures, not word lists. A word list finds only the words on it. Run every check on every sentence and on every clause, including transitions, lead-ins, subordinate clauses, participial phrases, and trailing clauses.
 
-1. **Animacy.** Non-human subject? Test the verb. Any verb you would not apply to a rock (wants, knows, wins, beats, earns, refuses, deserves) gets rewritten: name the person who acted, or use is/has/contains/produces/stops/removes/states/fails/applies.
-2. **Literal restatement.** Does each word name what physically happened? If it names one thing to mean another, answer who did what to what and write that. No milder word inside the same image.
+1. **Animacy.** Every verb, including ones in subordinate and participial clauses. Non-human subject? Test the verb. Any verb you would not apply to a rock (wants, knows, wins, beats, earns, refuses, deserves) gets rewritten: name the person who acted, or use is/has/contains/produces/stops/removes/states/fails/applies.
+2. **Literal restatement.** Does each word name what physically happened? If it names one thing to mean another, answer who did what to what and write that. No milder word inside the same image. An abstract noun given a physical property or motion fails too: "share one shape", "the construction moved".
 3. **Two-word verbs.** Try the plain one-word verb. If it means the same thing, the phrase was figurative. Use the plain verb.
 4. **First sentence.** It states the finding. Not context, not the question restated, not agreement.
 5. **Permission narration.** Delete "I decided", "I went ahead", "rather than asking", "I took the liberty". Give the call itself.
 6. **Justification clauses.** Delete any clause explaining why your choice was better, in any position.
-7. **Self-evaluation.** Delete any word rating your own work: earned, paid off, shines, elegant, clean, nice.
-8. **Signposting and significance.** Take each sentence's subject. If it names a part of the message (the cause, the point, the reason, the version, one thing) and the sentence only describes what comes next, delete it: "The mechanical cause is narrower", "Worth stating plainly". Delete any sentence explaining why a finding matters. Any position.
+7. **Self-evaluation.** Delete any word rating your own work: earned, paid off, shines, elegant, clean, nice. Blame counts too: "the failure was mine", "my mistake", "I got that wrong".
+8. **Signposting and significance.** Take each sentence's subject. If it names a part of the message (the cause, the point, the reason, the version, one thing) and the sentence only describes what comes next, delete it: "The mechanical cause is narrower", "Worth stating plainly". Delete any sentence or clause explaining why a finding matters, including a trailing "which is exactly why...". Delete any "worth ...ing" with a speech act, wherever it sits: worth naming, worth stating, worth flagging, worth noting, worth mentioning. Any position.
 9. **Repeated meaning.** One concept, one word. Reuse the first term.
 10. **Subject position.** Read the first five words of each sentence. Fix fronted clauses that switch subject, two stacked clauses or clefts, "there is/are" with a nameable actor, and every mid-sentence appositive.
 11. **Negated contrast.** Delete any "X, not Y" you wrote, in any word order. State the positive claim.
 12. **Banned list.** Check the reader's banned words, in every form each entry names.
-13. **Shape.** No headers or tables on a short answer. Three or more steps or conditions take a numbered list.
+13. **Structure.** No headers or tables on a short answer. Three or more steps or conditions take a numbered list.
 14. **Question answered with work.** A why is answered with a why.
 15. **Noun clusters.** Three nouns maximum in one stack. Four or more ("design system adoption evaluation framework") gets rewritten with a preposition or a relative clause.
 16. **One reading.** Take each pronoun and each definite noun phrase. Two possible referents in the preceding text means naming the thing.

@@ -1,0 +1,18 @@
+{
+  "models": [
+    "claude-haiku-4-5-20251001",
+    "claude-opus-5"
+  ],
+  "modelPinned": "claude-opus-5",
+  "date": "2026-08-15",
+  "cli": "2.1.232 (Claude Code)",
+  "corpusCommit": "d8f7993",
+  "corpusHash": {
+    "conversation-prose": "93779dd2b746",
+    "documentation-prose": "185c10232186"
+  },
+  "skills": [
+    "conversation-prose",
+    "documentation-prose"
+  ]
+}
