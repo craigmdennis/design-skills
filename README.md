@@ -89,7 +89,7 @@ Two prompts do more than write one file:
   `~/.claude/skills/published-prose/voice-profile.md`, which the skill reads before it
   writes or edits. Personal preference is in that file. The skill itself carries only rules
   about failures in writing, which is what makes it shareable.
-- **conversation-prose** also writes `checks.md`, a one-page version of the fifteen checks
+- **conversation-prose** also writes `checks.md`, a one-page version of the sixteen checks
   the skill opens with, and offers to install a `UserPromptSubmit` hook that prints that
   file into context before every reply. The prompt gives the trade-offs and installs the
   hook only if you agree. Without it the skill still applies through the routing line, but
