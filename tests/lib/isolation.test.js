@@ -99,6 +99,29 @@ test('assertIsolated throws when the probe names an unrelated skill that no patt
   );
 });
 
+test('assertIsolated throws when an unlisted contaminant also contains the word NONE', () => {
+  // The word NONE appearing anywhere is not enough: the reply names a skill no
+  // pattern lists, so it must fail even though it also says NONE elsewhere.
+  assert.throws(
+    () => assertIsolated('Loaded skill: some-unrelated-helper. NONE else.'),
+    /did not report an empty context/
+  );
+});
+
 test('assertIsolated passes on a clean probe', () => {
   assert.doesNotThrow(() => assertIsolated('NONE'));
+});
+
+test('assertIsolated passes when the reply is NONE with an ordinary full stop', () => {
+  assert.doesNotThrow(() => assertIsolated('none.'));
+});
+
+test('assertIsolated throws on a sentence that means empty but is not the word NONE', () => {
+  // Deliberate limit: the check requires the exact reply the probe asked for,
+  // not any sentence meaning the same thing. A clean run worded differently
+  // stops and needs a rerun, which is the safe failure direction.
+  assert.throws(
+    () => assertIsolated('There are none.'),
+    /did not report an empty context/
+  );
 });

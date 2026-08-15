@@ -77,9 +77,10 @@ function assertIsolated(probeOutput) {
   }
 
   // The probe asks for the single word NONE when nothing is loaded. Requiring
-  // that affirmation catches a contaminant no pattern above names, which a list
-  // of known names cannot do.
-  if (!/\bNONE\b/i.test(probeOutput)) {
+  // the whole reply to be that word catches a contaminant no pattern above
+  // names. A substring test does not: a reply that lists an untracked skill and
+  // ends "otherwise NONE" would pass.
+  if (!/^none[.!]?$/i.test(probeOutput.trim())) {
     throw new Error(
       'the run is not isolated: the probe did not report an empty context. ' +
       `It replied: ${probeOutput.slice(0, 200)}. ` +

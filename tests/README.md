@@ -18,11 +18,19 @@ The runner points the CLI at a temporary configuration directory with no
 instruction file, no hooks, and no installed skills, then sends a probe prompt
 that asks the instance to list everything present in its context and to reply
 with the single word `NONE` if nothing is loaded. The run stops unless the
-reply reports an empty context, so a contaminant the check does not name by
-pattern still stops the run. The run also stops when the reply names one of
-the three prose skills, an injection point, or the instruction file, regardless
-of what else the reply says, instead of producing a result that overstates
-what the skill did.
+reply is exactly that word, with an optional trailing full stop or exclamation
+mark. Requiring the exact reply, rather than checking whether the reply merely
+contains it, catches a contaminant no pattern names: a reply that names an
+untracked skill and adds `NONE` elsewhere still stops the run. The run also
+stops when the reply names one of the three prose skills, an injection point,
+or the instruction file, regardless of what else the reply says, instead of
+producing a result that overstates what the skill did.
+
+This is a deliberate limit, not an oversight: a reply that reports an empty
+context in different words, such as "There are none", also stops the run and
+needs a rerun. A clean run stopped in error costs a rerun. A contaminated run
+that passes costs a wrong number nobody would question. The check is built to
+take the first cost rather than risk the second.
 
 A run needs a credential in the environment, in `CLAUDE_CODE_OAUTH_TOKEN` or
 `ANTHROPIC_API_KEY`. `claude setup-token` produces the first against a
