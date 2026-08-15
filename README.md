@@ -198,8 +198,11 @@ Four things keep the comparison honest.
 ### Running it yourself
 
 Node 22 or newer, and an `ANTHROPIC_API_KEY` in a gitignored `.env.test` at the repository
-root. The skills under test must be installed at `~/.claude/skills/<name>/`, because the
-judge reads their checks from there.
+root. The skills under test must be installed at `~/.claude/skills/<name>/`, because that is where
+the harness reads them from. The copy in `prompts/` is de-personalised and re-wrapped, so it
+never matches byte for byte, but a test fails if the two check lists ever diverge — the check
+list is what the judge marks against and what sets every denominator above. `meta.json`
+records which copy produced a figure.
 
 ```
 node tests/all.js --plan              # call count and cost estimate, runs nothing
