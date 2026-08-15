@@ -75,6 +75,18 @@ function assertIsolated(probeOutput) {
       );
     }
   }
+
+  // The probe asks for the single word NONE when nothing is loaded. Requiring
+  // that affirmation catches a contaminant no pattern above names, which a list
+  // of known names cannot do.
+  if (!/\bNONE\b/i.test(probeOutput)) {
+    throw new Error(
+      'the run is not isolated: the probe did not report an empty context. ' +
+      `It replied: ${probeOutput.slice(0, 200)}. ` +
+      'A before call that already has a skill loaded produces a false number. ' +
+      'See docs/superpowers/notes/2026-08-14-cli-isolation.md'
+    );
+  }
 }
 
 module.exports = {

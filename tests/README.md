@@ -16,21 +16,25 @@ variable changes between the two sides.
 
 The runner points the CLI at a temporary configuration directory with no
 instruction file, no hooks, and no installed skills, then sends a probe prompt
-that asks the instance to list everything present in its context. If the reply
-names a skill, a hook, or an instruction file, the run stops instead of
-producing a result that overstates what the skill did.
+that asks the instance to list everything present in its context and to reply
+with the single word `NONE` if nothing is loaded. The run stops unless the
+reply reports an empty context, so a contaminant the check does not name by
+pattern still stops the run. The run also stops when the reply names one of
+the three prose skills, an injection point, or the instruction file, regardless
+of what else the reply says, instead of producing a result that overstates
+what the skill did.
 
 A run needs a credential in the environment, in `CLAUDE_CODE_OAUTH_TOKEN` or
 `ANTHROPIC_API_KEY`. `claude setup-token` produces the first against a
 subscription. Nothing is copied out of the real configuration directory: the
-account login lives in the platform keychain, which no file copy carries, and
-an isolated configuration directory cannot see it. A run with no credential
-exits with a non-zero status before creating anything.
+account login is stored in the platform keychain, which a file copy does not
+include, and an isolated configuration directory cannot see it. A run with no
+credential exits with a non-zero status before creating anything.
 
 `node run.js <skill> --dry-run` makes no model call. It needs no credential and
-runs no isolation probe. It walks the corpus, exercises the file handling, and
-deletes the temporary configuration directory. It proves nothing about
-isolation, which the live probe covers.
+runs no isolation probe. It reads each corpus file in turn, creates the output
+directory, writes the metadata file, and deletes the temporary configuration
+directory. It proves nothing about isolation, which the live probe covers.
 
 `node run.js --show-instruction` prints the rewrite instruction.
 
@@ -40,17 +44,17 @@ isolation, which the live probe covers.
 per 1,000 words. Without that normalisation, a rewrite that only shortens the
 text would score as a rewrite that corrects it.
 
-Detectors come in two tiers. **Exact** detectors are string matches with no
-judgement, and only these produce the reported total. **Approximate** detectors
-need part-of-speech knowledge that a dependency-free script does not have, so
-they are printed and excluded from the total.
+Detectors are divided into two tiers. **Exact** detectors are string matches
+with no judgement, and only these produce the reported total. **Approximate**
+detectors need part-of-speech knowledge that a dependency-free script does not
+have, so they are printed and excluded from the total.
 
 The change between before and after is reported as a percentage. When the
-before text carries violations and the after text carries none, the change is
--100%. When the before text carries no violations and the after text carries
-some, the change is reported as `n/a`: reporting 0 there would hide a rewrite
-that introduced violations into clean prose. When neither text carries any
-violations, the change is reported as 0.
+before text contains violations and the after text contains none, the change
+is -100%. When the before text contains no violations and the after text
+contains some, the change is reported as `n/a`: reporting 0 there would hide a
+rewrite that introduced violations into clean prose. When neither text
+contains any violations, the change is reported as 0.
 
 ### What the exact detectors cannot see
 
@@ -77,7 +81,7 @@ violations, the change is reported as 0.
 
 `judge.md` gives a fresh instance both texts and the skill's checks, and asks
 for a pass or fail on each with the failing sentence quoted. It is run three
-times and reported as a range, because the number moves between runs.
+times and reported as a range, because the result varies between runs.
 
 The judge never receives the deterministic scores. A judge shown the exact
 detectors' totals agrees with those totals.

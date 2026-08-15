@@ -72,9 +72,31 @@ test('cleanEnv points the CLI at the throwaway directory', () => {
   }
 });
 
-test('assertIsolated throws when the probe names a prose skill', () => {
-  assert.throws(() => assertIsolated('Loaded skills: conversation-prose'), /not isolated/i);
+test('assertIsolated throws when the probe names a prose skill, proven by the pattern reason', () => {
+  // The reply also affirms NONE, so this can only fail by matching the
+  // contaminant pattern, not by lacking the affirmation.
+  assert.throws(
+    () => assertIsolated('Loaded skills: conversation-prose. NONE else.'),
+    /the probe returned/
+  );
+});
+
+test('assertIsolated throws when the probe names an injection point, proven by the pattern reason', () => {
+  assert.throws(
+    () => assertIsolated('A UserPromptSubmit hook injected checks.md. NONE else.'),
+    /the probe returned/
+  );
+});
+
+test('assertIsolated throws when the probe names a contaminant with no NONE affirmation', () => {
   assert.throws(() => assertIsolated('A UserPromptSubmit hook injected checks.md'), /not isolated/i);
+});
+
+test('assertIsolated throws when the probe names an unrelated skill that no pattern lists', () => {
+  assert.throws(
+    () => assertIsolated('Loaded skill: some-unrelated-helper'),
+    /did not report an empty context/
+  );
 });
 
 test('assertIsolated passes on a clean probe', () => {
