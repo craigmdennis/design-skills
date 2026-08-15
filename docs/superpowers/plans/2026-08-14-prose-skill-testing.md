@@ -1712,9 +1712,10 @@ function main(argv) {
 
   // Fail before creating anything if the run cannot authenticate. An isolated
   // configuration directory cannot see the keychain login the interactive CLI
-  // uses, so the credential comes from the environment.
-  const credentialVar = assertAuthAvailable();
-  console.log(`credential from ${credentialVar}`);
+  // uses, so the credential comes from the environment. A dry run makes no
+  // model call, so it needs no credential and runs no probe, which keeps the
+  // plumbing testable without one.
+  if (!dryRun) console.log(`credential from ${assertAuthAvailable()}`);
 
   const started = Date.now();
   const configDir = makeCleanConfigDir();
@@ -1735,9 +1736,14 @@ function main(argv) {
     const env = cleanEnv(configDir);
 
     console.log(`config directory: ${configDir}`);
-    console.log('checking isolation');
-    assertIsolated(callClaude(PROBE_PROMPT, env));
-    console.log('isolation confirmed');
+
+    if (dryRun) {
+      console.log('dry run: no credential, no isolation probe, no model calls');
+    } else {
+      console.log('checking isolation');
+      assertIsolated(callClaude(PROBE_PROMPT, env));
+      console.log('isolation confirmed');
+    }
 
     const skillBody = readSkillBody(skill);
     const outDir = path.join(runDir, skill);
@@ -1799,7 +1805,11 @@ Run: `node tests/run.js --show-instruction`
 Expected: the four-line instruction, and nothing else.
 
 Run: `node tests/run.js conversation-prose --dry-run --out /tmp/prose-dry`
-Expected: the isolation check passes and all six files print `skipped`.
+Expected: the run prints the throwaway directory path, states that a dry run makes no model call, prints `skipped` for all six corpus files, writes `meta.json`, and deletes the throwaway directory on exit. No credential is needed for this, and none should be requested.
+
+Then confirm the directory was deleted: `ls "${TMPDIR:-/tmp}" | grep prose-test` should find nothing.
+
+Add one more check, which is the failure this guards against. With no credential in the environment, run `node tests/run.js conversation-prose --out /tmp/prose-real` without `--dry-run`. Expected: it exits non-zero with the message naming `claude setup-token`, before creating any throwaway directory and before writing any file into the run directory. A runner that creates a directory and then fails leaves state behind for no reason.
 
 - [ ] **Step 6: Commit**
 
