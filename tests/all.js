@@ -212,6 +212,10 @@ function main(argv) {
     step('judge', judgeArgs);
   }
 
+  // The report is written last, so it describes whatever this run produced. A
+  // run stopped before judging still gets one, carrying the detector counts.
+  step('report', [path.join(HERE, 'report.js'), runDir]);
+
   console.log(`\nrun directory: ${runDir}`);
 }
 

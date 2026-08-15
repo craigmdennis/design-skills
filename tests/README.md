@@ -94,6 +94,44 @@ times and reported as a range, because the result varies between runs.
 The judge never receives the deterministic scores. A judge shown the exact
 detectors' totals agrees with those totals.
 
+### The judge is not told which text is which
+
+The two texts arrive as TEXT A and TEXT B. The prompt names neither one and does
+not mention a rewrite, because a judge told which text a skill produced marks the
+other one against an expectation, and the before figure is the half of the
+comparison the improvement number rests on.
+
+Which slot the after text takes is `(pair index + round) % 2`, so the assignment
+repeats exactly on a second judging of one run directory, needs no stored seed,
+and puts the after text in each slot half the time across three rounds. The slot
+scores are mapped back to before and after once the reply arrives.
+
+### Two calibrations
+
+```
+node tests/judge.js <run-dir> --control --rounds 1
+```
+
+The control judges each before text against a copy of itself. Both texts pass and
+fail the same checks, so any gap is error. It is a sanity check on the instrument
+and no more: a judge given two identical texts can answer by copying one column
+into the other, so a zero gap here does not show that position leaves a real
+comparison alone.
+
+The position split does show that, and every ordinary judging pass prints it at
+no extra cost. The slot assignment flips between rounds, so the same after text
+is marked from slot A in one round and slot B in another; `judge.js` keeps each
+marking with its slot and reports what each text scored from each position.
+Randomised slots cancel position bias out of the reported totals rather than
+removing it, so the size of it is printed beside them and stored in the judged
+record as `positionSplit`.
+
+### Where the judged records go
+
+One file per model and mode, so two judgements of one directory cannot overwrite
+each other or be mistaken for one result:
+`judge[.control].<per-pair|batch>.<model>.json`.
+
 ## Limits
 
 1. The detectors are taken from the skills' own rules, so this is a measurement
@@ -107,6 +145,10 @@ detectors' totals agrees with those totals.
 5. `published-prose` is not covered. That skill reads a voice profile written
    at install time, so a shared run would need either one profile that does not
    generalise, or a placeholder profile that measures only part of the skill.
+6. The judge is not calibrated against a person. Blinding, the control, and the
+   position split show that the judge agrees with itself and does not read
+   position. None of them show that it agrees with a reader marking the same
+   checks by hand.
 
 ## Running the tests of the harness itself
 

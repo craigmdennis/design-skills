@@ -302,6 +302,40 @@ function cliVersion(env) {
   return result.status === 0 ? result.stdout.trim() : 'unknown';
 }
 
+// One run directory holds every skill, and each skill is a separate invocation
+// of this file, so the second write must add to the first instead of replacing
+// it. Calls and cost accumulate, models merge, and each skill keeps its own
+// entry under `skills`. Without this the run records only whichever skill ran
+// last, and the cost estimate in all.js reads a fraction of the real figure.
+function mergeMeta(file, skill, fresh) {
+  let existing = null;
+  if (fs.existsSync(file)) {
+    try {
+      existing = JSON.parse(fs.readFileSync(file, 'utf8'));
+    } catch (error) {
+      existing = null;
+    }
+  }
+
+  const skills = Object.assign({}, existing && existing.skills);
+  skills[skill] = { calls: fresh.calls, costUSD: fresh.costUSD, models: fresh.models };
+
+  const totals = Object.values(skills).reduce(
+    (sum, entry) => ({
+      calls: sum.calls + entry.calls,
+      costUSD: sum.costUSD + entry.costUSD
+    }),
+    { calls: 0, costUSD: 0 }
+  );
+
+  return Object.assign({}, fresh, {
+    models: [...new Set(Object.values(skills).flatMap(entry => entry.models))].sort(),
+    calls: totals.calls,
+    costUSD: Number(totals.costUSD.toFixed(4)),
+    skills
+  });
+}
+
 function main(argv) {
   loadEnvFile();
   const args = argv.slice(2);
@@ -462,20 +496,21 @@ function main(argv) {
       return;
     }
 
-    const meta = {
+    const calls = (makeBaseline || freshBefore) ? files.length * 2 + 1 : files.length + 1;
+    const meta = mergeMeta(path.join(runDir, 'meta.json'), skill, {
       // Every model the run actually used, as the CLI reported it per call.
       models: [...tally.models].sort(),
       modelPinned: pinnedModel() || null,
       // calls and cost together give a per-call figure, which `all.js --plan`
       // multiplies to predict what a run will cost.
-      calls: (makeBaseline || freshBefore) ? files.length * 2 + 1 : files.length + 1,
+      calls,
       baseline: (makeBaseline || freshBefore) ? null : 'tests/baseline',
       costUSD: Number(tally.costUSD.toFixed(4)),
       date: today(),
       cli: cliVersion(env),
       corpusCommit: gitCommit(),
       instructionHash: crypto.createHash('sha256').update(REWRITE_INSTRUCTION).digest('hex').slice(0, 12)
-    };
+    });
     fs.writeFileSync(path.join(runDir, 'meta.json'), `${JSON.stringify(meta, null, 2)}\n`);
 
     console.log(`\nwrote ${runDir}`);
@@ -511,5 +546,5 @@ if (require.main === module) {
 module.exports = {
   buildAfterPrompt, REWRITE_INSTRUCTION, stamp, assertRunDirFree, readBaseline,
   assertBaselineComplete, assertBaselineCorpusMatches, assertBaselineModelMatches,
-  corpusHash, corpusFileHashes, baselineWorkList, pinnedModel
+  corpusHash, corpusFileHashes, baselineWorkList, pinnedModel, mergeMeta
 };

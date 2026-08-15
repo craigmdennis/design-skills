@@ -7,7 +7,7 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const {
   buildAfterPrompt, REWRITE_INSTRUCTION, stamp, assertRunDirFree, assertBaselineComplete,
-  assertBaselineCorpusMatches, corpusHash, pinnedModel
+  assertBaselineCorpusMatches, corpusHash, pinnedModel, mergeMeta
 } = require('../run');
 
 const RUN_JS = path.join(__dirname, '..', 'run.js');
@@ -184,4 +184,61 @@ test('corpusHash is stable across calls and differs between skills', () => {
 
 test('assertBaselineCorpusMatches passes when no baseline meta exists', () => {
   assert.doesNotThrow(() => assertBaselineCorpusMatches('conversation-prose', false));
+});
+
+test('a second skill adds to the run metadata instead of replacing it', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-meta-'));
+  try {
+    const file = path.join(dir, 'meta.json');
+
+    const first = mergeMeta(file, 'conversation-prose', {
+      models: ['claude-opus-5'], calls: 7, costUSD: 0.4, date: '2026-08-15'
+    });
+    fs.writeFileSync(file, JSON.stringify(first));
+
+    const second = mergeMeta(file, 'documentation-prose', {
+      models: ['claude-opus-5', 'claude-haiku-4-5'], calls: 8, costUSD: 0.5, date: '2026-08-15'
+    });
+
+    assert.strictEqual(second.calls, 15, 'both skills counted');
+    assert.strictEqual(second.costUSD, 0.9);
+    assert.deepStrictEqual(second.models, ['claude-haiku-4-5', 'claude-opus-5']);
+    assert.deepStrictEqual(Object.keys(second.skills).sort(),
+      ['conversation-prose', 'documentation-prose']);
+    assert.strictEqual(second.skills['conversation-prose'].calls, 7);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('re-running one skill replaces that skill and leaves the other alone', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-meta-'));
+  try {
+    const file = path.join(dir, 'meta.json');
+    fs.writeFileSync(file, JSON.stringify(mergeMeta(file, 'a', {
+      models: ['m'], calls: 3, costUSD: 0.1
+    })));
+    fs.writeFileSync(file, JSON.stringify(mergeMeta(file, 'b', {
+      models: ['m'], calls: 4, costUSD: 0.2
+    })));
+
+    const again = mergeMeta(file, 'b', { models: ['m'], calls: 9, costUSD: 0.9 });
+    assert.strictEqual(again.calls, 12, 'the rerun replaces b and keeps a');
+    assert.strictEqual(again.skills.a.calls, 3);
+    assert.strictEqual(again.skills.b.calls, 9);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('merging into a corrupt metadata file starts over instead of throwing', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-meta-'));
+  try {
+    const file = path.join(dir, 'meta.json');
+    fs.writeFileSync(file, '{ not json');
+    const meta = mergeMeta(file, 'a', { models: ['m'], calls: 2, costUSD: 0.1 });
+    assert.strictEqual(meta.calls, 2);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 });

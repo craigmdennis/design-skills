@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const {
   buildPrompt, buildBatchPrompt, parseTotals, parseBatchTotals, pinnedModel,
   judgeRecordName, runWithConcurrency, afterSlot, blindPair, unblindTotals, asControl,
-  positionSplit
+  positionSplit, parseCheckRows, unblindCheckRows
 } = require('../judge');
 
 test('the position split reports each text from each slot', () => {
@@ -273,4 +273,43 @@ test('a model name with path characters cannot escape the run directory', () => 
   const name = judgeRecordName(false, '../../etc/passwd');
   assert.ok(!name.includes('/'), name);
   assert.match(name, /^judge\.per-pair\.[A-Za-z0-9._-]+\.json$/);
+});
+
+test('parseCheckRows reads the verdicts and the quoted sentence', () => {
+  const reply = [
+    '| check | A | B | failing sentence |',
+    '|---|---|---|---|',
+    '| 1 animacy | PASS | PASS | |',
+    '| 2 literal restatement | FAIL | PASS | the check earned its keep |',
+    '',
+    'TOTALS A 1/2 B 2/2'
+  ].join('\n');
+  assert.deepStrictEqual(parseCheckRows(reply), [
+    { check: '1 animacy', a: 'PASS', b: 'PASS', quote: null },
+    { check: '2 literal restatement', a: 'FAIL', b: 'PASS', quote: 'the check earned its keep' }
+  ]);
+});
+
+test('parseCheckRows skips the header and the separator', () => {
+  const rows = parseCheckRows([
+    '| check | A | B | failing sentence |',
+    '|---|---|---|---|',
+    '| 1 animacy | PASS | FAIL | a rock that wants |'
+  ].join('\n'));
+  assert.strictEqual(rows.length, 1);
+  assert.strictEqual(rows[0].check, '1 animacy');
+});
+
+test('parseCheckRows ignores prose that happens to contain pipes', () => {
+  assert.deepStrictEqual(parseCheckRows('the command is a | b | c and nothing else'), []);
+});
+
+test('check rows read back to before and after from either slot', () => {
+  const rows = [{ check: '2 literal', a: 'FAIL', b: 'PASS', quote: 'q' }];
+  assert.deepStrictEqual(unblindCheckRows(rows, 'b'), [
+    { check: '2 literal', before: 'FAIL', after: 'PASS', quote: 'q' }
+  ]);
+  assert.deepStrictEqual(unblindCheckRows(rows, 'a'), [
+    { check: '2 literal', before: 'PASS', after: 'FAIL', quote: 'q' }
+  ]);
 });

@@ -139,6 +139,38 @@ function parseBatchTotals(reply) {
   return found;
 }
 
+// The table rows above the totals line, which name the check and quote the
+// sentence that failed. The totals line alone says how many checks failed and
+// never which ones, and the report is built from these.
+function parseCheckRows(reply) {
+  const rows = [];
+  for (const line of reply.split('\n')) {
+    const cells = line.split('|').map(cell => cell.trim());
+    // A markdown row starts and ends with a pipe, so splitting gives an empty
+    // cell at each end: check, A, B, sentence between them.
+    if (cells.length !== 6 || cells[0] !== '' || cells[5] !== '') continue;
+    const [, check, a, b, quote] = cells;
+    if (!/^(PASS|FAIL)$/i.test(a) || !/^(PASS|FAIL)$/i.test(b)) continue;
+    rows.push({
+      check,
+      a: a.toUpperCase(),
+      b: b.toUpperCase(),
+      quote: quote || null
+    });
+  }
+  return rows;
+}
+
+// Check rows with their slot verdicts read back as before and after.
+function unblindCheckRows(rows, slot) {
+  return rows.map(row => ({
+    check: row.check,
+    before: slot === 'b' ? row.a : row.b,
+    after: slot === 'b' ? row.b : row.a,
+    quote: row.quote
+  }));
+}
+
 // Returns { a, b, denominator } or null when the reply carries no totals line
 // in the shape the template asks for.
 function parseTotals(reply) {
@@ -359,7 +391,12 @@ async function judgeRun(runDir, rounds, batch, concurrency, control) {
         marks.push({
           skill: item.skill, round: item.round, pair: id, afterSlot: slot,
           a: raw.a, b: raw.b, before: named.before, after: named.after,
-          denominator: raw.denominator
+          denominator: raw.denominator,
+          // A batch reply carries one table per pair with no marker between
+          // them, so the rows cannot be attributed and are left out.
+          checks: item.kind === 'batch'
+            ? null
+            : unblindCheckRows(parseCheckRows(reply.text), slot)
         });
       };
 
@@ -546,5 +583,5 @@ if (require.main === module) {
 module.exports = {
   buildPrompt, buildBatchPrompt, parseTotals, parseBatchTotals, readChecks, pinnedModel,
   judgeRecordName, runWithConcurrency, afterSlot, blindPair, unblindTotals, asControl,
-  positionSplit
+  positionSplit, parseCheckRows, unblindCheckRows
 };
