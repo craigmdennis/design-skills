@@ -160,16 +160,33 @@ function main(argv) {
     };
     fs.writeFileSync(path.join(runDir, 'meta.json'), `${JSON.stringify(meta, null, 2)}\n`);
 
-    const calls = files.length * 2 + 1;
     console.log(`\nwrote ${runDir}`);
-    console.log(`${calls} model calls, ${Math.round((Date.now() - started) / 1000)} seconds`);
-    console.log('Token cost depends on the model in use and is not reported by the CLI.');
-    console.log(`score it with: node tests/score.js ${runDir}`);
+    if (dryRun) {
+      // No model call was made, so no call count, no token-cost note, and no
+      // scorer command: none of the three describes what a dry run did.
+      console.log(`dry run: walked ${files.length} corpus files, made no model calls`);
+      console.log('the throwaway configuration directory was created and will be deleted on exit');
+    } else {
+      const calls = files.length * 2 + 1;
+      console.log(`${calls} model calls, ${Math.round((Date.now() - started) / 1000)} seconds`);
+      console.log('Token cost depends on the model in use and is not reported by the CLI.');
+      console.log(`score it with: node tests/score.js ${runDir}`);
+    }
   } finally {
     cleanUp();
   }
 }
 
-if (require.main === module) main(process.argv);
+if (require.main === module) {
+  try {
+    main(process.argv);
+  } catch (error) {
+    // Surface the message alone: a missing credential or a failed isolation
+    // check is a runner telling the reader what to do next, not a crash, and a
+    // stack trace buries the one line that matters.
+    console.error(error.message);
+    process.exit(1);
+  }
+}
 
 module.exports = { buildAfterPrompt, REWRITE_INSTRUCTION };
