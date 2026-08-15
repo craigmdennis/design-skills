@@ -2,7 +2,9 @@
 const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('node:fs');
-const { makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated } = require('./isolation');
+const {
+  makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated, assertAuthAvailable
+} = require('./isolation');
 
 test('makeCleanConfigDir creates a directory with no CLAUDE.md, hooks, or skills', () => {
   const dir = makeCleanConfigDir();
@@ -17,29 +19,37 @@ test('makeCleanConfigDir creates a directory with no CLAUDE.md, hooks, or skills
   }
 });
 
-test('the copied credential is present and owner-readable only', () => {
+test('nothing is copied from the real configuration directory', () => {
   const dir = makeCleanConfigDir();
   try {
-    const target = `${dir}/.credentials.json`;
-    assert.ok(fs.existsSync(target), 'the run cannot authenticate without it');
-    assert.strictEqual(fs.statSync(target).mode & 0o777, 0o600);
+    assert.deepStrictEqual(fs.readdirSync(dir).sort(), ['settings.json']);
     assert.strictEqual(fs.statSync(dir).mode & 0o777, 0o700);
   } finally {
     removeConfigDir(dir);
   }
 });
 
-test('the credential is the only thing copied from the real configuration', () => {
+test('assertAuthAvailable names the variable it found', () => {
+  assert.strictEqual(assertAuthAvailable({ CLAUDE_CODE_OAUTH_TOKEN: 'x' }), 'CLAUDE_CODE_OAUTH_TOKEN');
+  assert.strictEqual(assertAuthAvailable({ ANTHROPIC_API_KEY: 'x' }), 'ANTHROPIC_API_KEY');
+});
+
+test('assertAuthAvailable explains how to get a credential when none is set', () => {
+  assert.throws(() => assertAuthAvailable({}), /setup-token/);
+  assert.throws(() => assertAuthAvailable({}), /keychain/);
+});
+
+test('cleanEnv carries a credential through from the environment', () => {
   const dir = makeCleanConfigDir();
   try {
-    const entries = fs.readdirSync(dir).sort();
-    assert.deepStrictEqual(entries, ['.credentials.json', 'settings.json']);
+    const env = cleanEnv(dir);
+    assert.strictEqual(env.PATH, process.env.PATH, 'the environment should pass through');
   } finally {
     removeConfigDir(dir);
   }
 });
 
-test('removeConfigDir deletes the directory and the credential in it', () => {
+test('removeConfigDir deletes the directory', () => {
   const dir = makeCleanConfigDir();
   removeConfigDir(dir);
   assert.ok(!fs.existsSync(dir));

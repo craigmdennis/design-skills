@@ -8,12 +8,12 @@ const path = require('node:path');
 // flattering number.
 const CONFIG_DIR_VAR = 'CLAUDE_CONFIG_DIR';
 
-// An isolated configuration directory cannot see the credentials in the real
-// one, so a run inside it fails with "Not logged in". Only this one file is
-// copied across, with owner-only permissions, and removeConfigDir deletes the
-// whole directory when the run ends. Nothing else from the real configuration
-// directory is copied, which is what keeps the run isolated.
-const CREDENTIALS = '.credentials.json';
+// An isolated configuration directory cannot see the login the interactive CLI
+// uses, which lives in the platform keychain. `~/.claude/.credentials.json`
+// does not carry the account token either; on the machine this was built for it
+// held only a plugin's OAuth state. So the credential comes from the
+// environment and nothing is copied to disk.
+const TOKEN_VARS = ['CLAUDE_CODE_OAUTH_TOKEN', 'ANTHROPIC_API_KEY'];
 
 const PROBE_PROMPT =
   'List by name every skill, instruction file, and injected reminder currently ' +
@@ -28,30 +28,37 @@ const CONTAMINANTS = [
   /CLAUDE\.md/i
 ];
 
+// The directory holds an empty settings file and nothing else. Copying anything
+// from the real configuration directory would defeat the isolation this module
+// exists to provide.
 function makeCleanConfigDir() {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-test-'));
   fs.chmodSync(dir, 0o700);
   fs.writeFileSync(path.join(dir, 'settings.json'), '{}\n');
-
-  const source = path.join(os.homedir(), '.claude', CREDENTIALS);
-  if (!fs.existsSync(source)) {
-    throw new Error(
-      `no credentials at ${source}. The isolated run cannot authenticate. ` +
-      'Log in with the CLI, or set ANTHROPIC_API_KEY and use --bare instead.'
-    );
-  }
-  const target = path.join(dir, CREDENTIALS);
-  fs.copyFileSync(source, target);
-  fs.chmodSync(target, 0o600);
-
   return dir;
 }
 
 // Every exit path deletes the directory: the end of a run, a thrown error, and
-// an interrupted process. A copied credential left behind is the failure this
-// guards against.
+// an interrupted process. The CLI writes session transcripts into it.
 function removeConfigDir(dir) {
   if (dir && fs.existsSync(dir)) fs.rmSync(dir, { recursive: true, force: true });
+}
+
+// Returns the name of the variable carrying the credential, never its value.
+// The caller may print the name.
+function assertAuthAvailable(env) {
+  const source = env || process.env;
+  const found = TOKEN_VARS.find(name => source[name]);
+  if (!found) {
+    throw new Error(
+      'no credential in the environment, so the isolated run cannot ' +
+      'authenticate. Run `claude setup-token` and export the result as ' +
+      'CLAUDE_CODE_OAUTH_TOKEN, or export ANTHROPIC_API_KEY. The login the ' +
+      'interactive CLI uses lives in the platform keychain, which an isolated ' +
+      'configuration directory cannot see.'
+    );
+  }
+  return found;
 }
 
 function cleanEnv(configDir) {
@@ -71,5 +78,6 @@ function assertIsolated(probeOutput) {
 }
 
 module.exports = {
-  makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated, PROBE_PROMPT
+  makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated,
+  assertAuthAvailable, PROBE_PROMPT
 };

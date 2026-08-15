@@ -26,26 +26,40 @@ harness reports afterward is wrong.
   discovery. Its own help text states that OAuth and the keychain are never
   read under it, so it requires `ANTHROPIC_API_KEY`. That variable is not set
   on this machine, so `--bare` is not usable here without additional setup.
+- **Copying `~/.claude/.credentials.json` into the throwaway directory.**
+  This was tried first. The copy was mechanically correct: the copied file
+  was byte-identical to the source, and the throwaway directory held exactly
+  the two expected entries at the required permissions. The run still
+  returned `Not logged in`. Inspecting only the key names of the source file
+  (never its values) showed a single top-level key, `mcpOAuth`, holding
+  OAuth state for one installed plugin, and no account-level access token.
+  The account login this machine's interactive CLI uses lives in the
+  platform keychain, not in that file, and no file copy carries a keychain
+  entry. This finding is why the route below replaced the file-copy
+  approach.
 
 ## Route chosen
 
-Copy only `~/.claude/.credentials.json` into the throwaway configuration
-directory, and delete the whole directory when the run ends. This was the
-repository owner's explicit choice once told that isolation and
-authentication are coupled and that copying the credential was the
-alternative to `--bare` plus an API key.
+The credential comes from the environment, in `CLAUDE_CODE_OAUTH_TOKEN` or
+`ANTHROPIC_API_KEY`, and nothing is copied to disk. `claude setup-token`
+produces a long-lived token against a subscription; that token is exported
+into the shell environment before a run. `cleanEnv` passes the whole
+environment through unchanged, so the variable reaches the isolated call.
 
-Constraints on the copy:
+Constraints on this route:
 
-- The throwaway directory is created at mode `0700` and the copied credential
-  at mode `0600`.
-- The credential is the only file copied. Nothing else from the real
-  configuration directory is copied, because copying more would defeat the
-  isolation this mechanism exists to provide.
-- A missing credential throws with a clear message rather than falling
-  through to an unauthenticated run.
-- The directory is deleted at the end of every run, including on a thrown
-  error, so a failing run cannot leave a copied credential behind.
+- The throwaway configuration directory is created at mode `0700` and holds
+  only an empty settings file. Nothing from the real configuration directory
+  is copied into it, because copying anything would defeat the isolation
+  this mechanism exists to provide.
+- `assertAuthAvailable` checks for one of the two accepted variables and
+  returns its name, never its value, so a caller can report which one was
+  used without exposing the credential. A missing credential throws with
+  instructions naming `claude setup-token` and the keychain, rather than
+  falling through to an unauthenticated run.
+- The throwaway directory is deleted at the end of every run, including on a
+  thrown error, because the CLI writes session transcripts into it while it
+  runs.
 
 ## Verification
 
@@ -58,32 +72,11 @@ mention of a hook or a routing line, and refuses to proceed if any appears.
 CLI version observed on this machine at implementation time: `2.1.233`. The
 mechanisms above were established against `2.1.232`.
 
-## Verification result on this machine: blocked
+## Verification status: not yet run
 
-Running the isolated probe against `2.1.233` on this machine did not reach
-the model. It returned:
-
-```
-Not logged in · Please run /login
-```
-
-The credential copy itself is not at fault: the copied file is byte-identical
-to the source, and the throwaway directory holds exactly two entries,
-`settings.json` and `.credentials.json`, at the required permissions.
-
-The cause is a difference in where this machine keeps the account
-credential. Inspecting only the key names of `~/.claude/.credentials.json`
-(never its values) shows a single top-level key, `mcpOAuth`, holding OAuth
-state for one installed plugin. It holds no account-level access token. The
-CLI on this machine authenticates its normal, non-isolated runs some other
-way — most likely the platform keychain, which a file present in a
-`CLAUDE_CONFIG_DIR` copy cannot carry, and which reading requires a
-permission this task did not seek. `ANTHROPIC_API_KEY` is also unset here, so
-the `--bare` route in the mechanisms above is unavailable as a fallback.
-
-The route described above, copying `~/.claude/.credentials.json`, was
-established and consented to on the assumption that this file holds the
-account credential. On this machine it does not, so Step 5 of the task that
-produced this note could not confirm isolation against a real call. The
-directory-isolation mechanism itself is exercised and covered by the unit
-tests; only the live-call confirmation is outstanding.
+The live probe against the real CLI has not been run under this route. It
+needs a credential in the environment, in `CLAUDE_CODE_OAUTH_TOKEN` or
+`ANTHROPIC_API_KEY`, that had not been created at the time this note was
+last updated. The directory-isolation mechanism and `assertAuthAvailable`
+are exercised and covered by unit tests; the live-call confirmation is
+outstanding until a token is exported and the probe is run once.
