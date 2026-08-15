@@ -1323,18 +1323,22 @@ git commit -m "feat: add the run scorer"
 **Interfaces:**
 - Consumes: nothing.
 - Produces:
-  - `makeCleanConfigDir() => string` — creates a throwaway configuration directory and returns its path.
+  - `makeCleanConfigDir() => string` — creates a throwaway configuration directory holding an empty settings file and a copy of the credential, and returns its path.
+  - `removeConfigDir(dir: string) => void` — deletes that directory. Safe to call twice and on a path that does not exist.
   - `cleanEnv(configDir: string) => object` — an environment object for `child_process.spawnSync`.
   - `assertIsolated(probeOutput: string) => void` — throws when the probe shows a skill, a hook, or a routing line reached the call.
   - `PROBE_PROMPT: string` — the prompt Task 8 sends before any corpus prompt.
 
-- [ ] **Step 1: Find out how the CLI takes a different configuration directory**
+- [ ] **Step 1: Record the mechanism, which is already settled**
 
-Run: `claude --help`
+The controller established this empirically against CLI 2.1.232, so no search is needed. Write `docs/superpowers/notes/2026-08-14-cli-isolation.md` recording all of it:
 
-Look for an option or an environment variable that points at a configuration directory. Record the exact name found in `docs/superpowers/notes/2026-08-14-cli-isolation.md`, with the CLI version from `claude --version`.
+- `CLAUDE_CONFIG_DIR` redirects the configuration directory. A run with it set wrote its session files into the throwaway directory instead of `~/.claude`, which is the isolation the harness needs.
+- An isolated configuration directory cannot see the credentials in `~/.claude/.credentials.json`, so the run fails with `Not logged in · Please run /login`.
+- `--bare` skips hooks, auto-memory, and CLAUDE.md discovery, and its help states that OAuth and the keychain are never read under it. It therefore needs `ANTHROPIC_API_KEY`, which is not set on this machine.
+- The route chosen, with the repository owner's explicit consent: copy only `~/.claude/.credentials.json` into the throwaway directory, and delete the whole directory when the run ends.
 
-If nothing exists, record that, and use the fallback in Step 3: an empty settings file passed on the command line, plus the probe, which is what actually proves isolation either way.
+Record the CLI version from `claude --version` alongside these.
 
 - [ ] **Step 2: Write the failing test**
 
@@ -1345,21 +1349,64 @@ Create `tests/lib/isolation.test.js`:
 const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('node:fs');
-const { makeCleanConfigDir, cleanEnv, assertIsolated } = require('./isolation');
+const { makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated } = require('./isolation');
 
 test('makeCleanConfigDir creates a directory with no CLAUDE.md, hooks, or skills', () => {
   const dir = makeCleanConfigDir();
-  assert.ok(fs.existsSync(dir));
-  assert.ok(!fs.existsSync(`${dir}/CLAUDE.md`));
-  assert.ok(!fs.existsSync(`${dir}/skills`));
-  const settings = JSON.parse(fs.readFileSync(`${dir}/settings.json`, 'utf8'));
-  assert.deepStrictEqual(settings.hooks, undefined);
+  try {
+    assert.ok(fs.existsSync(dir));
+    assert.ok(!fs.existsSync(`${dir}/CLAUDE.md`));
+    assert.ok(!fs.existsSync(`${dir}/skills`));
+    const settings = JSON.parse(fs.readFileSync(`${dir}/settings.json`, 'utf8'));
+    assert.deepStrictEqual(settings.hooks, undefined);
+  } finally {
+    removeConfigDir(dir);
+  }
+});
+
+test('the copied credential is present and owner-readable only', () => {
+  const dir = makeCleanConfigDir();
+  try {
+    const target = `${dir}/.credentials.json`;
+    assert.ok(fs.existsSync(target), 'the run cannot authenticate without it');
+    assert.strictEqual(fs.statSync(target).mode & 0o777, 0o600);
+    assert.strictEqual(fs.statSync(dir).mode & 0o777, 0o700);
+  } finally {
+    removeConfigDir(dir);
+  }
+});
+
+test('the credential is the only thing copied from the real configuration', () => {
+  const dir = makeCleanConfigDir();
+  try {
+    const entries = fs.readdirSync(dir).sort();
+    assert.deepStrictEqual(entries, ['.credentials.json', 'settings.json']);
+  } finally {
+    removeConfigDir(dir);
+  }
+});
+
+test('removeConfigDir deletes the directory and the credential in it', () => {
+  const dir = makeCleanConfigDir();
+  removeConfigDir(dir);
+  assert.ok(!fs.existsSync(dir));
+});
+
+test('removeConfigDir is safe to call twice and on a missing directory', () => {
+  const dir = makeCleanConfigDir();
+  removeConfigDir(dir);
+  assert.doesNotThrow(() => removeConfigDir(dir));
+  assert.doesNotThrow(() => removeConfigDir('/no/such/prose-test-dir'));
 });
 
 test('cleanEnv points the CLI at the throwaway directory', () => {
   const dir = makeCleanConfigDir();
-  const env = cleanEnv(dir);
-  assert.ok(Object.values(env).includes(dir), 'the config directory should be in the environment');
+  try {
+    const env = cleanEnv(dir);
+    assert.strictEqual(env.CLAUDE_CONFIG_DIR, dir);
+  } finally {
+    removeConfigDir(dir);
+  }
 });
 
 test('assertIsolated throws when the probe names a prose skill', () => {
@@ -1374,7 +1421,7 @@ test('assertIsolated passes on a clean probe', () => {
 
 - [ ] **Step 3: Write the implementation**
 
-Create `tests/lib/isolation.js`. Replace `CONFIG_DIR_VAR` with the variable name found in Step 1:
+Create `tests/lib/isolation.js`:
 
 ```js
 'use strict';
@@ -1382,10 +1429,17 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 
-// Set in Step 1 from `claude --help`. The probe in assertIsolated is what
-// actually proves isolation, so a wrong guess here fails loudly instead of
-// producing a flattering number.
+// Verified against CLI 2.1.232. The probe in assertIsolated is what actually
+// proves isolation, so a wrong value here fails loudly instead of producing a
+// flattering number.
 const CONFIG_DIR_VAR = 'CLAUDE_CONFIG_DIR';
+
+// An isolated configuration directory cannot see the credentials in the real
+// one, so a run inside it fails with "Not logged in". Only this one file is
+// copied across, with owner-only permissions, and removeConfigDir deletes the
+// whole directory when the run ends. Nothing else from the real configuration
+// directory is copied, which is what keeps the run isolated.
+const CREDENTIALS = '.credentials.json';
 
 const PROBE_PROMPT =
   'List by name every skill, instruction file, and injected reminder currently ' +
@@ -1402,8 +1456,28 @@ const CONTAMINANTS = [
 
 function makeCleanConfigDir() {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-test-'));
+  fs.chmodSync(dir, 0o700);
   fs.writeFileSync(path.join(dir, 'settings.json'), '{}\n');
+
+  const source = path.join(os.homedir(), '.claude', CREDENTIALS);
+  if (!fs.existsSync(source)) {
+    throw new Error(
+      `no credentials at ${source}. The isolated run cannot authenticate. ` +
+      'Log in with the CLI, or set ANTHROPIC_API_KEY and use --bare instead.'
+    );
+  }
+  const target = path.join(dir, CREDENTIALS);
+  fs.copyFileSync(source, target);
+  fs.chmodSync(target, 0o600);
+
   return dir;
+}
+
+// Every exit path deletes the directory: the end of a run, a thrown error, and
+// an interrupted process. A copied credential left behind is the failure this
+// guards against.
+function removeConfigDir(dir) {
+  if (dir && fs.existsSync(dir)) fs.rmSync(dir, { recursive: true, force: true });
 }
 
 function cleanEnv(configDir) {
@@ -1422,7 +1496,9 @@ function assertIsolated(probeOutput) {
   }
 }
 
-module.exports = { makeCleanConfigDir, cleanEnv, assertIsolated, PROBE_PROMPT };
+module.exports = {
+  makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated, PROBE_PROMPT
+};
 ```
 
 - [ ] **Step 4: Run the tests to verify they pass**
@@ -1437,16 +1513,24 @@ Run:
 ```bash
 node -e '
 const { spawnSync } = require("node:child_process");
-const { makeCleanConfigDir, cleanEnv, PROBE_PROMPT } = require("./tests/lib/isolation");
+const { makeCleanConfigDir, removeConfigDir, cleanEnv, PROBE_PROMPT } = require("./tests/lib/isolation");
 const dir = makeCleanConfigDir();
-const r = spawnSync("claude", ["-p", PROBE_PROMPT], { env: cleanEnv(dir), encoding: "utf8" });
-console.log(r.stdout || r.stderr);
+try {
+  const r = spawnSync("claude", ["-p", PROBE_PROMPT], { env: cleanEnv(dir), encoding: "utf8" });
+  console.log(r.stdout || r.stderr);
+} finally {
+  removeConfigDir(dir);
+}
 '
 ```
 
 Expected: output containing `NONE`, or output naming no prose skill and no hook.
 
-If the output names `conversation-prose`, the configuration variable is wrong. Return to Step 1, find the correct mechanism, record it in the note, and repeat.
+This makes one real model call and costs tokens. Run it once.
+
+If the output says `Not logged in`, the credential copy failed. Check that `~/.claude/.credentials.json` exists and that `makeCleanConfigDir` copied it.
+
+If the output names `conversation-prose`, `documentation-prose`, or a hook, the isolation is not working. Record what you saw in the note and report BLOCKED rather than continuing, because every number the harness produces after that point would be measured against a before-text that already had the skill applied.
 
 - [ ] **Step 6: Write the note and commit**
 
@@ -1466,7 +1550,7 @@ git commit -m "feat: isolate test runs from the local agent configuration"
 - Test: `tests/lib/run.test.js`
 
 **Interfaces:**
-- Consumes: `makeCleanConfigDir`, `cleanEnv`, `assertIsolated`, `PROBE_PROMPT` from `./lib/isolation`.
+- Consumes: `makeCleanConfigDir`, `removeConfigDir`, `cleanEnv`, `assertIsolated`, `PROBE_PROMPT` from `./lib/isolation`.
 - Produces:
   - `REWRITE_INSTRUCTION: string`
   - `buildAfterPrompt(skillBody: string, beforeText: string) => string`
@@ -1518,7 +1602,9 @@ const os = require('node:os');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { execFileSync, spawnSync } = require('node:child_process');
-const { makeCleanConfigDir, cleanEnv, assertIsolated, PROBE_PROMPT } = require('./lib/isolation');
+const {
+  makeCleanConfigDir, removeConfigDir, cleanEnv, assertIsolated, PROBE_PROMPT
+} = require('./lib/isolation');
 
 const SKILLS = ['conversation-prose', 'documentation-prose'];
 const CORPUS = path.join(__dirname, 'corpus');
@@ -1603,52 +1689,69 @@ function main(argv) {
 
   const started = Date.now();
   const configDir = makeCleanConfigDir();
-  const env = cleanEnv(configDir);
 
-  console.log(`config directory: ${configDir}`);
-  console.log('checking isolation');
-  assertIsolated(callClaude(PROBE_PROMPT, env));
-  console.log('isolation confirmed');
+  // The throwaway directory holds a copy of the credential, so every exit path
+  // deletes it: the end of the run, a thrown error, and an interrupted process.
+  let removed = false;
+  const cleanUp = () => {
+    if (removed) return;
+    removed = true;
+    removeConfigDir(configDir);
+  };
+  process.on('exit', cleanUp);
+  process.on('SIGINT', () => { cleanUp(); process.exit(130); });
+  process.on('SIGTERM', () => { cleanUp(); process.exit(143); });
 
-  const skillBody = readSkillBody(skill);
-  const outDir = path.join(runDir, skill);
-  fs.mkdirSync(outDir, { recursive: true });
+  try {
+    const env = cleanEnv(configDir);
 
-  const files = fs.readdirSync(path.join(CORPUS, skill)).filter(f => f.endsWith('.md')).sort();
+    console.log(`config directory: ${configDir}`);
+    console.log('checking isolation');
+    assertIsolated(callClaude(PROBE_PROMPT, env));
+    console.log('isolation confirmed');
 
-  for (const file of files) {
-    const id = file.slice(0, 2);
-    const prompt = fs.readFileSync(path.join(CORPUS, skill, file), 'utf8');
-    process.stdout.write(`  ${file}  `);
+    const skillBody = readSkillBody(skill);
+    const outDir = path.join(runDir, skill);
+    fs.mkdirSync(outDir, { recursive: true });
 
-    if (dryRun) {
-      console.log('skipped');
-      continue;
+    const files = fs.readdirSync(path.join(CORPUS, skill)).filter(f => f.endsWith('.md')).sort();
+
+    for (const file of files) {
+      const id = file.slice(0, 2);
+      const prompt = fs.readFileSync(path.join(CORPUS, skill, file), 'utf8');
+      process.stdout.write(`  ${file}  `);
+
+      if (dryRun) {
+        console.log('skipped');
+        continue;
+      }
+
+      const before = callClaude(prompt, env);
+      fs.writeFileSync(path.join(outDir, `${id}.before.md`), `${before}\n`);
+      process.stdout.write('before ');
+
+      const after = callClaude(buildAfterPrompt(skillBody, before), env);
+      fs.writeFileSync(path.join(outDir, `${id}.after.md`), `${after}\n`);
+      console.log('after');
     }
 
-    const before = callClaude(prompt, env);
-    fs.writeFileSync(path.join(outDir, `${id}.before.md`), `${before}\n`);
-    process.stdout.write('before ');
+    const meta = {
+      model: process.env.ANTHROPIC_MODEL || 'default',
+      date: today(),
+      cli: cliVersion(env),
+      corpusCommit: gitCommit(),
+      instructionHash: crypto.createHash('sha256').update(REWRITE_INSTRUCTION).digest('hex').slice(0, 12)
+    };
+    fs.writeFileSync(path.join(runDir, 'meta.json'), `${JSON.stringify(meta, null, 2)}\n`);
 
-    const after = callClaude(buildAfterPrompt(skillBody, before), env);
-    fs.writeFileSync(path.join(outDir, `${id}.after.md`), `${after}\n`);
-    console.log('after');
+    const calls = files.length * 2 + 1;
+    console.log(`\nwrote ${runDir}`);
+    console.log(`${calls} model calls, ${Math.round((Date.now() - started) / 1000)} seconds`);
+    console.log('Token cost depends on the model in use and is not reported by the CLI.');
+    console.log(`score it with: node tests/score.js ${runDir}`);
+  } finally {
+    cleanUp();
   }
-
-  const meta = {
-    model: process.env.ANTHROPIC_MODEL || 'default',
-    date: today(),
-    cli: cliVersion(env),
-    corpusCommit: gitCommit(),
-    instructionHash: crypto.createHash('sha256').update(REWRITE_INSTRUCTION).digest('hex').slice(0, 12)
-  };
-  fs.writeFileSync(path.join(runDir, 'meta.json'), `${JSON.stringify(meta, null, 2)}\n`);
-
-  const calls = files.length * 2 + 1;
-  console.log(`\nwrote ${runDir}`);
-  console.log(`${calls} model calls, ${Math.round((Date.now() - started) / 1000)} seconds`);
-  console.log('Token cost depends on the model in use and is not reported by the CLI.');
-  console.log(`score it with: node tests/score.js ${runDir}`);
 }
 
 if (require.main === module) main(process.argv);
