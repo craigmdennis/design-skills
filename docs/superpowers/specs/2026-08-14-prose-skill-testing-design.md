@@ -250,8 +250,8 @@ phrase.
 ## The judge
 
 `tests/judge.md` contains the skill's checks and one instruction: for each check,
-mark the before text and the after text as pass or fail, and quote the sentence
-that failed. The output is a fixed table, so the totals can be read by eye.
+mark each of two texts as pass or fail, and quote the sentence that failed. The
+output is a fixed table, so the totals can be read by eye.
 
 The judge is run three times per skill. The README reports the range across those
 three runs, with the model and the date. A single figure implies a stability the
@@ -259,6 +259,36 @@ method does not have.
 
 The judging prompt does not receive the deterministic scores. A judge shown the
 script's answer agrees with the script.
+
+### The judge is blinded
+
+The two texts reach the judge as TEXT A and TEXT B. Nothing in the prompt states
+which one a skill produced, and the template above the checks names neither text
+and does not mention a rewrite. A judge told which text is the revision marks the
+other one against an expectation, and the before figure is the half of the
+comparison the whole improvement number rests on.
+
+Which slot the after text takes is `(pair index + round) % 2`. The assignment is
+therefore the same on every judging of one run directory, needs no stored seed,
+and puts the after text in each slot exactly half the time across three rounds.
+`judge.js` maps the slot scores back to before and after after the reply arrives.
+
+### Two calibrations, and what each one can show
+
+**The control** (`--control`) judges each before text against a copy of itself.
+Both texts pass and fail the same checks, so a gap between the two scores is
+error. It is a cheap sanity check on the instrument and nothing more: a judge
+given two identical texts can answer by copying one column into the other, so a
+zero gap here does not establish that position leaves a real comparison alone.
+
+**The position split** is the stronger measure and costs nothing extra. Because
+the slot assignment flips between rounds, the same after text is marked from slot
+A in one round and from slot B in another. `judge.js` keeps every marking with
+the slot it came from and reports what each text scored from each position. A gap
+there is position bias measured on texts that differ, which is the case that
+matters. Randomised slots cancel that bias out of the reported totals; they do
+not remove it, so the size of it is printed beside the totals and recorded in the
+judged record.
 
 ## What goes in the README
 
@@ -288,6 +318,11 @@ measure whether the writing is better, and no automatic test can.*
    which is how `conversation-prose` is normally used.
 5. **Twelve prompts.** Enough for a direction, too few for a confidence interval.
 6. **Judge variance.** Reported as a range for that reason.
+7. **The judge is not calibrated against a person.** Blinding, the control, and
+   the position split establish that the judge agrees with itself and does not
+   read position. None of them establish that it agrees with a reader marking the
+   same checks by hand. Marking three pairs by hand and comparing is the step
+   that would, and it has not been done.
 
 ## Open items to settle during implementation
 
