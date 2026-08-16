@@ -138,11 +138,11 @@ each other or be mistaken for one result:
    against the skills' own definition of failure.
 2. The reference run is one model on one date, both recorded in `meta.json`.
 3. The test measures a rewrite pass over fixed text. It does not measure prose
-   written with the skill already loaded, which is how `conversation` is
+   written with the skill already loaded, which is how `conversation-prose` is
    normally used.
 4. Twelve prompts is enough for a direction and too few for a confidence
    interval.
-5. `published` is not covered. That skill reads a voice profile written
+5. `published-prose` is not covered. That skill reads a voice profile written
    at install time, so a shared run would need either one profile that does not
    generalise, or a placeholder profile that measures only part of the skill.
 6. The judge is not calibrated against a person. Blinding, the control, and the

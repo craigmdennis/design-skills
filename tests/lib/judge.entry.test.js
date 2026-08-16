@@ -34,7 +34,7 @@ function makeStub(dir) {
 }
 
 function makeRun(dir) {
-  const skillDir = path.join(dir, 'conversation');
+  const skillDir = path.join(dir, 'conversation-prose');
   fs.mkdirSync(skillDir, { recursive: true });
   fs.writeFileSync(path.join(skillDir, '01.before.md'), 'The rule holds; I decided to keep it.\n');
   fs.writeFileSync(path.join(skillDir, '01.after.md'), 'The rule applies. I kept it.\n');

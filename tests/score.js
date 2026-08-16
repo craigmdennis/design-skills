@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { DETECTORS, runDetectors } = require('./lib/detectors');
 
-const SKILLS = ['conversation', 'documentation'];
+const SKILLS = ['conversation-prose', 'documentation-prose'];
 
 function readPairs(runDir, skill) {
   const dir = path.join(runDir, skill);

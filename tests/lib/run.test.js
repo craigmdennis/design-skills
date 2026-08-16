@@ -40,7 +40,7 @@ test('a dry run reports no model calls and does not point at the scorer', () => 
   try {
     result = spawnSync(
       process.execPath,
-      [RUN_JS, 'conversation', '--dry-run', '--out', outDir],
+      [RUN_JS, 'conversation-prose', '--dry-run', '--out', outDir],
       { encoding: 'utf8' }
     );
   } finally {
@@ -66,7 +66,7 @@ test('a run with no credential prints the message alone, with no stack trace, an
 
   const result = spawnSync(
     process.execPath,
-    [RUN_JS, 'conversation', '--out', outDir],
+    [RUN_JS, 'conversation-prose', '--out', outDir],
     { encoding: 'utf8', env }
   );
 
@@ -85,14 +85,14 @@ test('the run stamp carries seconds and sorts in clock order', () => {
 });
 
 test('assertRunDirFree passes on a directory that does not exist', () => {
-  assert.doesNotThrow(() => assertRunDirFree('/no/such/prose-run', 'conversation', false));
+  assert.doesNotThrow(() => assertRunDirFree('/no/such/prose-run', 'conversation-prose', false));
 });
 
 test('assertRunDirFree passes on an empty skill directory', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-free-'));
   try {
-    fs.mkdirSync(path.join(dir, 'conversation'), { recursive: true });
-    assert.doesNotThrow(() => assertRunDirFree(dir, 'conversation', false));
+    fs.mkdirSync(path.join(dir, 'conversation-prose'), { recursive: true });
+    assert.doesNotThrow(() => assertRunDirFree(dir, 'conversation-prose', false));
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
@@ -101,11 +101,11 @@ test('assertRunDirFree passes on an empty skill directory', () => {
 test('assertRunDirFree stops a run that would overwrite results', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-free-'));
   try {
-    const skillDir = path.join(dir, 'conversation');
+    const skillDir = path.join(dir, 'conversation-prose');
     fs.mkdirSync(skillDir, { recursive: true });
     fs.writeFileSync(path.join(skillDir, '01.before.md'), 'x\n');
     assert.throws(
-      () => assertRunDirFree(dir, 'conversation', false),
+      () => assertRunDirFree(dir, 'conversation-prose', false),
       /already holds 1 result files/
     );
   } finally {
@@ -116,10 +116,10 @@ test('assertRunDirFree stops a run that would overwrite results', () => {
 test('assertRunDirFree lets a second skill join the same run', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-free-'));
   try {
-    const skillDir = path.join(dir, 'conversation');
+    const skillDir = path.join(dir, 'conversation-prose');
     fs.mkdirSync(skillDir, { recursive: true });
     fs.writeFileSync(path.join(skillDir, '01.before.md'), 'x\n');
-    assert.doesNotThrow(() => assertRunDirFree(dir, 'documentation', false));
+    assert.doesNotThrow(() => assertRunDirFree(dir, 'documentation-prose', false));
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
@@ -128,10 +128,10 @@ test('assertRunDirFree lets a second skill join the same run', () => {
 test('--force allows the overwrite', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-free-'));
   try {
-    const skillDir = path.join(dir, 'conversation');
+    const skillDir = path.join(dir, 'conversation-prose');
     fs.mkdirSync(skillDir, { recursive: true });
     fs.writeFileSync(path.join(skillDir, '01.before.md'), 'x\n');
-    assert.doesNotThrow(() => assertRunDirFree(dir, 'conversation', true));
+    assert.doesNotThrow(() => assertRunDirFree(dir, 'conversation-prose', true));
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
@@ -140,21 +140,21 @@ test('--force allows the overwrite', () => {
 test('assertBaselineComplete names every missing before text', () => {
   // Ids the corpus will never carry, so the test holds once the baseline exists.
   assert.throws(
-    () => assertBaselineComplete('conversation', ['98', '99']),
-    /no before text for conversation 98, 99/
+    () => assertBaselineComplete('conversation-prose', ['98', '99']),
+    /no before text for conversation-prose 98, 99/
   );
 });
 
 test('assertBaselineComplete passes when every id is present', () => {
-  const ids = fs.readdirSync(path.join(__dirname, '..', 'baseline', 'conversation'))
+  const ids = fs.readdirSync(path.join(__dirname, '..', 'baseline', 'conversation-prose'))
     .filter(f => f.endsWith('.before.md'))
     .map(f => f.slice(0, 2));
-  assert.doesNotThrow(() => assertBaselineComplete('conversation', ids));
+  assert.doesNotThrow(() => assertBaselineComplete('conversation-prose', ids));
 });
 
 test('assertBaselineComplete names the command that fixes it', () => {
   assert.throws(
-    () => assertBaselineComplete('documentation', ['99']),
+    () => assertBaselineComplete('documentation-prose', ['99']),
     /--make-baseline/
   );
 });
@@ -177,13 +177,13 @@ test('pinnedModel reads the environment and returns empty when unset', () => {
 });
 
 test('corpusHash is stable across calls and differs between skills', () => {
-  assert.strictEqual(corpusHash('conversation'), corpusHash('conversation'));
-  assert.notStrictEqual(corpusHash('conversation'), corpusHash('documentation'));
-  assert.match(corpusHash('conversation'), /^[0-9a-f]{12}$/);
+  assert.strictEqual(corpusHash('conversation-prose'), corpusHash('conversation-prose'));
+  assert.notStrictEqual(corpusHash('conversation-prose'), corpusHash('documentation-prose'));
+  assert.match(corpusHash('conversation-prose'), /^[0-9a-f]{12}$/);
 });
 
 test('assertBaselineCorpusMatches passes when no baseline meta exists', () => {
-  assert.doesNotThrow(() => assertBaselineCorpusMatches('conversation', false));
+  assert.doesNotThrow(() => assertBaselineCorpusMatches('conversation-prose', false));
 });
 
 test('a second skill adds to the run metadata instead of replacing it', () => {
@@ -191,12 +191,12 @@ test('a second skill adds to the run metadata instead of replacing it', () => {
   try {
     const file = path.join(dir, 'meta.json');
 
-    const first = mergeMeta(file, 'conversation', {
+    const first = mergeMeta(file, 'conversation-prose', {
       models: ['claude-opus-5'], calls: 7, costUSD: 0.4, date: '2026-08-15'
     });
     fs.writeFileSync(file, JSON.stringify(first));
 
-    const second = mergeMeta(file, 'documentation', {
+    const second = mergeMeta(file, 'documentation-prose', {
       models: ['claude-opus-5', 'claude-haiku-4-5'], calls: 8, costUSD: 0.5, date: '2026-08-15'
     });
 
@@ -204,8 +204,8 @@ test('a second skill adds to the run metadata instead of replacing it', () => {
     assert.strictEqual(second.costUSD, 0.9);
     assert.deepStrictEqual(second.models, ['claude-haiku-4-5', 'claude-opus-5']);
     assert.deepStrictEqual(Object.keys(second.skills).sort(),
-      ['conversation', 'documentation']);
-    assert.strictEqual(second.skills['conversation'].calls, 7);
+      ['conversation-prose', 'documentation-prose']);
+    assert.strictEqual(second.skills['conversation-prose'].calls, 7);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
@@ -269,7 +269,7 @@ test('the plugin installs the same checks the figures are measured against', t =
   // The harness reads the skill from ~/.claude/skills/ and the README publishes
   // figures from it. A reader installs the plugin. If the two check lists
   // ever diverge, the published figure describes a skill nobody can install.
-  for (const skill of ['conversation', 'documentation']) {
+  for (const skill of ['conversation-prose', 'documentation-prose']) {
     const print = skillFingerprint(skill);
     if (!print.installed['checks.md']) {
       t.diagnostic(`${skill} is not installed with a checks.md, so nothing was compared`);
@@ -278,7 +278,7 @@ test('the plugin installs the same checks the figures are measured against', t =
     assert.strictEqual(
       print.checksMatchPublished, true,
       `${skill}: the installed checks (${print.checkCount}) and the checks in ` +
-      `plugins/prose/skills/${skill}/checks.md (${print.publishedCheckCount}) are not the same list`
+      `plugins/writing/skills/${skill}/checks.md (${print.publishedCheckCount}) are not the same list`
     );
   }
 });
@@ -309,7 +309,7 @@ test('a skill in neither place resolves to nothing and names both paths', () => 
   assert.strictEqual(source, null);
   assert.throws(() => readSkillBody('no-such-skill'), err => {
     assert.match(err.message, /\.claude\/skills\/no-such-skill/);
-    assert.match(err.message, /plugins\/prose\/skills\/no-such-skill/);
+    assert.match(err.message, /plugins\/writing\/skills\/no-such-skill/);
     return true;
   });
 });

@@ -11,7 +11,7 @@ const {
 } = require('./lib/isolation');
 const { loadEnvFile } = require('./lib/env');
 
-const SKILLS = ['conversation', 'documentation'];
+const SKILLS = ['conversation-prose', 'documentation-prose'];
 const CORPUS = path.join(__dirname, 'corpus');
 const BASELINE = path.join(__dirname, 'baseline');
 const SKILL_HOME = path.join(os.homedir(), '.claude', 'skills');
@@ -54,9 +54,9 @@ function pinnedModel() {
 // and the cost, so meta.json can name what actually ran.
 //
 // Every call runs with no tools and from an empty directory. A call made inside
-// this repository read the documentation skill off disk and applied the
+// this repository read the documentation-prose skill off disk and applied the
 // house style to a before text, which is the contamination the whole harness
-// exists to prevent. The skills are still on disk under `plugins/prose/`, so
+// exists to prevent. The skills are still on disk under `plugins/writing/`, so
 // the empty working directory and the disallowed tools both stay. The isolation
 // probe cannot see this failure, because at probe time no tool has run yet.
 const NO_TOOLS = ['Bash', 'Read', 'Glob', 'Grep', 'Edit', 'Write', 'WebFetch', 'WebSearch',
@@ -97,8 +97,8 @@ function callClaude(prompt, env, tally, cwd) {
   return String(payload.result || '').trim();
 }
 
-// Where a reader's copy comes from: the prose plugin in this repository.
-const PLUGIN_SKILLS = path.join(__dirname, '..', 'plugins', 'prose', 'skills');
+// Where a reader's copy comes from: the writing plugin in this repository.
+const PLUGIN_SKILLS = path.join(__dirname, '..', 'plugins', 'writing', 'skills');
 
 // Two places a skill can be. An installed copy at ~/.claude/skills/<skill>/ is
 // preferred, because it is the copy that actually runs and may carry local
@@ -122,7 +122,7 @@ function readSkillBody(skill) {
     throw new Error(
       `no skill named ${skill} at ${path.join(SKILL_HOME, skill)} or ` +
       `${path.join(PLUGIN_SKILLS, skill)}. Install it with ` +
-      'claude plugin install prose@design-skills, or run from a clone of this repository.'
+      'claude plugin install writing@design-skills, or run from a clone of this repository.'
     );
   }
   return fs.readFileSync(path.join(dir, 'SKILL.md'), 'utf8');

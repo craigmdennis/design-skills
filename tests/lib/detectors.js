@@ -1,8 +1,8 @@
 'use strict';
 const { stripQuoted, countWords, splitSentences } = require('./text');
 
-const CONVERSATION = 'conversation';
-const DOCUMENTATION = 'documentation';
+const CONVERSATION = 'conversation-prose';
+const DOCUMENTATION = 'documentation-prose';
 const BOTH = [CONVERSATION, DOCUMENTATION];
 
 const SENTENCE_CAP = 25;
@@ -221,8 +221,8 @@ const DETECTORS = [
     label: 'em dash (information only, never a violation)',
     tier: 'approximate',
     skills: BOTH,
-    // ASD-STE100 permits the em dash. Only published bans it, as a voice
-    // preference, and published is out of scope for this harness.
+    // ASD-STE100 permits the em dash. Only published-prose bans it, as a voice
+    // preference, and published-prose is out of scope for this harness.
     count: ctx => matchCount(ctx.text, /—/g)
   }
 ];

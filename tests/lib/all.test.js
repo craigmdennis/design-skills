@@ -34,11 +34,11 @@ test('--plan counts the corpus and the judging rounds', () => {
 });
 
 test('the plan counts the corpus files instead of assuming a size', () => {
-  // documentation carries one more prompt than conversation, so a
+  // documentation-prose carries one more prompt than conversation-prose, so a
   // hardcoded six would report the wrong number for both.
   const both = plan([]).stdout.match(/(\d+) for the corpus/)[1];
-  const one = plan(['conversation']).stdout.match(/(\d+) for the corpus/)[1];
-  const other = plan(['documentation']).stdout.match(/(\d+) for the corpus/)[1];
+  const one = plan(['conversation-prose']).stdout.match(/(\d+) for the corpus/)[1];
+  const other = plan(['documentation-prose']).stdout.match(/(\d+) for the corpus/)[1];
   assert.strictEqual(Number(both), Number(one) + Number(other));
   assert.notStrictEqual(one, other, 'the two corpora differ in size');
 });
@@ -60,7 +60,7 @@ test('the plan names where the before texts come from', () => {
 });
 
 test('naming one skill counts only that corpus', () => {
-  const result = plan(['conversation', '--rounds', '1']);
+  const result = plan(['conversation-prose', '--rounds', '1']);
   assert.match(result.stdout, /7 for the corpus/);
   assert.match(result.stdout, /6 for 1 judging rounds/);
   assert.match(result.stdout, /13 in total/);

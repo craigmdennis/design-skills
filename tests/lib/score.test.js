@@ -13,7 +13,7 @@ const ORPHAN = path.join(__dirname, '..', 'fixtures', 'run-orphan');
 test('scoreRun reports one result per skill in the run', () => {
   const results = scoreRun(SAMPLE);
   assert.strictEqual(results.length, 1);
-  assert.strictEqual(results[0].skill, 'conversation');
+  assert.strictEqual(results[0].skill, 'conversation-prose');
 });
 
 test('scoreRun counts the exact tier only in the total', () => {

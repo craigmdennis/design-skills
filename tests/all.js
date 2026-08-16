@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
-const SKILLS = ['conversation', 'documentation'];
+const SKILLS = ['conversation-prose', 'documentation-prose'];
 const HERE = __dirname;
 
 // One run directory for every step, so the corpus run, the score, and the
@@ -68,7 +68,7 @@ function step(label, args) {
 }
 
 const USAGE = [
-  'usage: node tests/all.js [conversation] [documentation]',
+  'usage: node tests/all.js [conversation-prose] [documentation-prose]',
   '                        [--rounds N] [--no-judge] [--plan] [--batch]',
   '                        [--model <id>] [--judge-model <id>] [--fresh-before]',
   '                        [--concurrency N] [--control]',
@@ -101,8 +101,8 @@ const USAGE = [
   '                       and reading it halves the corpus calls.',
   '',
   '  Generate the baseline once with:',
-  '    node tests/run.js conversation --make-baseline',
-  '    node tests/run.js documentation --make-baseline',
+  '    node tests/run.js conversation-prose --make-baseline',
+  '    node tests/run.js documentation-prose --make-baseline',
   '',
   '  Naming one or both skills limits the run to those. The default is both.'
 ].join('\n');

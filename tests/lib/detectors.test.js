@@ -16,11 +16,11 @@ function checkFixture(name) {
   }
 }
 
-test('conversation exact detectors match the fixture', () => {
+test('conversation-prose exact detectors match the fixture', () => {
   checkFixture('conversation-exact');
 });
 
-test('documentation exact detectors match the fixture', () => {
+test('documentation-prose exact detectors match the fixture', () => {
   checkFixture('documentation-exact');
 });
 
@@ -39,13 +39,13 @@ test('detector ids are unique', () => {
 });
 
 test('code fences and block quotes are not counted', () => {
-  const plain = runDetectors('Nothing here.', 'conversation');
-  const quoted = runDetectors('Nothing here.\n\n```\na; b; c;\n```\n\n> a; b;\n', 'conversation');
+  const plain = runDetectors('Nothing here.', 'conversation-prose');
+  const quoted = runDetectors('Nothing here.\n\n```\na; b; c;\n```\n\n> a; b;\n', 'conversation-prose');
   assert.strictEqual(quoted.counts.semicolon, plain.counts.semicolon);
 });
 
 test('agent-clause does not count the imperative you', () => {
-  const actual = runDetectors('Before you run the build, set the token.', 'documentation');
+  const actual = runDetectors('Before you run the build, set the token.', 'documentation-prose');
   assert.strictEqual(actual.counts['agent-clause'], 0);
 });
 

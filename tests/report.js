@@ -221,7 +221,7 @@ function build(runDir) {
     if (fingerprints.some(([, p]) => p.checksMatchPublished === false)) {
       out.push(
         'A skill marked **no** was measured against a check list that differs from ' +
-        'the one in `plugins/prose/`. The figures describe the locally installed copy, ' +
+        'the one in `plugins/writing/`. The figures describe the locally installed copy, ' +
         'and a reader installing from this repository would be measuring something ' +
         'else.'
       );
@@ -376,7 +376,7 @@ function build(runDir) {
     '5. The test measures a rewrite pass over fixed text. It does not measure ' +
       'prose written with the skill already loaded, which is how these skills are ' +
       'normally used.',
-    '6. `published` is not covered. That skill reads a voice profile written ' +
+    '6. `published-prose` is not covered. That skill reads a voice profile written ' +
       'at install time, so a shared run would measure either a profile that does ' +
       'not generalise or only part of the skill.'
   ].join('\n'));

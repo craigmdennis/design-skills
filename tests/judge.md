@@ -29,7 +29,7 @@ TOTALS A 4/15 B 13/15
 
 ===== CHECKS =====
 
-[paste the contents of ~/.claude/skills/conversation/checks.md here, or
+[paste the contents of ~/.claude/skills/conversation-prose/checks.md here, or
 the equivalent checklist for the skill under test]
 
 ===== BEGIN TEXT A =====

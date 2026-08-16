@@ -1,5 +1,5 @@
 {
-  "name": "prose",
+  "name": "writing",
   "version": "1.0.0",
   "description": "Three writing standards, one per genre. `conversation` governs an agent's replies, `documentation` governs skills and READMEs and specs, and `published` governs text going out under an author's own name. Ships the per-turn checklist hook that keeps the conversation standard applied over a long session.",
   "author": {

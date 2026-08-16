@@ -9,7 +9,7 @@ const {
 } = require('./lib/isolation');
 const { loadEnvFile } = require('./lib/env');
 
-const SKILLS = ['conversation', 'documentation'];
+const SKILLS = ['conversation-prose', 'documentation-prose'];
 const SKILL_HOME = path.join(os.homedir(), '.claude', 'skills');
 const TEMPLATE = path.join(__dirname, 'judge.md');
 // Judging marks two texts against a checklist, which is a different job from
@@ -69,8 +69,8 @@ function buildPrompt(checks, textA, textB) {
   ].join('\n');
 }
 
-// Where a reader's copy comes from: the prose plugin in this repository.
-const PLUGIN_SKILLS = path.join(__dirname, '..', 'plugins', 'prose', 'skills');
+// Where a reader's copy comes from: the writing plugin in this repository.
+const PLUGIN_SKILLS = path.join(__dirname, '..', 'plugins', 'writing', 'skills');
 
 // The checklist comes from the same copy the runner measured: an installed one
 // at ~/.claude/skills/<skill>/ first, the plugin's own second. A skill that
@@ -86,7 +86,7 @@ function readChecks(skill) {
   }
   throw new Error(
     `no checks for ${skill}. Looked in ${dirs.join(' and ')}. Install the skill ` +
-    'with claude plugin install prose@design-skills, or run from a clone of this repository.'
+    'with claude plugin install writing@design-skills, or run from a clone of this repository.'
   );
 }
 

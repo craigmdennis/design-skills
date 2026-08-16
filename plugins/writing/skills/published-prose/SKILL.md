@@ -1,5 +1,5 @@
 ---
-name: published
+name: published-prose
 description: Use when writing or editing prose published or sent under the author's own name — blog posts, case studies, portfolio pages, strategy docs, resume and cover-letter copy, application answers, social posts. Applies the author's voice rules and removes AI-generated patterns. Does NOT govern how the agent writes back to the reader in conversation.
 ---
 
@@ -10,7 +10,7 @@ description: Use when writing or editing prose published or sent under the autho
 Run these three steps in order, at the start of every invocation, before
 applying any rule below.
 
-1. Read `~/.claude/skills/published/voice-profile.md`.
+1. Read `~/.claude/skills/published-prose/voice-profile.md`.
 2. A profile counts as usable when the read succeeds **and** the file contains
    the line `status: complete`. A failed read and a file without that line are
    the same case.
@@ -19,7 +19,7 @@ applying any rule below.
 
    - **Build one now.** Read `interview.md` from this skill's own directory,
      ask its questions one at a time, and write the answers to
-     `~/.claude/skills/published/voice-profile.md` using the shape in
+     `~/.claude/skills/published-prose/voice-profile.md` using the shape in
      `voice-profile.template.md`, which carries the `status: complete` line.
      Creating the directory is part of this step. Never write the profile into
      a plugin directory: a plugin update replaces everything under it.
@@ -57,7 +57,7 @@ Close this skill when writing to the reader instead of for them.
 ## The voice profile
 
 Personal preferences are not in this file. They are in
-`~/.claude/skills/published/voice-profile.md`, which "Before writing
+`~/.claude/skills/published-prose/voice-profile.md`, which "Before writing
 anything" above reads or builds.
 
 The profile records

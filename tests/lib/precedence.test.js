@@ -7,8 +7,8 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
 const RUN_JS = path.join(__dirname, '..', 'run.js');
-const INJECT_JS = path.join(__dirname, '..', '..', 'plugins', 'prose', 'scripts', 'inject.js');
-const PLUGIN_ROOT = path.join(__dirname, '..', '..', 'plugins', 'prose');
+const INJECT_JS = path.join(__dirname, '..', '..', 'plugins', 'writing', 'scripts', 'inject.js');
+const PLUGIN_ROOT = path.join(__dirname, '..', '..', 'plugins', 'writing');
 
 // Both the harness and the hook script resolve a skill in two places: an
 // installed copy at ~/.claude/skills/<skill>/ first, the plugin's own second.
@@ -48,8 +48,8 @@ function resolveIn(home, skill) {
 
 test('the harness measures an installed copy in preference to the plugin', () => {
   withFakeHome(home => {
-    const planted = plantSkill(home, 'conversation', { 'SKILL.md': '# local\n' });
-    const { dir, source } = resolveIn(home, 'conversation');
+    const planted = plantSkill(home, 'conversation-prose', { 'SKILL.md': '# local\n' });
+    const { dir, source } = resolveIn(home, 'conversation-prose');
     assert.strictEqual(source, 'installed');
     assert.strictEqual(dir, planted);
   });
@@ -57,9 +57,9 @@ test('the harness measures an installed copy in preference to the plugin', () =>
 
 test('the harness falls back to the plugin when nothing is installed', () => {
   withFakeHome(home => {
-    const { dir, source } = resolveIn(home, 'conversation');
+    const { dir, source } = resolveIn(home, 'conversation-prose');
     assert.strictEqual(source, 'plugin');
-    assert.match(dir, /plugins[/\\]prose[/\\]skills[/\\]conversation$/);
+    assert.match(dir, /plugins[/\\]writing[/\\]skills[/\\]conversation-prose$/);
   });
 });
 
@@ -78,14 +78,14 @@ function inject(home, skill, file) {
 
 test('the hook injects an installed copy in preference to the plugin', () => {
   withFakeHome(home => {
-    plantSkill(home, 'conversation', { 'checks.md': 'LOCAL CHECKS\n' });
-    assert.strictEqual(inject(home, 'conversation', 'checks.md'), 'LOCAL CHECKS\n');
+    plantSkill(home, 'conversation-prose', { 'checks.md': 'LOCAL CHECKS\n' });
+    assert.strictEqual(inject(home, 'conversation-prose', 'checks.md'), 'LOCAL CHECKS\n');
   });
 });
 
 test('the hook falls back to the plugin when nothing is installed', () => {
   withFakeHome(home => {
-    assert.match(inject(home, 'conversation', 'checks.md'), /^# conversation: run these/);
+    assert.match(inject(home, 'conversation-prose', 'checks.md'), /^# conversation-prose: run these/);
   });
 });
 
@@ -93,17 +93,17 @@ test('the hook falls back to the plugin when nothing is installed', () => {
 // there would leave the standard out of context with no sign that it happened.
 test('the hook reads past an empty installed copy to the plugin', () => {
   withFakeHome(home => {
-    plantSkill(home, 'conversation', { 'checks.md': '   \n' });
-    assert.match(inject(home, 'conversation', 'checks.md'), /^# conversation: run these/);
+    plantSkill(home, 'conversation-prose', { 'checks.md': '   \n' });
+    assert.match(inject(home, 'conversation-prose', 'checks.md'), /^# conversation-prose: run these/);
   });
 });
 
 test('the hook strips frontmatter, which is loader metadata and not prose', () => {
   withFakeHome(home => {
-    plantSkill(home, 'conversation', {
-      'SKILL.md': '---\nname: conversation\ndescription: x\n---\n\n# Body\n'
+    plantSkill(home, 'conversation-prose', {
+      'SKILL.md': '---\nname: conversation-prose\ndescription: x\n---\n\n# Body\n'
     });
-    assert.strictEqual(inject(home, 'conversation', 'SKILL.md'), '# Body\n');
+    assert.strictEqual(inject(home, 'conversation-prose', 'SKILL.md'), '# Body\n');
   });
 });
 

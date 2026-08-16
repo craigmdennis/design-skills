@@ -239,10 +239,14 @@ missing `status: complete` line as no profile, and offers the interview from a
 sibling file loaded only on that branch. The profile writes outside the plugin
 directory, because a plugin update replaces everything under it.
 
-**The names.** The three skills drop the `-prose` suffix, because the plugin
-name now carries it: `prose:conversation`, `prose:documentation`,
-`prose:published`. The cost is that a skill installed with no plugin prefix is
-named `published`, which says less on its own than `published-prose` did.
+**The names.** The plugin is called `writing`, giving `writing:conversation-prose`
+and `writing:documentation-prose`. Naming it `prose` was tried first and dropped:
+`prose:conversation-prose` repeats a word, and removing the repetition by
+shortening the skills to `conversation`, `documentation`, and `published` moved
+the cost somewhere worse. A skills-only install drops the plugin prefix, so those
+short names would sit in a flat `~/.claude/skills/` where any other author can
+claim `documentation` and shadow it silently. Naming the plugin for the domain
+and each skill for its genre satisfies both constraints at once.
 
 **One improvement that fell out of the rename.** The harness had refused to run
 without a skill installed at `~/.claude/skills/<skill>/`, so a stranger cloning

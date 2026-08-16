@@ -84,25 +84,25 @@ test('cleanEnv points the CLI at the throwaway directory', () => {
 
 test('assertIsolated throws when the probe describes the skill under test', () => {
   assert.throws(
-    () => assertIsolated('Check 8 is Signposting and significance.', 'conversation'),
-    /the probe described conversation/
+    () => assertIsolated('Check 8 is Signposting and significance.', 'conversation-prose'),
+    /the probe described conversation-prose/
   );
 });
 
 test('assertIsolated names the skill it asked about in the message', () => {
   assert.throws(
-    () => assertIsolated('It bans metaphor and idiom.', 'documentation'),
-    /documentation/
+    () => assertIsolated('It bans metaphor and idiom.', 'documentation-prose'),
+    /documentation-prose/
   );
 });
 
 test('assertIsolated passes when the model reports no such skill', () => {
-  assert.doesNotThrow(() => assertIsolated('NO SUCH SKILL', 'conversation'));
+  assert.doesNotThrow(() => assertIsolated('NO SUCH SKILL', 'conversation-prose'));
 });
 
 test('assertIsolated passes when the denial carries surrounding prose', () => {
   assert.doesNotThrow(
-    () => assertIsolated('I have no such skill in my context: NO SUCH SKILL', 'conversation')
+    () => assertIsolated('I have no such skill in my context: NO SUCH SKILL', 'conversation-prose')
   );
 });
 
@@ -111,14 +111,14 @@ test('assertIsolated throws on a self-report that lists context instead of answe
   // plus harness text, because the model counts its own system prompt. Only the
   // exact denial passes.
   assert.throws(
-    () => assertIsolated('Instruction files: none. Skills: none loaded.', 'conversation'),
+    () => assertIsolated('Instruction files: none. Skills: none loaded.', 'conversation-prose'),
     /not isolated/i
   );
 });
 
 test('probePrompt names the skill and demands the exact denial', () => {
-  const prompt = probePrompt('documentation');
-  assert.match(prompt, /documentation/);
+  const prompt = probePrompt('documentation-prose');
+  assert.match(prompt, /documentation-prose/);
   assert.match(prompt, /NO SUCH SKILL/);
 });
 

@@ -9,23 +9,26 @@ contract changes.
 
 ### The three prose skills become a plugin, and `prompts/` is removed
 
-`plugins/prose/` holds three skills, renamed to drop the `-prose` suffix the
-plugin name now carries: `conversation`, `documentation`, and `published`,
-invoked as `prose:conversation` and so on. Install with
-`claude plugin install prose@design-skills`. The three files under `prompts/`
+`plugins/writing/` holds `conversation-prose`, `documentation-prose`, and
+`published-prose` as ordinary skills, invoked as `writing:conversation-prose`
+and so on. The plugin is named for the domain and each skill for the genre it
+governs, so no word repeats at the invocation site and every skill name still
+stands alone where a skills-only install drops the prefix. Install with
+`claude plugin install writing@design-skills`. The three files under `prompts/`
 are deleted, and with them the paste route, the hand-edit of
 `~/.claude/settings.json`, and the routing lines in `~/.claude/CLAUDE.md`.
 
 Two hooks replace the settings edit. `SessionStart` injects
-`conversation/SKILL.md`, about 6,700 tokens once per session.
-`UserPromptSubmit` injects `conversation/checks.md`, about 650 tokens per turn.
-Both prefer a copy at `~/.claude/skills/<skill>/` over the plugin's own, so an
-edited copy still takes priority and the same text is never injected twice.
+`conversation-prose/SKILL.md`, about 6,700 tokens once per session.
+`UserPromptSubmit` injects `conversation-prose/checks.md`, about 650 tokens per
+turn. Both prefer a copy at `~/.claude/skills/<skill>/` over the plugin's own,
+so an edited copy still takes priority and the same text is never injected
+twice.
 
-`published` no longer depends on an interview at install time, which a plugin
-install cannot run. Its first instruction reads
-`~/.claude/skills/published/voice-profile.md`. Where no profile contains the
-line `status: complete`, the skill offers two paths: the twelve-question
+`published-prose` no longer depends on an interview at install time, which a
+plugin install cannot run. Its first instruction reads
+`~/.claude/skills/published-prose/voice-profile.md`. Where no profile contains
+the line `status: complete`, the skill offers two paths: the twelve-question
 interview, now in `interview.md` beside the skill and read only on that branch,
 or writing without a profile and asking for each preference as it applies. The
 profile is written outside the plugin directory, so an update does not replace
@@ -36,15 +39,12 @@ uses: an installed copy at `~/.claude/skills/<skill>/` first, the plugin's own
 second. A clone with nothing installed now measures the shipped skill instead
 of refusing to run, and `meta.json` records which of the two produced each
 figure. The check list is compared against
-`plugins/prose/skills/<skill>/checks.md`, and a figure measured against a
+`plugins/writing/skills/<skill>/checks.md`, and a figure measured against a
 different list still fails a test and is still named in the report.
 
-Unchanged: the four other plugins, the corpus, the baseline, and the published
-figures, because the check lists are the same lists those figures were measured
-against. The two committed run directories under `tests/runs/` keep the
-pre-rename directory names, being dated records of what was measured.
-`published` still has no `checks.md` and no per-turn injection; the two hooks
-inject `conversation` only.
+Unchanged: the four other plugins, the skill names, the corpus, the baseline,
+and the published figures. `published-prose` still has no `checks.md` and no
+per-turn injection; the two hooks inject `conversation-prose` only.
 
 ## 2026-08-15
 
