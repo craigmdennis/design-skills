@@ -248,6 +248,15 @@ short names would sit in a flat `~/.claude/skills/` where any other author can
 claim `documentation` and shadow it silently. Naming the plugin for the domain
 and each skill for its genre satisfies both constraints at once.
 
+**What the first install test found.** A `SessionStart` hook's plain stdout is
+discarded. Both hooks were written to print the file directly, which worked for
+`UserPromptSubmit` and silently injected nothing at session start. The fix is
+the `hookSpecificOutput` envelope both events accept. Two properties of a
+headless `-p` run made this slow to see: the hook command executes and its
+output is dropped, so a marker file proves the wrong half; and `SessionStart`
+injection does not apply to `-p` at all, which a control run against a hook
+known to work interactively confirmed.
+
 **One improvement that fell out of the rename.** The harness had refused to run
 without a skill installed at `~/.claude/skills/<skill>/`, so a stranger cloning
 the repository could not reproduce a figure without installing first. It now

@@ -18,7 +18,10 @@ stands alone where a skills-only install drops the prefix. Install with
 are deleted, and with them the paste route, the hand-edit of
 `~/.claude/settings.json`, and the routing lines in `~/.claude/CLAUDE.md`.
 
-Two hooks replace the settings edit. `SessionStart` injects
+Two hooks replace the settings edit. Each prints a `hookSpecificOutput` JSON
+envelope naming its own event, because a `SessionStart` hook's plain stdout is
+discarded. Emitting the envelope from Node also removes the `jq` dependency the
+equivalent shell hook carried. `SessionStart` injects
 `conversation-prose/SKILL.md`, about 6,700 tokens once per session.
 `UserPromptSubmit` injects `conversation-prose/checks.md`, about 650 tokens per
 turn. Both prefer a copy at `~/.claude/skills/<skill>/` over the plugin's own,

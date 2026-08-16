@@ -63,23 +63,29 @@ test('the harness falls back to the plugin when nothing is installed', () => {
   });
 });
 
-function inject(home, skill, file) {
+// A SessionStart hook's plain stdout is discarded, so the script emits the
+// JSON envelope both events accept. Returns the injected text, or '' when the
+// script printed nothing.
+function inject(home, skill, file, event) {
   const result = spawnSync(
     process.execPath,
-    [INJECT_JS, skill, file],
+    [INJECT_JS, event || 'UserPromptSubmit', skill, file],
     {
       encoding: 'utf8',
       env: Object.assign({}, process.env, { HOME: home, CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT })
     }
   );
   assert.strictEqual(result.status, 0, 'the hook script always exits 0');
-  return result.stdout;
+  if (!result.stdout.trim()) return '';
+  const payload = JSON.parse(result.stdout);
+  assert.strictEqual(payload.hookSpecificOutput.hookEventName, event || 'UserPromptSubmit');
+  return payload.hookSpecificOutput.additionalContext;
 }
 
 test('the hook injects an installed copy in preference to the plugin', () => {
   withFakeHome(home => {
     plantSkill(home, 'conversation-prose', { 'checks.md': 'LOCAL CHECKS\n' });
-    assert.strictEqual(inject(home, 'conversation-prose', 'checks.md'), 'LOCAL CHECKS\n');
+    assert.strictEqual(inject(home, 'conversation-prose', 'checks.md'), 'LOCAL CHECKS');
   });
 });
 
@@ -103,12 +109,60 @@ test('the hook strips frontmatter, which is loader metadata and not prose', () =
     plantSkill(home, 'conversation-prose', {
       'SKILL.md': '---\nname: conversation-prose\ndescription: x\n---\n\n# Body\n'
     });
-    assert.strictEqual(inject(home, 'conversation-prose', 'SKILL.md'), '# Body\n');
+    assert.strictEqual(inject(home, 'conversation-prose', 'SKILL.md', 'SessionStart'), '# Body');
   });
 });
 
 test('the hook prints nothing and exits 0 when a skill is in neither place', () => {
   withFakeHome(home => {
-    assert.strictEqual(inject(home, 'no-such-skill', 'SKILL.md'), '');
+    assert.strictEqual(inject(home, 'no-such-skill', 'SKILL.md', 'SessionStart'), '');
   });
+});
+
+// The event name is not decoration: SessionStart discards plain stdout, and an
+// envelope naming the wrong event is discarded too.
+test('the hook labels its output with the event it was registered for', () => {
+  withFakeHome(home => {
+    plantSkill(home, 'conversation-prose', { 'SKILL.md': '# local\n' });
+    for (const event of ['SessionStart', 'UserPromptSubmit']) {
+      const result = spawnSync(
+        process.execPath,
+        [INJECT_JS, event, 'conversation-prose', 'SKILL.md'],
+        { encoding: 'utf8', env: Object.assign({}, process.env, { HOME: home, CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT }) }
+      );
+      const payload = JSON.parse(result.stdout);
+      assert.strictEqual(payload.hookSpecificOutput.hookEventName, event);
+      assert.strictEqual(payload.hookSpecificOutput.additionalContext, '# local');
+    }
+  });
+});
+
+test('the hook prints nothing for an event it was not written for', () => {
+  withFakeHome(home => {
+    plantSkill(home, 'conversation-prose', { 'SKILL.md': '# local\n' });
+    const result = spawnSync(
+      process.execPath,
+      [INJECT_JS, 'Stop', 'conversation-prose', 'SKILL.md'],
+      { encoding: 'utf8', env: Object.assign({}, process.env, { HOME: home, CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT }) }
+    );
+    assert.strictEqual(result.status, 0);
+    assert.strictEqual(result.stdout, '');
+  });
+});
+
+// hooks.json is the only place the script's arguments are set. A signature
+// change that misses it produces a hook that runs and injects nothing, which is
+// exactly the failure this file exists to catch.
+test('hooks.json calls the script with an event name each hook accepts', () => {
+  const hooks = JSON.parse(fs.readFileSync(path.join(PLUGIN_ROOT, 'hooks', 'hooks.json'), 'utf8'));
+  for (const [event, groups] of Object.entries(hooks.hooks)) {
+    for (const group of groups) {
+      for (const hook of group.hooks) {
+        assert.match(hook.command, /inject\.js" (SessionStart|UserPromptSubmit) \S+ \S+$/,
+          `${event}: ${hook.command}`);
+        assert.ok(hook.command.includes(`inject.js" ${event} `),
+          `${event} hook passes a different event name: ${hook.command}`);
+      }
+    }
+  }
 });

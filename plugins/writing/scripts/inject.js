@@ -7,17 +7,20 @@
 //   UserPromptSubmit  -> conversation-prose checks.md  (the checklist, per turn)
 //
 // conversation-prose governs every reply, so loading it on demand is too late:
-// by the time the agent decides a reply needs it, the reply is written. A
+// by the time the standard is found to apply, the reply is written. A
 // session-start injection loads the standard; a per-turn injection restates the
 // checklist near the reply, because a file read once at session start stops
-// affecting output as the session grows.
+// affecting output as a session gets longer.
 //
-// Precedence: a copy under ~/.claude/skills/<skill>/ wins over the plugin's own
-// copy. Anyone who edited the standard into their own words keeps that edit, and
-// nobody pays twice for two near-identical copies of the same text.
+// Output shape: a SessionStart hook's plain stdout is discarded. Both events
+// accept the JSON envelope below, so both use it. Emitting the envelope from
+// Node also removes the `jq` dependency an equivalent shell hook would carry.
 //
-// Best-effort: always exits 0. Stdout reaches the agent's context, so a failure
-// prints nothing at all.
+// Precedence: a copy under ~/.claude/skills/<skill>/ takes priority over the
+// plugin's own. An edited copy is the one that applies, and the same text is
+// never injected twice.
+//
+// Best-effort: always exits 0. A failure prints nothing at all.
 
 'use strict';
 
@@ -25,9 +28,11 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
+const EVENTS = ['SessionStart', 'UserPromptSubmit'];
+
 function main() {
-  const [skill, file] = process.argv.slice(2);
-  if (!skill || !file) return;
+  const [event, skill, file] = process.argv.slice(2);
+  if (!EVENTS.includes(event) || !skill || !file) return;
 
   const candidates = [
     path.join(os.homedir(), '.claude', 'skills', skill, file)
@@ -46,7 +51,12 @@ function main() {
     // An empty file is a truncated write, not a deliberate silence. Fall
     // through to the next candidate instead of injecting nothing.
     if (!text.trim()) continue;
-    process.stdout.write(stripFrontmatter(text).trim() + '\n');
+    process.stdout.write(JSON.stringify({
+      hookSpecificOutput: {
+        hookEventName: event,
+        additionalContext: stripFrontmatter(text).trim()
+      }
+    }) + '\n');
     return;
   }
 }

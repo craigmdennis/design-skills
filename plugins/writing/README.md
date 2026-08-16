@@ -27,6 +27,10 @@ Restart the session afterwards. The hooks below are inactive until then.
 `conversation-prose` governs every reply, so loading it on demand is too late.
 By the time the standard is found to apply, the reply is written. Two hooks correct that order.
 
+Each hook prints a `hookSpecificOutput` JSON envelope naming its own event. A
+`SessionStart` hook's plain stdout is discarded, so the envelope is required
+there; both events accept it.
+
 | Hook | Injects | Cost |
 |---|---|---|
 | `SessionStart` | `conversation-prose/SKILL.md` | about 6,700 tokens, once per session |
