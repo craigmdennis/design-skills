@@ -24,12 +24,12 @@ The corpus figure covers one skill. Each skill is a separate invocation of `run.
 
 | skill | pairs | violations per 1,000 words, before | after | change | checks passed, before | after |
 |---|---:|---:|---:|---:|---:|---:|
-| conversation-prose | 6 | 13.9 | 5.4 | -61% | 59 to 63/96 (61.5% to 65.6%) | 95/96 (99.0%) |
-| documentation-prose | 7 | 24.6 | 3.9 | -84% | 88 to 90/126 (69.8% to 71.4%) | 120 to 122/126 (95.2% to 96.8%) |
+| conversation | 6 | 13.9 | 5.4 | -61% | 59 to 63/96 (61.5% to 65.6%) | 95/96 (99.0%) |
+| documentation | 7 | 24.6 | 3.9 | -84% | 88 to 90/126 (69.8% to 71.4%) | 120 to 122/126 (95.2% to 96.8%) |
 
 The first three columns are counted by script and reproduce exactly from the committed texts. The last two are marked by a model and vary between rounds, so they are reported as a range.
 
-## conversation-prose
+## conversation
 
 6 pairs. Counted by script, exact detectors only:
 
@@ -76,7 +76,7 @@ Per prompt, averaged across rounds:
 | 05 | 11.3/16 | 15.7/16 | +4.3 | 3 |
 | 06 | 11.7/16 | 15.7/16 | +4.0 | 3 |
 
-## documentation-prose
+## documentation
 
 7 pairs. Counted by script, exact detectors only:
 
@@ -137,8 +137,8 @@ Control (`judge.control.per-pair.claude-opus-5.json`): each before text judged a
 
 | skill | slot A | slot B | gap |
 |---|---:|---:|---:|
-| conversation-prose | 57/96 | 57/96 | 0 |
-| documentation-prose | 94/126 | 94/126 | 0 |
+| conversation | 57/96 | 57/96 | 0 |
+| documentation | 94/126 | 94/126 | 0 |
 
 A zero here is weak evidence on its own: a judge given two identical texts can answer by copying one column into the other. The position split above is the measurement that uses texts which differ.
 
@@ -149,5 +149,5 @@ A zero here is weak evidence on its own: a judge given two identical texts can a
 3. One model on one date, both recorded above.
 4. Thirteen prompts is enough for a direction and too few for a confidence interval.
 5. The test measures a rewrite pass over fixed text. It does not measure prose written with the skill already loaded, which is how these skills are normally used.
-6. `published-prose` is not covered. That skill reads a voice profile written at install time, so a shared run would measure either a profile that does not generalise or only part of the skill.
+6. `published` is not covered. That skill reads a voice profile written at install time, so a shared run would measure either a profile that does not generalise or only part of the skill.
 

@@ -5,13 +5,13 @@ rules that improve one genre make the other two worse.
 
 | Writing | Skill | Standard |
 |---|---|---|
-| An agent's replies: explanations, status updates, summaries, plans, reviews, questions back | `conversation-prose` | ASD-STE100 subset, 16 checks |
-| Documentation: skills, READMEs, specs, plans, code comments, pull request bodies | `documentation-prose` | Third-person impersonal, 18 checks |
-| Prose published under an author's name: posts, case studies, resume copy | `published-prose` | Voice rules plus a personal profile |
+| An agent's replies: explanations, status updates, summaries, plans, reviews, questions back | `conversation` | ASD-STE100 subset, 16 checks |
+| Documentation: skills, READMEs, specs, plans, code comments, pull request bodies | `documentation` | Third-person impersonal, 18 checks |
+| Prose published under an author's name: posts, case studies, resume copy | `published` | Voice rules plus a personal profile |
 
-Applying `published-prose` to a reply removes the comparison that would have
+Applying `published` to a reply removes the comparison that would have
 made a concept clear and produces false confidence where a caveat was honest.
-Applying `conversation-prose` to a blog post removes the author's voice from it.
+Applying `conversation` to a blog post removes the author's voice from it.
 
 ## Install
 
@@ -24,19 +24,19 @@ Restart the session afterwards. The hooks below are inactive until then.
 
 ## The two hooks
 
-`conversation-prose` governs every reply, so loading it on demand is too late.
+`conversation` governs every reply, so loading it on demand is too late.
 By the time the standard is found to apply, the reply is written. Two hooks correct that order.
 
 | Hook | Injects | Cost |
 |---|---|---|
-| `SessionStart` | `conversation-prose/SKILL.md` | about 6,700 tokens, once per session |
-| `UserPromptSubmit` | `conversation-prose/checks.md` | about 650 tokens per turn |
+| `SessionStart` | `conversation/SKILL.md` | about 6,700 tokens, once per session |
+| `UserPromptSubmit` | `conversation/checks.md` | about 650 tokens per turn |
 
 The per-turn injection exists because a file read once at session start stops
 affecting output as a session gets longer. The 16 checks restated on each turn
 are what keep the standard applied at turn 90.
 
-`documentation-prose` and `published-prose` load on demand from their
+`documentation` and `published` load on demand from their
 descriptions and cost nothing until invoked.
 
 To stop both injections, disable the plugin with `/plugin`.
@@ -50,8 +50,8 @@ injected twice.
 
 ## The voice profile
 
-`published-prose` reads
-`~/.claude/skills/published-prose/voice-profile.md` before writing anything. The
+`published` reads
+`~/.claude/skills/published/voice-profile.md` before writing anything. The
 profile records spelling convention, punctuation bans, when to write "I" and
 when "we", which sentence habits must survive an edit, what numbers may be
 published on which surface, and which words are banned.
@@ -73,9 +73,9 @@ The rules describe failures in writing generally, which is why they are
 shareable. The specific bans belong to one author. Two parts are meant to be
 replaced:
 
-- **`conversation-prose`**, the section "Words the reader has banned". It ships
+- **`conversation`**, the section "Words the reader has banned". It ships
   with one worked example. Replace it.
-- **`published-prose`**, the whole voice profile.
+- **`published`**, the whole voice profile.
 
 Copy the skill directory to `~/.claude/skills/<name>/` before editing. Edits
 made inside the plugin are lost at the next `claude plugin update`, and a local
@@ -84,10 +84,10 @@ copy takes priority over the plugin's anyway.
 ## Measured result
 
 Blinded and reproducible. Violations per 1,000 words fall by 61%
-for `conversation-prose` and 84% for `documentation-prose`; the model-judged
+for `conversation` and 84% for `documentation`; the model-judged
 check score rises from 61–66% to 99% and from 70–71% to 95–97%. The corpus,
 the harness, and the limits of what those figures show are in the repository
-README and `docs/prose-test-report.md`. `published-prose` is not measured.
+README and `docs/prose-test-report.md`. `published` is not measured.
 
 ## Limits
 

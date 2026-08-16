@@ -11,7 +11,7 @@ const { build, readJudged, pairTable, checkTable } = require('../report');
 // report are predictable.
 function makeRun() {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-report-'));
-  const skillDir = path.join(dir, 'conversation-prose');
+  const skillDir = path.join(dir, 'conversation');
   fs.mkdirSync(skillDir, { recursive: true });
   fs.writeFileSync(path.join(skillDir, '01.before.md'),
     'The rule holds; I decided to keep it rather than drop it.\n');
@@ -22,7 +22,7 @@ function makeRun() {
   fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify({
     modelPinned: 'test-model', models: ['test-model'], calls: 3, costUSD: 0.2,
     date: '2026-08-15', cli: 'test', corpusCommit: 'abc1234', baseline: 'tests/baseline',
-    skills: { 'conversation-prose': { calls: 3, costUSD: 0.2, models: ['test-model'] } }
+    skills: { 'conversation': { calls: 3, costUSD: 0.2, models: ['test-model'] } }
   }));
   return dir;
 }
@@ -31,7 +31,7 @@ const JUDGED = {
   rounds: 2, batch: false, control: false, blinded: true, calls: 4,
   model: 'test-model', costUSD: 0.5,
   results: [{
-    skill: 'conversation-prose',
+    skill: 'conversation',
     pairs: 2,
     rows: [
       { round: 1, before: 10, after: 30, a: 20, b: 20, denominator: 32, unparsed: 0 },
@@ -44,7 +44,7 @@ const JUDGED = {
   },
   marks: [
     {
-      skill: 'conversation-prose', round: 1, pair: '01', afterSlot: 'b',
+      skill: 'conversation', round: 1, pair: '01', afterSlot: 'b',
       a: 4, b: 15, before: 4, after: 15, denominator: 16,
       checks: [
         { check: '1 animacy', before: 'FAIL', after: 'PASS', quote: 'the check earned its keep' },
@@ -52,7 +52,7 @@ const JUDGED = {
       ]
     },
     {
-      skill: 'conversation-prose', round: 1, pair: '02', afterSlot: 'a',
+      skill: 'conversation', round: 1, pair: '02', afterSlot: 'a',
       a: 15, b: 6, before: 6, after: 15, denominator: 16,
       checks: [
         { check: '1 animacy', before: 'FAIL', after: 'PASS', quote: null },
@@ -110,7 +110,7 @@ test('the report carries the cost of every phase it found', () => {
     fs.writeFileSync(path.join(dir, 'judge.control.per-pair.test-model.json'), JSON.stringify({
       rounds: 1, batch: false, control: true, calls: 2, costUSD: 0.25,
       results: [{
-        skill: 'conversation-prose', pairs: 2,
+        skill: 'conversation', pairs: 2,
         rows: [{ round: 1, before: 10, after: 10, a: 10, b: 10, denominator: 32, unparsed: 0 }]
       }],
       marks: []
@@ -159,7 +159,7 @@ test('the per-prompt table averages every round of each pair', () => {
 });
 
 test('the per-check table counts failures and quotes one of them', () => {
-  const table = checkTable(JUDGED.marks, 'conversation-prose');
+  const table = checkTable(JUDGED.marks, 'conversation');
   assert.match(table, /\| 1 animacy \| 2\/2 \| 0\/2 \| "the check earned its keep" \|/);
   assert.match(table, /\| 2 literal \| 1\/2 \| 0\/2 \| "a rock that wants" \|/);
 });
@@ -173,7 +173,7 @@ test('the report states what the figures do not show', () => {
   try {
     const report = build(dir);
     assert.match(report, /not calibrated against a person/);
-    assert.match(report, /published-prose` is not covered/);
+    assert.match(report, /published` is not covered/);
     assert.match(report, /does not measure whether the writing is better/);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
@@ -184,7 +184,8 @@ test('the report names a skill measured against a different check list', () => {
   const dir = makeRun();
   try {
     const meta = JSON.parse(fs.readFileSync(path.join(dir, 'meta.json'), 'utf8'));
-    meta.skills['conversation-prose'].fingerprint = {
+    meta.skills['conversation'].fingerprint = {
+      source: 'installed',
       installed: { 'SKILL.md': 'aaaaaaaaaaaa', 'checks.md': 'bbbbbbbbbbbb' },
       checkCount: 16, publishedCheckCount: 15, checksMatchPublished: false
     };
@@ -202,7 +203,8 @@ test('the report confirms the check list a reader would install', () => {
   const dir = makeRun();
   try {
     const meta = JSON.parse(fs.readFileSync(path.join(dir, 'meta.json'), 'utf8'));
-    meta.skills['conversation-prose'].fingerprint = {
+    meta.skills['conversation'].fingerprint = {
+      source: 'installed',
       installed: { 'SKILL.md': 'aaaaaaaaaaaa', 'checks.md': 'bbbbbbbbbbbb' },
       checkCount: 16, publishedCheckCount: 16, checksMatchPublished: true
     };
@@ -212,6 +214,29 @@ test('the report confirms the check list a reader would install', () => {
     assert.match(report, /\| yes \|/);
     assert.ok(!/differs from the one in/.test(report));
     assert.match(report, /\| 16 \|/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('the report names which copy of a skill produced the figures', () => {
+  const dir = makeRun();
+  try {
+    const meta = JSON.parse(fs.readFileSync(path.join(dir, 'meta.json'), 'utf8'));
+    meta.skills['conversation'].fingerprint = {
+      source: 'plugin',
+      installed: { 'SKILL.md': 'cccccccccccc', 'checks.md': 'dddddddddddd' },
+      checkCount: 16, publishedCheckCount: 16, checksMatchPublished: true
+    };
+    fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify(meta));
+
+    const report = build(dir);
+    assert.match(report, /\| conversation \| plugin \|/);
+    // A figure measured from the plugin compares a file against itself, so the
+    // report must not present that comparison as evidence.
+    assert.match(report, /trivially true/);
+    assert.ok(!/de-personalised and re-wrapped/.test(report),
+      'the installed-copy note does not apply to a plugin-sourced figure');
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }

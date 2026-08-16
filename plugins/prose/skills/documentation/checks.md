@@ -1,4 +1,4 @@
-# documentation-prose: run these on the draft before saving
+# documentation: run these on the draft before saving
 
 Procedures, not word lists. A word list finds only the words on it. Run every check on every sentence and on every clause, including headings, table cells, and code comments.
 

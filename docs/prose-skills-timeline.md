@@ -239,7 +239,20 @@ missing `status: complete` line as no profile, and offers the interview from a
 sibling file loaded only on that branch. The profile writes outside the plugin
 directory, because a plugin update replaces everything under it.
 
-`prompts/` is deleted.
+**The names.** The three skills drop the `-prose` suffix, because the plugin
+name now carries it: `prose:conversation`, `prose:documentation`,
+`prose:published`. The cost is that a skill installed with no plugin prefix is
+named `published`, which says less on its own than `published-prose` did.
+
+**One improvement that fell out of the rename.** The harness had refused to run
+without a skill installed at `~/.claude/skills/<skill>/`, so a stranger cloning
+the repository could not reproduce a figure without installing first. It now
+resolves a skill in two places, installed first and the plugin second, and
+records in `meta.json` which one produced each figure. The hook script uses the
+same order.
+
+`prompts/` is deleted. The two committed run directories under `tests/runs/`
+keep the pre-rename names, being dated records of what was measured.
 
 ## Where it landed
 

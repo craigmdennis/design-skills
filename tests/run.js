@@ -11,7 +11,7 @@ const {
 } = require('./lib/isolation');
 const { loadEnvFile } = require('./lib/env');
 
-const SKILLS = ['conversation-prose', 'documentation-prose'];
+const SKILLS = ['conversation', 'documentation'];
 const CORPUS = path.join(__dirname, 'corpus');
 const BASELINE = path.join(__dirname, 'baseline');
 const SKILL_HOME = path.join(os.homedir(), '.claude', 'skills');
@@ -54,7 +54,7 @@ function pinnedModel() {
 // and the cost, so meta.json can name what actually ran.
 //
 // Every call runs with no tools and from an empty directory. A call made inside
-// this repository read the documentation-prose skill off disk and applied the
+// this repository read the documentation skill off disk and applied the
 // house style to a before text, which is the contamination the whole harness
 // exists to prevent. The skills are still on disk under `plugins/prose/`, so
 // the empty working directory and the disallowed tools both stay. The isolation
@@ -97,14 +97,35 @@ function callClaude(prompt, env, tally, cwd) {
   return String(payload.result || '').trim();
 }
 
+// Where a reader's copy comes from: the prose plugin in this repository.
+const PLUGIN_SKILLS = path.join(__dirname, '..', 'plugins', 'prose', 'skills');
+
+// Two places a skill can be. An installed copy at ~/.claude/skills/<skill>/ is
+// preferred, because it is the copy that actually runs and may carry local
+// edits. The plugin's own copy is the fallback, so a fresh clone measures
+// something without an install step. The hook script uses the same order.
+function resolveSkillDir(skill) {
+  const installed = path.join(SKILL_HOME, skill);
+  if (fs.existsSync(path.join(installed, 'SKILL.md'))) {
+    return { dir: installed, source: 'installed' };
+  }
+  const shipped = path.join(PLUGIN_SKILLS, skill);
+  if (fs.existsSync(path.join(shipped, 'SKILL.md'))) {
+    return { dir: shipped, source: 'plugin' };
+  }
+  return { dir: null, source: null };
+}
+
 function readSkillBody(skill) {
-  const file = path.join(SKILL_HOME, skill, 'SKILL.md');
-  if (!fs.existsSync(file)) {
+  const { dir } = resolveSkillDir(skill);
+  if (!dir) {
     throw new Error(
-      `no skill at ${file}. Install it first: claude plugin install prose@design-skills.`
+      `no skill named ${skill} at ${path.join(SKILL_HOME, skill)} or ` +
+      `${path.join(PLUGIN_SKILLS, skill)}. Install it with ` +
+      'claude plugin install prose@design-skills, or run from a clone of this repository.'
     );
   }
-  return fs.readFileSync(file, 'utf8');
+  return fs.readFileSync(path.join(dir, 'SKILL.md'), 'utf8');
 }
 
 // The numbered check titles, which are what the judge marks against and what
@@ -114,42 +135,43 @@ function checkTitles(text) {
   return [...text.matchAll(/^\s*(\d+)\.\s+\*\*(.+?)\.?\*\*/gm)].map(m => `${m[1]} ${m[2]}`);
 }
 
-// Where a reader's copy comes from: the prose plugin in this repository.
-const PUBLISHED_SKILLS = path.join(__dirname, '..', 'plugins', 'prose', 'skills');
-
-// The skill under test comes from ~/.claude/skills/, and the plugin holds what
-// a reader installs. The bytes of the two never match: the published copy is
+// A measured copy and a published copy. Where the measured one is installed at
+// ~/.claude/skills/, the bytes of the two never match: the published copy is
 // de-personalised and re-wrapped on purpose. What has to match is the check
 // list, because that is what the judge marks against and what sets every
 // denominator. A figure produced against a different check list describes a
-// skill nobody can install from this repository.
+// skill nobody can install from this repository. Where the plugin's own copy
+// was measured, the two are one file and the comparison is trivially true, so
+// `source` records which case produced the figure.
 function skillFingerprint(skill) {
   const digest = file => (fs.existsSync(file)
     ? crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex').slice(0, 12)
     : null);
 
-  const installedChecksFile = path.join(SKILL_HOME, skill, 'checks.md');
-  const installedChecks = fs.existsSync(installedChecksFile)
-    ? fs.readFileSync(installedChecksFile, 'utf8')
+  const { dir, source } = resolveSkillDir(skill);
+  const measuredChecksFile = dir ? path.join(dir, 'checks.md') : null;
+  const measuredChecks = measuredChecksFile && fs.existsSync(measuredChecksFile)
+    ? fs.readFileSync(measuredChecksFile, 'utf8')
     : null;
 
-  const publishedChecksFile = path.join(PUBLISHED_SKILLS, skill, 'checks.md');
+  const publishedChecksFile = path.join(PLUGIN_SKILLS, skill, 'checks.md');
   const publishedChecks = fs.existsSync(publishedChecksFile)
     ? fs.readFileSync(publishedChecksFile, 'utf8')
     : null;
 
-  const installedTitles = checkTitles(installedChecks);
+  const measuredTitles = checkTitles(measuredChecks);
   const publishedTitles = checkTitles(publishedChecks);
 
   return {
+    source,
     installed: {
-      'SKILL.md': digest(path.join(SKILL_HOME, skill, 'SKILL.md')),
-      'checks.md': digest(installedChecksFile)
+      'SKILL.md': dir ? digest(path.join(dir, 'SKILL.md')) : null,
+      'checks.md': measuredChecksFile ? digest(measuredChecksFile) : null
     },
-    checkCount: installedTitles ? installedTitles.length : null,
+    checkCount: measuredTitles ? measuredTitles.length : null,
     publishedCheckCount: publishedTitles ? publishedTitles.length : null,
-    checksMatchPublished: installedTitles && publishedTitles
-      ? JSON.stringify(installedTitles) === JSON.stringify(publishedTitles)
+    checksMatchPublished: measuredTitles && publishedTitles
+      ? JSON.stringify(measuredTitles) === JSON.stringify(publishedTitles)
       : null
   };
 }
@@ -604,5 +626,6 @@ if (require.main === module) {
 module.exports = {
   buildAfterPrompt, REWRITE_INSTRUCTION, stamp, assertRunDirFree, readBaseline,
   assertBaselineComplete, assertBaselineCorpusMatches, assertBaselineModelMatches,
-  corpusHash, corpusFileHashes, baselineWorkList, pinnedModel, mergeMeta, skillFingerprint
+  corpusHash, corpusFileHashes, baselineWorkList, pinnedModel, mergeMeta, skillFingerprint,
+  resolveSkillDir, readSkillBody, SKILLS, PLUGIN_SKILLS
 };

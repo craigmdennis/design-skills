@@ -1,5 +1,5 @@
 {
-  "skill": "conversation-prose",
+  "skill": "conversation",
   "counts": {
     "semicolon": 2,
     "long-sentence": 3,

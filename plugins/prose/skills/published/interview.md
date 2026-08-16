@@ -1,7 +1,7 @@
 # Voice profile interview
 
-Read by the `published-prose` skill when no usable voice profile is installed.
-Write the answers to `~/.claude/skills/published-prose/voice-profile.md` using
+Read by the `published` skill when no usable voice profile is installed.
+Write the answers to `~/.claude/skills/published/voice-profile.md` using
 the shape in `voice-profile.template.md`.
 
 Ask these one at a time. Wait for each answer.

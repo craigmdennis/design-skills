@@ -1,17 +1,17 @@
 # Voice profile template
 
 Write the answers into the structure below, in the author's own words, and save
-it as `~/.claude/skills/published-prose/voice-profile.md`. Where an answer was
+it as `~/.claude/skills/published/voice-profile.md`. Where an answer was
 "no preference", write "No preference stated. Ask when it matters."
 
 The `status: complete` line marks a finished interview. A profile without it
-counts as absent, and `published-prose` offers the interview again.
+counts as absent, and `published` offers the interview again.
 
 Everything from the next line down is the file to write.
 
 ---
 name: voice-profile
-description: Personal voice preferences read by the published-prose skill before writing or editing.
+description: Personal voice preferences read by the `published` skill before writing or editing.
 status: complete
 ---
 

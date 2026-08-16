@@ -7,7 +7,6 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
 const JUDGE_JS = path.join(__dirname, '..', 'judge.js');
-const SKILL_HOME = path.join(os.homedir(), '.claude', 'skills');
 
 // These tests drive judge.js as a child process and make no model call. A stub
 // binary stands in for the CLI, records the arguments it was given, and returns
@@ -35,18 +34,15 @@ function makeStub(dir) {
 }
 
 function makeRun(dir) {
-  const skillDir = path.join(dir, 'conversation-prose');
+  const skillDir = path.join(dir, 'conversation');
   fs.mkdirSync(skillDir, { recursive: true });
   fs.writeFileSync(path.join(skillDir, '01.before.md'), 'The rule holds; I decided to keep it.\n');
   fs.writeFileSync(path.join(skillDir, '01.after.md'), 'The rule applies. I kept it.\n');
 }
 
-test('the judge reaches its first call and parses the reply', t => {
-  if (!fs.existsSync(path.join(SKILL_HOME, 'conversation-prose'))) {
-    t.skip('conversation-prose is not installed, so the judge has no checks to send');
-    return;
-  }
-
+// No install guard: the judge falls back to the plugin's own copy, which every
+// clone has, so the checks are always available to send.
+test('the judge reaches its first call and parses the reply', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prose-judge-'));
   try {
     const { stub, log } = makeStub(dir);

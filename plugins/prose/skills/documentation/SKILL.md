@@ -1,5 +1,5 @@
 ---
-name: documentation-prose
+name: documentation
 description: Use when writing or editing documentation of any kind — skill files, README files, specs, plans, architecture notes, code comments, API reference, contributing guides, changelogs, runbooks, and pull request titles and bodies. Applies third-person impersonal voice, the register of specifications and reference manuals. Governs documentation only; it does not govern conversational replies or prose published under an author's own name.
 ---
 
@@ -17,11 +17,11 @@ also has a shape of its own. See "Change documents" below.
 It does not govern two other genres:
 
 - **Conversational replies.** Explanations, status updates, summaries, reviews,
-  and questions back to a reader follow ASD-STE100. See the `conversation-prose`
+  and questions back to a reader follow ASD-STE100. See the `conversation`
   skill where it is installed.
 - **Prose published under a person's own name.** Blog posts, case studies,
   resume copy, and application answers follow that author's own voice rules. See
-  the `published-prose` skill where it is installed.
+  the `published` skill where it is installed.
 
 Both companion skills are optional. This one is complete on its own.
 

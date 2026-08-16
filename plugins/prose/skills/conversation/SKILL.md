@@ -1,6 +1,6 @@
 ---
-name: conversation-prose
-description: Use at the start of every session and whenever writing a reply, explanation, status update, summary, plan, review, or question to the reader. Governs the agent's own prose in conversation — the counterpart to published-prose, which governs published prose and does not apply here.
+name: conversation
+description: Use at the start of every session and whenever writing a reply, explanation, status update, summary, plan, review, or question to the reader. Governs the agent's own prose in conversation — the counterpart to the `published` skill, which governs prose under an author's name and does not apply here.
 ---
 
 # Conversation prose
@@ -12,26 +12,26 @@ explanations, status updates, summaries, plans, code review, commit messages,
 and questions back to the reader.
 
 It does not govern text going out under the author's name. That is
-`published-prose`: blog posts, case studies, portfolio pages, strategy
+`published`: blog posts, case studies, portfolio pages, strategy
 documents, resume and cover-letter copy, application answers. The two are
 separate genres with opposite requirements in places, and this skill exists to
-stop `published-prose` rules being applied to conversation.
+stop `published` rules being applied to conversation.
 
 It does not govern documentation either. Skill files, README files,
 specifications, plans, and code comments take third-person impersonal. That is
-`documentation-prose`.
+`documentation`.
 
-**`published-prose` does not apply here.** Not partially, not "the universal
+**`published` does not apply here.** Not partially, not "the universal
 anti-patterns". When writing to the reader, do not apply that skill. When
 writing for the author, it applies. Specifically, none of these apply to the
 agent's prose: the metaphor ban as it is worded there, "no caveating", the
 proscribed word list, fragment closers, the spelling convention, the em-dash
 ban, the bold budget.
 
-The em-dash ban in `published-prose` is a voice preference. ASD-STE100 permits the em dash and
+The em-dash ban in `published` is a voice preference. ASD-STE100 permits the em dash and
 bans only the semicolon, so do not re-derive that ban from the standard.
 
-The one partial exception is `published-prose`'s "do not add the why when the
+The one partial exception is `published`'s "do not add the why when the
 what is clear" rule. Explaining a mechanism the reader needs is the job here and
 stays. Justifying your own wording after the fact does not. See "Do not narrate
 or justify your own choices" below.
@@ -178,13 +178,13 @@ it refers to. If the preceding text offers two candidates, name the thing.
 - *"the file"*, after two files have been named → name it again
 - *"it"*, across a paragraph boundary → repeat the noun
 
-## What carries over from published-prose
+## What carries over from `published`
 
 - **Plainest accurate word.** "Use" not "utilize", "help" not "facilitate". No
   promotional register, no vague attributions ("studies suggest"), no hedging
   pileups ("it's worth noting that it could potentially").
 
-Everything else in `published-prose` is a rule for published work. It does not
+Everything else in `published` is a rule for published work. It does not
 apply to a reply.
 
 ## The two standards
@@ -318,7 +318,7 @@ instead of verifying it, mark it.
 
 No check finds this failure, because it is about the facts and not the wording.
 
-`published-prose`'s "no caveating" is a rule about not undercutting a published
+`published`'s "no caveating" is a rule about not undercutting a published
 conclusion with defensive qualifiers. Applied to conversation it produces false
 confidence, which is worse than a hedge. Hedge when the evidence hedges.
 
@@ -465,7 +465,7 @@ as a fact about the thing. Do not make it a verdict on your choice: *"a
 smooth-reading example survives a proof-read, which is the failure being
 taught"* is a fact. *"a real one teaches better"* is a verdict.
 
-This is the narrowed version of `published-prose`'s "do not add the why when the
+This is the narrowed version of `published`'s "do not add the why when the
 what is clear". Explaining a mechanism the reader needs in order to decide
 something stays. Explaining why your own sentence was the right call goes.
 
@@ -505,10 +505,10 @@ a fix.
 They and them for anyone whose pronouns have not been stated. A name is not
 evidence of pronouns.
 
-### A published-prose rule applied to the reply
+### A `published` rule applied to the reply
 
 No check finds this one either. A fragment closer, or a word avoided only
-because it is on `published-prose`'s proscribed list, belongs in a reply. Put it
+because it is on `published`'s proscribed list, belongs in a reply. Put it
 back. Analogy and "X, not Y" are **not** examples of this: STE bans the first
 and check 11 bans writing the second, in replies as well as in published prose.
 
@@ -538,7 +538,7 @@ it if it is not a ban the reader wants.
   - *"that rule holds better"* becomes *"that rule works better"*
 
   Fixed compound nouns are out of scope (`placeholder`, `stakeholder`). A ban
-  here can be stricter than the same word's treatment in `published-prose`. Two
+  here can be stricter than the same word's treatment in `published`. Two
   genres, two rules. Do not sync them without asking the reader.
 
 - **"figure" meaning "figure of speech".** The two words that state the meaning

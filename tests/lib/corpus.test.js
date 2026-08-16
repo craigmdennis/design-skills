@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const CORPUS = path.join(__dirname, '..', 'corpus');
-const SKILLS = ['conversation-prose', 'documentation-prose'];
+const SKILLS = ['conversation', 'documentation'];
 
 test('each skill has at least six corpus files, numbered from 01 with no gaps', () => {
   for (const skill of SKILLS) {

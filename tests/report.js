@@ -180,33 +180,44 @@ function build(runDir) {
     `($${corpusCost.toFixed(2)} corpus, $${judgeCost.toFixed(2)} judging` +
     `${controlCost ? `, $${controlCost.toFixed(2)} control` : ''}) |`);
   out.push('');
-  // The harness reads the skill from ~/.claude/skills/, and the prose plugin
-  // holds what a reader installs. A figure produced against a drifted copy describes a
-  // skill that is not in this repository, so a mismatch is named here.
+  // A skill resolves in two places: an installed copy at ~/.claude/skills/
+  // first, the plugin's own second. Which one produced a figure changes what
+  // the figure describes, so `source` is printed beside the digests, and a
+  // check list that differs from the plugin's is named as a mismatch.
   const fingerprints = Object.entries((meta.skills || {}))
     .map(([skill, entry]) => [skill, entry.fingerprint])
     .filter(([, print]) => print);
   if (fingerprints.length) {
     out.push('The skill measured, and whether a reader installing the plugin gets the same checks:');
     out.push('');
-    out.push('| skill | installed SKILL.md | installed checks.md | checks | same checks as the plugin |');
-    out.push('|---|---|---|---:|---|');
+    out.push('| skill | source | SKILL.md | checks.md | checks | same checks as the plugin |');
+    out.push('|---|---|---|---|---:|---|');
     for (const [skill, print] of fingerprints) {
       const same = print.checksMatchPublished === null
         ? 'not comparable'
         : (print.checksMatchPublished ? 'yes' : '**no**');
       out.push(
-        `| ${skill} | \`${print.installed['SKILL.md'] || 'missing'}\` ` +
+        `| ${skill} | ${print.source || 'unknown'} | \`${print.installed['SKILL.md'] || 'missing'}\` ` +
         `| \`${print.installed['checks.md'] || 'none'}\` | ${print.checkCount ?? 'n/a'} | ${same} |`
       );
     }
     out.push('');
-    out.push(
-      'The published copy is de-personalised and re-wrapped, so its bytes never ' +
-      'match the installed one. The check list is what has to match, because the ' +
-      'judge marks against it and it sets every denominator above.'
-    );
-    out.push('');
+    if (fingerprints.some(([, p]) => p.source === 'installed')) {
+      out.push(
+        'An installed copy is de-personalised and re-wrapped in the plugin, so the ' +
+        'bytes of the two never match. The check list is what has to match, because ' +
+        'the judge marks against it and it sets every denominator above.'
+      );
+      out.push('');
+    }
+    if (fingerprints.some(([, p]) => p.source === 'plugin')) {
+      out.push(
+        'A skill sourced from `plugin` was measured from this repository with nothing ' +
+        'installed, so the measured copy and the published copy are one file and the ' +
+        'check comparison for it is trivially true.'
+      );
+      out.push('');
+    }
     if (fingerprints.some(([, p]) => p.checksMatchPublished === false)) {
       out.push(
         'A skill marked **no** was measured against a check list that differs from ' +
@@ -365,7 +376,7 @@ function build(runDir) {
     '5. The test measures a rewrite pass over fixed text. It does not measure ' +
       'prose written with the skill already loaded, which is how these skills are ' +
       'normally used.',
-    '6. `published-prose` is not covered. That skill reads a voice profile written ' +
+    '6. `published` is not covered. That skill reads a voice profile written ' +
       'at install time, so a shared run would measure either a profile that does ' +
       'not generalise or only part of the skill.'
   ].join('\n'));

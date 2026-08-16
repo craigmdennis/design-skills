@@ -23,8 +23,8 @@ writing standards and the hooks that keep one of them applied to every reply.
   raw material for a future blog post, case study, or retro.
 - **[impact-report](plugins/impact-report/)** (`/impact-report:write-report`) — turns one
   initiative you owned into a short, shareable impact report.
-- **[prose](plugins/prose/)** (`conversation-prose`, `documentation-prose`,
-  `published-prose`) — three writing standards, one per genre, plus the hooks that keep the
+- **[prose](plugins/prose/)** (`conversation`, `documentation`,
+  `published`) — three writing standards, one per genre, plus the hooks that keep the
   conversation standard applied on every turn. See [Prose skills](#prose-skills).
 
 ### Install: any agent, skills only
@@ -66,7 +66,7 @@ switches, are in the [field-notes README](plugins/field-notes/).
 
 **prose** registers the two injection hooks described under
 [Prose skills](#prose-skills). Installed as skills only, all three still work when invoked
-by name, and `conversation-prose` then loads at most once per session instead of on every
+by name, and `conversation` then loads at most once per session instead of on every
 turn.
 
 ## Prose skills
@@ -77,9 +77,9 @@ make worse, so they are separate skills and not settings on one skill. The backg
 
 | Genre | Skill | Standard |
 |---|---|---|
-| Replies, explanations, status updates, summaries, plans, review | [conversation-prose](plugins/prose/skills/conversation-prose/) | ASD-STE100 (Issue 9) and minimalism |
-| Skill files, READMEs, specs, plans, code comments, changelogs | [documentation-prose](plugins/prose/skills/documentation-prose/) | Third-person impersonal |
-| Prose published under an author's own name | [published-prose](plugins/prose/skills/published-prose/) | The author's own voice, from an interview |
+| Replies, explanations, status updates, summaries, plans, review | [conversation](plugins/prose/skills/conversation/) | ASD-STE100 (Issue 9) and minimalism |
+| Skill files, READMEs, specs, plans, code comments, changelogs | [documentation](plugins/prose/skills/documentation/) | Third-person impersonal |
+| Prose published under an author's own name | [published](plugins/prose/skills/published/) | The author's own voice, from an interview |
 
 ```
 /plugin marketplace add craigmdennis/design-skills
@@ -90,7 +90,7 @@ Restart the session afterwards. The two hooks below are inactive until then.
 
 ### The two hooks
 
-`conversation-prose` governs every reply, so loading it on demand is too late. By the time
+`conversation` governs every reply, so loading it on demand is too late. By the time
 the standard is found to apply, the reply is written. A `SessionStart` hook injects the full
 skill once per session, about 6,700 tokens. A `UserPromptSubmit` hook injects `checks.md`,
 the sixteen checks in one line each, on every turn, about 650 tokens. The per-turn injection
@@ -101,11 +101,11 @@ Both injections prefer a copy at `~/.claude/skills/<skill>/`, so an edited copy 
 priority over the plugin's and the same text is never injected twice. To stop both, disable
 the plugin with `/plugin`.
 
-`documentation-prose` and `published-prose` load on demand and cost nothing until invoked.
+`documentation` and `published` load on demand and cost nothing until invoked.
 
 ### The voice profile
 
-`published-prose` reads `~/.claude/skills/published-prose/voice-profile.md` before writing
+`published` reads `~/.claude/skills/published/voice-profile.md` before writing
 anything: spelling, punctuation, when you write "I" and when "we", which numbers may be
 published on which surface, and which words you have banned. Where no profile exists, the
 skill offers two paths: a twelve-question interview that writes a profile, or writing
@@ -121,8 +121,8 @@ directory, so `claude plugin update` does not replace it.
 
 The rules describe failures in writing generally. The specific bans belong to one author.
 Two parts are meant to be replaced: the "Words the reader has banned" section of
-`conversation-prose`, which ships one worked entry as an example (a ban on every figurative use
-of "hold"), and the whole `published-prose` voice profile.
+`conversation`, which ships one worked entry as an example (a ban on every figurative use
+of "hold"), and the whole `published` voice profile.
 
 Copy the skill directory to `~/.claude/skills/<name>/` before editing. Edits made inside the
 plugin are lost at the next `claude plugin update`, and a local copy takes priority over the
@@ -130,7 +130,7 @@ plugin's anyway.
 
 ### On ASD-STE100
 
-`conversation-prose` applies a subset of the ASD-STE100 writing rules (Issue 9, January
+`conversation` applies a subset of the ASD-STE100 writing rules (Issue 9, January
 2025) and does not implement the standard. The standard's dictionary is licensed and is not
 reproduced here, so nothing checks a word against the approved list. The rules that describe
 sentence shape — voice, sentence length, noun clusters, punctuation, one idea per sentence —
@@ -153,8 +153,8 @@ prose in and measure that instead.
 
 | skill | prompts | violations per 1,000 words, before | after | change | checks passed, before | after |
 |---|---:|---:|---:|---:|---:|---:|
-| conversation-prose | 6 | 13.9 | 5.4 | **−61%** | 61.5–65.6% | **99.0%** |
-| documentation-prose | 7 | 24.6 | 3.9 | **−84%** | 69.8–71.4% | **95.2–96.8%** |
+| conversation | 6 | 13.9 | 5.4 | **−61%** | 61.5–65.6% | **99.0%** |
+| documentation | 7 | 24.6 | 3.9 | **−84%** | 69.8–71.4% | **95.2–96.8%** |
 
 Claude Opus 5, 2026-08-15. The first three columns are counted by script and reproduce
 exactly from the committed texts. The last two are marked by a second Claude instance across
@@ -163,7 +163,7 @@ three rounds, so they are given as a range. Full detail, per prompt and per chec
 
 ### What the change looks like
 
-`conversation-prose`, from a code review. The rewrite states the finding in the first
+`conversation`, from a code review. The rewrite states the finding in the first
 sentence, drops the semicolon, and stops giving a living verb to a piece of software:
 
 > **Before** — Three things, one of which is urgent. […] `id` comes straight from the path and
@@ -175,7 +175,7 @@ sentence, drops the semicolon, and stops giving a living verb to a piece of soft
 > the authenticated user, including the `admin` flag. […] Fix this first. The fix replaces the
 > whole function.
 
-`documentation-prose`, from a deploy runbook. Who set a rule and when belongs in version
+`documentation`, from a deploy runbook. Who set a rule and when belongs in version
 control, so the rule survives and the attribution goes:
 
 > **Before** — **Friday freeze:** no deploy happens on a Friday after 15:00 UTC. Marcus Webb
@@ -199,7 +199,7 @@ Four things keep the comparison honest.
 1. **The before text sees no skill.** Corpus calls run against a throwaway configuration
    directory with `--bare`, no tools, no slash commands, and an empty working directory. An
    early version ran inside this repository with tools enabled, and one before text quoted a
-   rule out of the documentation-prose skill on disk, which made it an after text. A canary probe
+   rule out of the documentation skill on disk, which made it an after text. A canary probe
    asks the fresh instance what the skill says and requires the answer "NO SUCH SKILL".
 2. **The judge is blinded.** The two texts arrive as TEXT A and TEXT B. Nothing tells the
    judge which one a skill produced. Labelling them BEGIN BEFORE and BEGIN AFTER moved the
@@ -225,7 +225,7 @@ records which copy produced a figure.
 node tests/all.js --plan              # call count and cost estimate, runs nothing
 node tests/all.js                     # corpus, score, judge, report
 node tests/all.js --no-judge          # counted score only, no judged score
-node tests/all.js conversation-prose  # one skill
+node tests/all.js conversation  # one skill
 ```
 
 Approximate cost, from the runs above:
@@ -247,7 +247,7 @@ scores the before text more leniently, so it is a smoke test and not a published
 The individual steps run on their own if you want them:
 
 ```
-node tests/run.js conversation-prose --out tests/runs/mine   # generate the after texts
+node tests/run.js conversation --out tests/runs/mine   # generate the after texts
 node tests/score.js tests/runs/mine                          # counted score
 node tests/judge.js tests/runs/mine --rounds 3               # judged score
 node tests/report.js tests/runs/mine                         # write docs/prose-test-report.md
@@ -262,7 +262,7 @@ as `08.before.md` and add the prompt that would have produced it as
 `tests/corpus/<skill>/08-your-name.md`. Then:
 
 ```
-node tests/run.js conversation-prose --out tests/runs/mine
+node tests/run.js conversation --out tests/runs/mine
 node tests/all.js --no-judge
 ```
 
@@ -277,7 +277,7 @@ the failures it names. It does not measure whether the writing is better, and no
 test can. The judge has not been calibrated against a person marking the same checks by hand.
 Thirteen prompts is enough for a direction and too few for a confidence interval. And the
 test measures a rewrite pass over fixed text, where the normal use is prose written with the
-skill already loaded. `published-prose` is not measured at all, because it reads a voice
+skill already loaded. `published` is not measured at all, because it reads a voice
 profile written at install time and a shared run would measure either a profile that
 generalises to nobody or only part of the skill.
 

@@ -9,7 +9,7 @@ const {
 } = require('./lib/isolation');
 const { loadEnvFile } = require('./lib/env');
 
-const SKILLS = ['conversation-prose', 'documentation-prose'];
+const SKILLS = ['conversation', 'documentation'];
 const SKILL_HOME = path.join(os.homedir(), '.claude', 'skills');
 const TEMPLATE = path.join(__dirname, 'judge.md');
 // Judging marks two texts against a checklist, which is a different job from
@@ -69,18 +69,24 @@ function buildPrompt(checks, textA, textB) {
   ].join('\n');
 }
 
-// conversation-prose ships a one-page checks file for its per-turn hook.
-// documentation-prose has no such file, so its own text is the checklist.
+// Where a reader's copy comes from: the prose plugin in this repository.
+const PLUGIN_SKILLS = path.join(__dirname, '..', 'plugins', 'prose', 'skills');
+
+// The checklist comes from the same copy the runner measured: an installed one
+// at ~/.claude/skills/<skill>/ first, the plugin's own second. A skill that
+// ships a one-page checks.md gives the judge that file; otherwise its own text
+// is the checklist.
 function readChecks(skill) {
-  const compact = path.join(SKILL_HOME, skill, 'checks.md');
-  if (fs.existsSync(compact)) return fs.readFileSync(compact, 'utf8');
-
-  const full = path.join(SKILL_HOME, skill, 'SKILL.md');
-  if (fs.existsSync(full)) return fs.readFileSync(full, 'utf8');
-
+  const dirs = [path.join(SKILL_HOME, skill), path.join(PLUGIN_SKILLS, skill)];
+  for (const dir of dirs) {
+    for (const name of ['checks.md', 'SKILL.md']) {
+      const file = path.join(dir, name);
+      if (fs.existsSync(file)) return fs.readFileSync(file, 'utf8');
+    }
+  }
   throw new Error(
-    `no checks for ${skill}. Expected ${compact} or ${full}. Install the skill ` +
-    `first: claude plugin install prose@design-skills.`
+    `no checks for ${skill}. Looked in ${dirs.join(' and ')}. Install the skill ` +
+    'with claude plugin install prose@design-skills, or run from a clone of this repository.'
   );
 }
 

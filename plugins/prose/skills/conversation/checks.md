@@ -1,4 +1,4 @@
-# conversation-prose: run these on the draft before sending
+# conversation: run these on the draft before sending
 
 Procedures, not word lists. A word list finds only the words on it. Run every check on every sentence and on every clause, including transitions, lead-ins, subordinate clauses, participial phrases, and trailing clauses.
 

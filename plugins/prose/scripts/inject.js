@@ -3,10 +3,10 @@
 // prose: inject a skill file into the agent's context
 //
 // Registered twice in hooks.json:
-//   SessionStart      -> conversation-prose SKILL.md   (the full standard, once)
-//   UserPromptSubmit  -> conversation-prose checks.md  (the checklist, per turn)
+//   SessionStart      -> conversation SKILL.md   (the full standard, once)
+//   UserPromptSubmit  -> conversation checks.md  (the checklist, per turn)
 //
-// conversation-prose governs every reply, so loading it on demand is too late:
+// conversation governs every reply, so loading it on demand is too late:
 // by the time the agent decides a reply needs it, the reply is written. A
 // session-start injection loads the standard; a per-turn injection restates the
 // checklist near the reply, because a file read once at session start stops
