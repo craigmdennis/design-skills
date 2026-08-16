@@ -5,6 +5,41 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-08-16
+
+### The three prose skills become a plugin, and `prompts/` is removed
+
+`plugins/prose/` holds `conversation-prose`, `documentation-prose`, and
+`published-prose` as ordinary skills. Install with
+`claude plugin install prose@design-skills`. The three files under `prompts/`
+are deleted, and with them the paste route, the hand-edit of
+`~/.claude/settings.json`, and the routing lines in `~/.claude/CLAUDE.md`.
+
+Two hooks replace the settings edit. `SessionStart` injects
+`conversation-prose/SKILL.md`, about 6,700 tokens once per session.
+`UserPromptSubmit` injects `conversation-prose/checks.md`, about 650 tokens per
+turn. Both prefer a copy at `~/.claude/skills/<skill>/` over the plugin's own, so
+an edited copy still takes priority and the same text is never injected twice.
+
+`published-prose` no longer depends on an interview at install time, which a
+plugin install cannot run. Its first instruction reads
+`~/.claude/skills/published-prose/voice-profile.md`. Where no profile contains
+the line `status: complete`, the skill offers two paths: the twelve-question
+interview, now in `interview.md` beside the skill and read only on that branch,
+or writing without a profile and asking for each preference as it applies. The
+profile is written outside the plugin directory, so an update does not replace
+it.
+
+The harness compares the installed check list against
+`plugins/prose/skills/<skill>/checks.md` instead of the deleted prompt files. A
+figure measured against a different check list still fails a test and is still
+named in the report.
+
+Unchanged: the four other plugins, the corpus, the baseline, and the published
+figures, because the check lists are the same lists the figures were measured
+against. `published-prose` still has no `checks.md` and no per-turn injection;
+the two hooks inject `conversation-prose` only.
+
 ## 2026-08-15
 
 ### A measured before and after, regenerable by anyone

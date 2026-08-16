@@ -80,7 +80,7 @@ function readChecks(skill) {
 
   throw new Error(
     `no checks for ${skill}. Expected ${compact} or ${full}. Install the skill ` +
-    `first by pasting prompts/${skill}.md into a session.`
+    `first: claude plugin install prose@design-skills.`
   );
 }
 

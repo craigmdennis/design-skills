@@ -192,7 +192,7 @@ test('the report names a skill measured against a different check list', () => {
 
     const report = build(dir);
     assert.match(report, /\| \*\*no\*\* \|/);
-    assert.match(report, /differs from the one in `prompts\/`/);
+    assert.match(report, /differs from the one in `plugins\/prose\/`/);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }

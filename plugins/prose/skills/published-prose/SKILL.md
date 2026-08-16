@@ -1,88 +1,32 @@
-# published-prose
-
-A prompt that installs a writing skill for prose published under an author's own
-name: blog posts, case studies, portfolio pages, strategy documents, resume and
-cover-letter copy, application answers, social posts.
-
-The skill removes the patterns that make text read as machine-generated. It
-borrows three rules from ASD-STE100 (Simplified Technical English) and takes
-nothing else from that standard, which is written for text that must not be
-misread and excludes writing where voice and persuasion are the point. It
-does not govern how an agent writes back in conversation, and it does not govern
-documentation. Those are two separate genres with opposite requirements in
-places; see `conversation-prose.md` and `documentation-prose.md` in this
-directory.
-
-## What the prompt does
-
-1. Writes `~/.claude/skills/published-prose/SKILL.md`.
-2. Interviews the reader, one question at a time, about voice preferences that
-   cannot be generic: spelling, punctuation, person, what numbers may be
-   published, and which words are banned.
-3. Writes those answers to `~/.claude/skills/published-prose/voice-profile.md`,
-   which the skill reads before it writes anything.
-4. Offers a routing line for `~/.claude/CLAUDE.md`, and adds it only on
-   confirmation.
-
-The interview takes about ten questions. Answering "no preference" to any of
-them is valid; the skill then asks at the point the preference is needed.
-
-## Why the voice profile is separate
-
-The skill body carries rules about failures in writing. A voice profile carries
-preferences about writing. Nobody else can use another person's preferences, and
-an unstated preference produces prose that reads as somebody else. Keeping the
-two in separate files means the skill can be shared and the profile stays local.
-
-## Limits
-
-The prompt embeds the skill verbatim, so a pasted copy has no connection to this
-repository. No update reaches it. Re-pasting the block installs the current
-version and overwrites the previous one, so copy `voice-profile.md` aside first
-if it has been edited by hand.
-
-## The prompt
-
-Copy everything inside the block below and paste it into a Claude Code session.
-
-````
-You are installing a writing skill into this environment. Do exactly the
-following, and nothing else.
-
-1. Create the directory ~/.claude/skills/published-prose/ if it does not exist.
-
-2. Write the text between BEGIN SKILL.md and END SKILL.md to
-   ~/.claude/skills/published-prose/SKILL.md, verbatim. Do not summarise it, do
-   not reformat it, do not correct it, and do not change any wording. The file
-   includes examples of banned phrases; those have to be reproduced exactly for
-   the rules to be usable.
-
-3. Interview me to build a voice profile. Ask the questions under INTERVIEW one
-   at a time and wait for each answer before asking the next. Do not ask them as
-   a list. If I answer "no preference" or "skip", record that and continue.
-
-4. Write my answers to ~/.claude/skills/published-prose/voice-profile.md using
-   the structure under VOICE PROFILE TEMPLATE. Record my answers in my own
-   words. Do not add preferences I did not state.
-
-5. Print the full path of both files.
-
-6. Ask whether to add this line to ~/.claude/CLAUDE.md, and add it only if I say
-   yes:
-
-   When writing or editing prose published or sent under my own name, use the
-   published-prose skill.
-
-7. Stop. Do not create or change any other file. Do not change settings. Do not
-   install anything else.
-
-===== BEGIN SKILL.md =====
 ---
 name: published-prose
 description: Use when writing or editing prose published or sent under the author's own name — blog posts, case studies, portfolio pages, strategy docs, resume and cover-letter copy, application answers, social posts. Applies the author's voice rules and removes AI-generated patterns. Does NOT govern how the agent writes back to the reader in conversation.
 ---
 
 # Published prose
+
+## Before writing anything
+
+Run these three steps in order, at the start of every invocation, before
+applying any rule below.
+
+1. Read `~/.claude/skills/published-prose/voice-profile.md`.
+2. A profile counts as usable when the read succeeds **and** the file contains
+   the line `status: complete`. A failed read and a file without that line are
+   the same case.
+3. When the profile is usable, apply it and say nothing about it. When it is
+   not, state that no voice profile is installed and offer both of these:
+
+   - **Build one now.** Read `interview.md` from this skill's own directory,
+     ask its questions one at a time, and write the answers to
+     `~/.claude/skills/published-prose/voice-profile.md` using the shape in
+     `voice-profile.template.md`, which carries the `status: complete` line.
+     Creating the directory is part of this step. Never write the profile into
+     a plugin directory: a plugin update replaces everything under it.
+   - **Continue without one.** Apply this file alone and ask for each
+     preference at the moment it applies to a sentence.
+
+To rebuild a profile, delete `voice-profile.md` and invoke this skill again.
 
 ## Scope
 
@@ -112,10 +56,11 @@ Close this skill when writing to the reader instead of for them.
 
 ## The voice profile
 
-Personal preferences are not in this file. They are in `voice-profile.md`, in
-this same directory.
+Personal preferences are not in this file. They are in
+`~/.claude/skills/published-prose/voice-profile.md`, which "Before writing
+anything" above reads or builds.
 
-**Read `voice-profile.md` before writing or editing anything.** It records
+The profile records
 spelling convention, punctuation bans, when to write "I" and when "we", which
 sentence habits belong to the author and must survive an edit, what numbers may
 be published on which surface, and which words the author has banned.
@@ -1374,102 +1319,3 @@ STEMG, which maintains the standard, produces no AI tools, and endorses none.
 The boundary that the standard excludes creative and persuasive writing is taken
 from the asd-ste100-skill by Dustin Yuchen Teng, MIT licensed:
 <https://github.com/danyuchn/asd-ste100-skill>.
-===== END SKILL.md =====
-
-===== INTERVIEW =====
-
-Ask these one at a time. Wait for each answer.
-
-1. Which surfaces do you publish under your own name, and where do those files
-   live? Name each one and its path or platform: blog, case studies, portfolio
-   pages, resume, strategy documents, social posts.
-
-2. Which spelling convention do you use: British, American, or something else?
-
-3. What is your rule on em dashes: never, sparingly, or freely? If you avoid
-   them, what do you use instead: parentheses, a semicolon, or two sentences?
-
-4. When do you write "I" and when do you write "we"? Give me the rule you follow
-   and one example of each if you have them.
-
-5. Which sentence habits are yours and must survive an edit? Examples of the
-   kinds of thing I mean: sentence fragments as closers, semicolons joining
-   clauses, single quotes around in-group jargon, casual connectives
-   ("actually", "even", "etc."), slash lists ("how/when/if"), hyphenated
-   compounds ("use-cases", "deep dive").
-
-6. How do you use bold, and how much of it per section? What does a bolded line
-   mean when a reader sees one?
-
-7. Headings and titles: sentence case or title case? Do you allow a
-   colon-subtitle in a title, or do you prefer a plain conjunction?
-
-8. Numbers. Which figures may be published on which surface? Is there an
-   employer whose absolute figures must always be softened? Is there any figure
-   old enough to be an explicit exception?
-
-9. What pronouns do you use for people you write about but do not name?
-
-10. Is there any surface where every metaphor and idiom must be removed, even
-    the ones you wrote yourself?
-
-11. Which words or phrases have you banned outright? Include anything you have
-    corrected an agent on before.
-
-12. How do your pieces usually end? A follow-on fact, a concrete opportunity
-    ahead, or a pointer to related work?
-
-===== VOICE PROFILE TEMPLATE =====
-
-Write the answers into this structure, in the author's own words. Where an
-answer was "no preference", write "No preference stated. Ask when it matters."
-
----
-name: voice-profile
-description: Personal voice preferences read by the published-prose skill before writing or editing.
----
-
-# Voice profile
-
-## Surfaces
-
-| Surface | Where it lives | Genre |
-|---|---|---|
-
-## Spelling
-
-## Punctuation
-
-- Em dashes:
-- Substitute:
-- Semicolons:
-- Quotation marks around jargon:
-
-## Person
-
-- "I":
-- "we":
-
-## Sentence habits to preserve
-
-## Bold
-
-## Headings and titles
-
-## Numbers
-
-| Surface | Percentages and ratios | Absolutes |
-|---|---|---|
-
-Explicit exceptions:
-
-## Pronouns for unnamed people
-
-## Surfaces where every figure is removed
-
-## Banned words and phrases
-
-## Closers
-
-===== END VOICE PROFILE TEMPLATE =====
-````

@@ -3,12 +3,9 @@
 Installable agent skills from Visible by Design, a framework for helping designers get
 the recognition they deserve within organisations.
 
-This repository contains two kinds of thing, and they install differently:
-
-- **Plugins**, in `plugins/`. Installed with a package manager, and updated in place.
-- **Prompts**, in `prompts/`. Copied and pasted into an agent session, which then writes
-  the skill into the local environment. No install step, and no connection back to this
-  repository.
+Everything here is a plugin in `plugins/`, installed with a package manager and updated in
+place. Four are interview-driven skills for design work. The fifth, `prose`, holds three
+writing standards and the hooks that keep one of them applied to every reply.
 
 ## Plugins
 
@@ -26,6 +23,9 @@ This repository contains two kinds of thing, and they install differently:
   raw material for a future blog post, case study, or retro.
 - **[impact-report](plugins/impact-report/)** (`/impact-report:write-report`) — turns one
   initiative you owned into a short, shareable impact report.
+- **[prose](plugins/prose/)** (`conversation-prose`, `documentation-prose`,
+  `published-prose`) — three writing standards, one per genre, plus the hooks that keep the
+  conversation standard applied on every turn. See [Prose skills](#prose-skills).
 
 ### Install: any agent, skills only
 
@@ -46,70 +46,87 @@ the background. Invoke a skill when you want it, by asking your agent to "set my
 /plugin install design-goals@design-skills
 /plugin install field-notes@design-skills
 /plugin install impact-report@design-skills
+/plugin install prose@design-skills
 ```
 
 For **case-study**, **design-goals**, and **impact-report** the two routes are equivalent.
 Both install pure skills.
 
-**field-notes** is the one where the plugin route adds something. It also registers capture
-hooks that run on Claude Code events: logging your prompts, collecting insight callouts, and
-asking once a session for the "why" behind a decision. Capture then happens without you
-thinking about it. The hooks only run in a project you have asked to track, and do nothing
-at all in one you have not. Installed as a skill only, field-notes still works; you invoke
-it and the agent maintains the log, with none of the automatic capture. Start with the skill
-and install the plugin later. Both routes use the same files, so nothing is lost by
-switching. Details, including the privacy switches, are in the
-[field-notes README](plugins/field-notes/).
+**field-notes** and **prose** are the two where the plugin route adds something, because
+both register hooks that the skills-only route cannot.
 
-## Prompts
+**field-notes** registers capture hooks that run on Claude Code events: logging your
+prompts, collecting insight callouts, and asking once a session for the "why" behind a
+decision. Capture then happens without you thinking about it. The hooks only run in a
+project you have asked to track, and do nothing at all in one you have not. Installed as a
+skill only, field-notes still works; you invoke it and the agent maintains the log, with
+none of the automatic capture. Start with the skill and install the plugin later. Both
+routes use the same files, so nothing is lost by switching. Details, including the privacy
+switches, are in the [field-notes README](plugins/field-notes/).
 
-Three writing skills, one per genre of writing. Each one governs a genre the other two make
-worse, so they are separate skills and not settings on one skill. The background is in
+**prose** registers the two injection hooks described under
+[Prose skills](#prose-skills). Installed as skills only, all three still work when invoked
+by name, and `conversation-prose` then loads at most once per session instead of on every
+turn.
+
+## Prose skills
+
+Three writing standards, one per genre of writing. Each one governs a genre the other two
+make worse, so they are separate skills and not settings on one skill. The background is in
 ["Fixing the AI writing problem"](https://craigmdennis.com/writing/fixing-the-ai-writing-problem/).
 
-| Genre | Prompt | Standard |
+| Genre | Skill | Standard |
 |---|---|---|
-| Replies, explanations, status updates, summaries, plans, review | [conversation-prose](prompts/conversation-prose.md) | ASD-STE100 (Issue 9) and minimalism |
-| Skill files, READMEs, specs, plans, code comments, changelogs | [documentation-prose](prompts/documentation-prose.md) | Third-person impersonal |
-| Prose published under an author's own name | [published-prose](prompts/published-prose.md) | The author's own voice, interviewed at install |
+| Replies, explanations, status updates, summaries, plans, review | [conversation-prose](plugins/prose/skills/conversation-prose/) | ASD-STE100 (Issue 9) and minimalism |
+| Skill files, READMEs, specs, plans, code comments, changelogs | [documentation-prose](plugins/prose/skills/documentation-prose/) | Third-person impersonal |
+| Prose published under an author's own name | [published-prose](plugins/prose/skills/published-prose/) | The author's own voice, from an interview |
 
-### How to use one
+```
+/plugin marketplace add craigmdennis/design-skills
+/plugin install prose@design-skills
+```
 
-Open the prompt file, copy everything inside the fenced block, and paste it into a Claude
-Code session. The agent writes the skill to `~/.claude/skills/<name>/SKILL.md`, prints the
-full path, and asks whether to add a routing line to `~/.claude/CLAUDE.md`.
+Restart the session afterwards. The two hooks below are inactive until then.
 
-Every edit outside `~/.claude/skills/` is refused by default. Answer no and the agent prints
-what it would have added, so you can apply it by hand later.
+### The two hooks
 
-Two prompts do more than write one file:
+`conversation-prose` governs every reply, so loading it on demand is too late. By the time
+the standard is found to apply, the reply is written. A `SessionStart` hook injects the full
+skill once per session, about 6,700 tokens. A `UserPromptSubmit` hook injects `checks.md`,
+the sixteen checks in one line each, on every turn, about 650 tokens. The per-turn injection
+is what keeps the standard applied at turn 90. A file read once at session start stops
+affecting output as a session gets longer.
 
-- **published-prose** asks about twelve questions before it writes anything permanent:
-  spelling, punctuation, when you write "I" and when "we", which numbers may be published
-  on which surface, and which words you have banned. The answers go to
-  `~/.claude/skills/published-prose/voice-profile.md`, which the skill reads before it
-  writes or edits. Personal preference is in that file. The skill itself carries only rules
-  about failures in writing, which is what makes it shareable.
-- **conversation-prose** also writes `checks.md`, a one-page version of the sixteen checks
-  the skill opens with, and offers to install a `UserPromptSubmit` hook that prints that
-  file into context before every reply. The prompt gives the trade-offs and installs the
-  hook only if you agree. Without it the skill still applies through the routing line, but
-  it loads at most once per session and its influence falls as the conversation grows. The
-  skill also ships one worked entry in its banned-words section, a ban on every figurative
-  use of "hold", to show what an entry needs. Delete it if it is not a ban you want, and add
-  your own.
+Both injections prefer a copy at `~/.claude/skills/<skill>/`, so an edited copy takes
+priority over the plugin's and the same text is never injected twice. To stop both, disable
+the plugin with `/plugin`.
 
-### Why a prompt instead of a plugin
+`documentation-prose` and `published-prose` load on demand and cost nothing until invoked.
 
-A pasted prompt records nothing about where it came from. There is no repository URL, no
-version, and no manifest, so no command can check for a newer copy and no update reaches
-the installed file. That is the point: the skill becomes yours to edit, and nothing
-overwrites the edits.
+### The voice profile
 
-The cost is that a later correction in this repository will not reach an installed copy.
-Pasting the block a second time installs the current version and overwrites the previous
-one, along with any edits. Copy `voice-profile.md` and your banned-words list somewhere
-safe before doing that.
+`published-prose` reads `~/.claude/skills/published-prose/voice-profile.md` before writing
+anything: spelling, punctuation, when you write "I" and when "we", which numbers may be
+published on which surface, and which words you have banned. Where no profile exists, the
+skill offers two paths: a twelve-question interview that writes a profile, or writing
+without one and asking for each preference as it applies. A profile counts as installed only
+when it contains the line `status: complete`, so an interrupted interview does not install a
+partial profile.
+
+Personal preference is in that file. The skill itself states only rules about failures in
+writing, which is what makes it shareable. The profile is written outside the plugin
+directory, so `claude plugin update` does not replace it.
+
+### Editing them
+
+The rules describe failures in writing generally. The specific bans belong to one author.
+Two parts are meant to be replaced: the "Words the reader has banned" section of
+`conversation-prose`, which ships one worked entry as an example (a ban on every figurative use
+of "hold"), and the whole `published-prose` voice profile.
+
+Copy the skill directory to `~/.claude/skills/<name>/` before editing. Edits made inside the
+plugin are lost at the next `claude plugin update`, and a local copy takes priority over the
+plugin's anyway.
 
 ### On ASD-STE100
 
@@ -182,7 +199,7 @@ Four things keep the comparison honest.
 1. **The before text sees no skill.** Corpus calls run against a throwaway configuration
    directory with `--bare`, no tools, no slash commands, and an empty working directory. An
    early version ran inside this repository with tools enabled, and one before text quoted a
-   rule out of `prompts/documentation-prose.md`, which made it an after text. A canary probe
+   rule out of the documentation-prose skill on disk, which made it an after text. A canary probe
    asks the fresh instance what the skill says and requires the answer "NO SUCH SKILL".
 2. **The judge is blinded.** The two texts arrive as TEXT A and TEXT B. Nothing tells the
    judge which one a skill produced. Labelling them BEGIN BEFORE and BEGIN AFTER moved the
@@ -199,7 +216,7 @@ Four things keep the comparison honest.
 
 Node 22 or newer, and an `ANTHROPIC_API_KEY` in a gitignored `.env.test` at the repository
 root. The skills under test must be installed at `~/.claude/skills/<name>/`, because that is where
-the harness reads them from. The copy in `prompts/` is de-personalised and re-wrapped, so it
+the harness reads them from. The copy in `plugins/prose/` is de-personalised and re-wrapped, so it
 never matches byte for byte, but a test fails if the two check lists ever diverge — the check
 list is what the judge marks against and what sets every denominator above. `meta.json`
 records which copy produced a figure.
@@ -270,7 +287,7 @@ The method, the detector definitions, and the limits are in [tests/README.md](te
 
 Each skill in `plugins/` interviews you one question at a time, then fills a bundled
 template. case-study edits your existing draft instead, and field-notes sets up a gitignored
-`.field-notes/` decision log the agent maintains every session. Each prompt in `prompts/`
-writes one skill file into your own environment. Nothing leaves your machine.
+`.field-notes/` decision log the agent maintains every session. The prose skills read and
+write only inside your own environment. Nothing leaves your machine.
 
 Created by [Craig Dennis](https://craigmdennis.com).

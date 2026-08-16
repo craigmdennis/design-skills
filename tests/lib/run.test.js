@@ -265,9 +265,9 @@ test('a fingerprint is stored per skill, not per run', () => {
   }
 });
 
-test('the published prompt installs the same checks the figures are measured against', t => {
+test('the plugin installs the same checks the figures are measured against', t => {
   // The harness reads the skill from ~/.claude/skills/ and the README publishes
-  // figures from it. A reader installs from prompts/. If the two check lists
+  // figures from it. A reader installs the plugin. If the two check lists
   // ever diverge, the published figure describes a skill nobody can install.
   for (const skill of ['conversation-prose', 'documentation-prose']) {
     const print = skillFingerprint(skill);
@@ -278,7 +278,7 @@ test('the published prompt installs the same checks the figures are measured aga
     assert.strictEqual(
       print.checksMatchPublished, true,
       `${skill}: the installed checks (${print.checkCount}) and the checks in ` +
-      `prompts/${skill}.md (${print.publishedCheckCount}) are not the same list`
+      `plugins/prose/skills/${skill}/checks.md (${print.publishedCheckCount}) are not the same list`
     );
   }
 });

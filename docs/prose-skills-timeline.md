@@ -210,6 +210,37 @@ costs nothing extra and every ordinary run now prints it.
 to nine points and the measured improvement fell from 38 to 32–36. Position bias
 measured 1.0 point of 96.
 
+## Phase 9 — The paste route is replaced by a plugin (2026-08-16)
+
+Phase 2 chose paste over plugin for two reasons: a reader arrives from a blog
+post, and a frozen copy is the reader's to edit. Three facts changed after that.
+
+1. **The install became too large to paste.** `conversation-prose` came to
+   install two files and to ask the reader to hand-edit
+   `~/.claude/settings.json` — checking for `jq`, backing the file up, and
+   restoring the backup when the JSON failed to parse. A plugin registers hooks
+   without touching a reader's files at all.
+2. **The prompts reached 2,730 lines.** Two commands are easier to paste from a
+   blog post than 848 lines of one of them.
+3. **An update now makes a measured difference.** When Phase 2 chose the frozen
+   copy, no update changed a published figure. The restructure in Phase 3 is
+   what produced the 99% figure, and a reader on a copy taken before it gets a
+   worse result than the published number states.
+
+**What replaced the edits.** Two hooks: `SessionStart` injects the skill,
+`UserPromptSubmit` injects the sixteen checks each turn. Both prefer a copy at
+`~/.claude/skills/<skill>/` over the plugin's own. That keeps the Phase 2 reason
+for pasting, an edited copy taking priority, without the paste.
+
+**What made `published-prose` installable.** A plugin install cannot run an
+interview, and that skill's install-time interview was the reason it had no
+plugin route. The fix is a first instruction that reads the profile, treats a
+missing `status: complete` line as no profile, and offers the interview from a
+sibling file loaded only on that branch. The profile writes outside the plugin
+directory, because a plugin update replaces everything under it.
+
+`prompts/` is deleted.
+
 ## Where it landed
 
 | | |
@@ -232,7 +263,9 @@ fixed text, where the normal use is prose written with the skill already loaded.
 ## Still open
 
 - `published-prose` has no `checks.md` and its self-check is still 29 bullets
-  across 569 lines, which is the structure that failed in Phase 3.
+  across 569 lines, which is the structure that failed in Phase 3. It is also
+  the one skill with no per-turn injection, because the two hooks inject
+  `conversation-prose` only.
 - Whether batching alone or the cheaper model caused the leniency in Phase 6. One
   run of batch on Opus, blinded, three rounds, six calls, would settle it.
 - Calibrating the judge against three pairs marked by hand.

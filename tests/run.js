@@ -54,10 +54,11 @@ function pinnedModel() {
 // and the cost, so meta.json can name what actually ran.
 //
 // Every call runs with no tools and from an empty directory. A call made inside
-// this repository read `prompts/documentation-prose.md` and applied the house
-// style to a before text, which is the contamination the whole harness exists
-// to prevent. The isolation probe cannot see it, because at probe time no tool
-// has run yet.
+// this repository read the documentation-prose skill off disk and applied the
+// house style to a before text, which is the contamination the whole harness
+// exists to prevent. The skills are still on disk under `plugins/prose/`, so
+// the empty working directory and the disallowed tools both stay. The isolation
+// probe cannot see this failure, because at probe time no tool has run yet.
 const NO_TOOLS = ['Bash', 'Read', 'Glob', 'Grep', 'Edit', 'Write', 'WebFetch', 'WebSearch',
   'NotebookEdit', 'Task', 'TodoWrite'];
 
@@ -100,7 +101,7 @@ function readSkillBody(skill) {
   const file = path.join(SKILL_HOME, skill, 'SKILL.md');
   if (!fs.existsSync(file)) {
     throw new Error(
-      `no skill at ${file}. Install it first by pasting prompts/${skill}.md into a session.`
+      `no skill at ${file}. Install it first: claude plugin install prose@design-skills.`
     );
   }
   return fs.readFileSync(file, 'utf8');
@@ -113,17 +114,11 @@ function checkTitles(text) {
   return [...text.matchAll(/^\s*(\d+)\.\s+\*\*(.+?)\.?\*\*/gm)].map(m => `${m[1]} ${m[2]}`);
 }
 
-// The text between two markers in a prompt file, which is what a reader
-// installs when they paste it.
-function embedded(promptText, name) {
-  const start = promptText.indexOf(`===== BEGIN ${name} =====`);
-  const end = promptText.indexOf(`===== END ${name} =====`);
-  if (start < 0 || end <= start) return null;
-  return promptText.slice(start + `===== BEGIN ${name} =====`.length, end).trim();
-}
+// Where a reader's copy comes from: the prose plugin in this repository.
+const PUBLISHED_SKILLS = path.join(__dirname, '..', 'plugins', 'prose', 'skills');
 
-// The skill under test comes from ~/.claude/skills/, and prompts/ holds what a
-// reader installs. The bytes of the two never match: the published copy is
+// The skill under test comes from ~/.claude/skills/, and the plugin holds what
+// a reader installs. The bytes of the two never match: the published copy is
 // de-personalised and re-wrapped on purpose. What has to match is the check
 // list, because that is what the judge marks against and what sets every
 // denominator. A figure produced against a different check list describes a
@@ -138,9 +133,9 @@ function skillFingerprint(skill) {
     ? fs.readFileSync(installedChecksFile, 'utf8')
     : null;
 
-  const prompt = path.join(__dirname, '..', 'prompts', `${skill}.md`);
-  const publishedChecks = fs.existsSync(prompt)
-    ? embedded(fs.readFileSync(prompt, 'utf8'), 'checks.md')
+  const publishedChecksFile = path.join(PUBLISHED_SKILLS, skill, 'checks.md');
+  const publishedChecks = fs.existsSync(publishedChecksFile)
+    ? fs.readFileSync(publishedChecksFile, 'utf8')
     : null;
 
   const installedTitles = checkTitles(installedChecks);

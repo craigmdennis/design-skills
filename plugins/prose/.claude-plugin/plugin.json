@@ -1,0 +1,21 @@
+{
+  "name": "prose",
+  "version": "1.0.0",
+  "description": "Three writing standards, one per genre: conversation-prose for an agent's replies, documentation-prose for skills and READMEs and specs, published-prose for text going out under an author's name. Ships the per-turn checklist hook that keeps the conversation standard applied over a long session.",
+  "author": {
+    "name": "Craig Dennis",
+    "url": "https://craigmdennis.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "writing",
+    "prose",
+    "editing",
+    "style",
+    "ste100",
+    "documentation",
+    "skill",
+    "hooks"
+  ],
+  "repository": "https://github.com/craigmdennis/design-skills"
+}
