@@ -5,6 +5,141 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-08-16
+
+### The three prose skills become a plugin, and `prompts/` is removed
+
+`plugins/writing/` holds `conversation-prose`, `documentation-prose`, and
+`published-prose` as ordinary skills, invoked as `writing:conversation-prose`
+and so on. The plugin is named for the domain and each skill for the genre it
+governs, so no word repeats at the invocation site and every skill name still
+stands alone where a skills-only install drops the prefix. Install with
+`claude plugin install writing@design-skills`. The three files under `prompts/`
+are deleted, and with them the paste route, the hand-edit of
+`~/.claude/settings.json`, and the routing lines in `~/.claude/CLAUDE.md`.
+
+Two hooks replace the settings edit. Each prints a `hookSpecificOutput` JSON
+envelope naming its own event, because a `SessionStart` hook's plain stdout is
+discarded. Emitting the envelope from Node also removes the `jq` dependency the
+equivalent shell hook carried. `SessionStart` injects
+`conversation-prose/SKILL.md`, about 6,700 tokens once per session.
+`UserPromptSubmit` injects `conversation-prose/checks.md`, about 650 tokens per
+turn. Both prefer a copy at `~/.claude/skills/<skill>/` over the plugin's own,
+so an edited copy still takes priority and the same text is never injected
+twice.
+
+`published-prose` no longer depends on an interview at install time, which a
+plugin install cannot run. Its first instruction reads
+`~/.claude/skills/published-prose/voice-profile.md`. Where no profile contains
+the line `status: complete`, the skill offers two paths: the twelve-question
+interview, now in `interview.md` beside the skill and read only on that branch,
+or writing without a profile and asking for each preference as it applies. The
+profile is written outside the plugin directory, so an update does not replace
+it.
+
+The harness resolves a skill in two places, in the same order the hook script
+uses: an installed copy at `~/.claude/skills/<skill>/` first, the plugin's own
+second. A clone with nothing installed now measures the shipped skill instead
+of refusing to run, and `meta.json` records which of the two produced each
+figure. The check list is compared against
+`plugins/writing/skills/<skill>/checks.md`, and a figure measured against a
+different list still fails a test and is still named in the report.
+
+Unchanged: the four other plugins, the skill names, the corpus, the baseline,
+and the published figures. `published-prose` still has no `checks.md` and no
+per-turn injection; the two hooks inject `conversation-prose` only.
+
+## 2026-08-15
+
+### A measured before and after, regenerable by anyone
+
+`tests/` holds a harness that answers thirteen fixed prompts twice, once with no
+skill loaded and once with the skill applied as a rewrite pass, and scores both.
+`node tests/all.js` runs the corpus, the score, the judge, and the report against
+one directory. `--plan` prints the call count and a cost estimate taken from what
+earlier runs recorded.
+
+Two scores. Eighteen detectors counted by script, of which thirteen are exact and
+produce the headline figure and five are approximate and are printed apart. A
+second score is marked by a Claude instance against the skill's own checks, three
+rounds, reported as a range.
+
+The measured result: `conversation-prose` 13.9 to 5.4 violations per 1,000 words,
+`documentation-prose` 24.6 to 3.9. Checks passed rose from 61.5-65.6% to 99.0%
+and from 69.8-71.4% to 95.2-96.8%.
+
+The judge is blinded. The two texts arrive as TEXT A and TEXT B, and nothing in
+the prompt says which one a skill produced. Labelling them raised the measured
+improvement from 32-36 points to 38. Which slot the after text takes flips
+between rounds, so the same text is marked from both positions and the gap is
+reported; it measured 1.0 point of 96. A control judges each before text against
+a copy of itself.
+
+The before texts are committed under `tests/baseline/`, with a hash of every
+corpus prompt, so the figures reproduce from fixed inputs and anyone can drop
+their own prose in and measure it. The reference run behind the published figures
+is committed too.
+
+### documentation-prose — a compact checks file
+
+The prompt now installs two files: the skill body and a one-page `checks.md`
+carrying eighteen numbered checks, for injection on every turn through the
+`UserPromptSubmit` hook. `conversation-prose` already worked this way. Checks 16
+to 18 apply to change documents only, and the file states that any other document
+passes all three, so the denominator stays fixed.
+
+## 2026-08-14
+
+### conversation-prose — four STE rules added, two declined, one claim corrected
+
+A fifteenth check: noun clusters take three words at most. A stack of four or
+more marks none of the relations between the words, so the reader has to guess
+them. It is the rule an agent breaks most often in this genre and it was absent.
+
+Three more rules of the standard, in the register section. Rule 8.1 bans the
+semicolon outright and permits every other mark, including the em dash. Words
+are not dropped to shorten a sentence: the subject, the verb, and the article
+stay. A sequence of three or more steps takes a vertical list, which check 13
+now allows for.
+
+Two rules are declined, with the reason recorded. The present perfect is
+permitted here, because "the job has completed" and "the job completed" are
+different statements and a reply reports status constantly. The six-sentence
+paragraph cap is a rule for a manual.
+
+Two corrections. The standard is now named by edition (Issue 9, January 2025:
+53 rules in 9 sections). The em-dash ban belongs to `published-prose` as a voice
+preference, and the skill says so, because the standard permits the mark.
+
+Every rule is now marked as structural or lexical. Structural rules describe the
+shape of a sentence and are enforceable from their description. Lexical rules
+are defined by the licensed dictionary, which is absent, so they are a direction
+of travel and compliance is never claimed.
+
+A closing section records that this applies a subset of the rules, implements
+nothing, carries no endorsement from ASD or STEMG, and is not for regulated
+technical publications. Two limits are added to the meta-rule: a draft that
+passes is sent unchanged, and shortening stops at one possible reading.
+
+### published-prose — STE demoted from governing standard to three borrowed rules
+
+The skill claimed ASD-STE100 as its governing standard, with the standard taking
+priority in any disagreement. It then scoped away the sentence-length ceiling and
+the subject-first rule, contradicted Rule 8.1 by requiring semicolons, and used
+none of the rest. The standard is written for text that must not be misread and
+excludes writing where voice and persuasion are the point, so the claim was
+removed.
+
+Three rules are borrowed and named as borrowed: one word for one meaning, no
+figurative language, and noun clusters of three words at most. Everything that
+existed only to reconcile the rest of the file with the standard is gone,
+including the scoped-exception apparatus and the divergence notes. Instructional
+passages inside a published piece still take the standard's sentence rules,
+which is now stated once instead of three times.
+
+The em dash and the semicolon are recorded as voice, because the standard
+permits the first and bans the second, and this genre does the reverse.
+
 ## 2026-08-12
 
 ### prompts — three writing skills, installed by copy and paste

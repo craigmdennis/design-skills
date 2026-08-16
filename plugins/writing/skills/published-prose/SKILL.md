@@ -1,86 +1,32 @@
-# published-prose
-
-A prompt that installs a writing skill for prose published under an author's own
-name: blog posts, case studies, portfolio pages, strategy documents, resume and
-cover-letter copy, application answers, social posts.
-
-The skill removes the patterns that make text read as machine-generated, and it
-applies ASD-STE100 (Simplified Technical English) as its governing standard. It
-does not govern how an agent writes back in conversation, and it does not govern
-documentation. Those are two separate genres with opposite requirements in
-places; see `conversation-prose.md` and `documentation-prose.md` in this
-directory.
-
-## What the prompt does
-
-1. Writes `~/.claude/skills/published-prose/SKILL.md`.
-2. Interviews the reader, one question at a time, about voice preferences that
-   cannot be generic: spelling, punctuation, person, what numbers may be
-   published, and which words are banned.
-3. Writes those answers to `~/.claude/skills/published-prose/voice-profile.md`,
-   which the skill reads before it writes anything.
-4. Offers a routing line for `~/.claude/CLAUDE.md`, and adds it only on
-   confirmation.
-
-The interview takes about ten questions. Answering "no preference" to any of
-them is valid; the skill then asks at the point the preference is needed.
-
-## Why the voice profile is separate
-
-The skill body carries rules about failures in writing. A voice profile carries
-preferences about writing. Nobody else can use another person's preferences, and
-an unstated preference produces prose that reads as somebody else. Keeping the
-two in separate files means the skill can be shared and the profile stays local.
-
-## Limits
-
-The prompt embeds the skill verbatim, so a pasted copy has no connection to this
-repository. No update reaches it. Re-pasting the block installs the current
-version and overwrites the previous one, so copy `voice-profile.md` aside first
-if it has been edited by hand.
-
-## The prompt
-
-Copy everything inside the block below and paste it into a Claude Code session.
-
-````
-You are installing a writing skill into this environment. Do exactly the
-following, and nothing else.
-
-1. Create the directory ~/.claude/skills/published-prose/ if it does not exist.
-
-2. Write the text between BEGIN SKILL.md and END SKILL.md to
-   ~/.claude/skills/published-prose/SKILL.md, verbatim. Do not summarise it, do
-   not reformat it, do not correct it, and do not change any wording. The file
-   includes examples of banned phrases; those have to be reproduced exactly for
-   the rules to be usable.
-
-3. Interview me to build a voice profile. Ask the questions under INTERVIEW one
-   at a time and wait for each answer before asking the next. Do not ask them as
-   a list. If I answer "no preference" or "skip", record that and continue.
-
-4. Write my answers to ~/.claude/skills/published-prose/voice-profile.md using
-   the structure under VOICE PROFILE TEMPLATE. Record my answers in my own
-   words. Do not add preferences I did not state.
-
-5. Print the full path of both files.
-
-6. Ask whether to add this line to ~/.claude/CLAUDE.md, and add it only if I say
-   yes:
-
-   When writing or editing prose published or sent under my own name, use the
-   published-prose skill.
-
-7. Stop. Do not create or change any other file. Do not change settings. Do not
-   install anything else.
-
-===== BEGIN SKILL.md =====
 ---
 name: published-prose
 description: Use when writing or editing prose published or sent under the author's own name — blog posts, case studies, portfolio pages, strategy docs, resume and cover-letter copy, application answers, social posts. Applies the author's voice rules and removes AI-generated patterns. Does NOT govern how the agent writes back to the reader in conversation.
 ---
 
 # Published prose
+
+## Before writing anything
+
+Run these three steps in order, at the start of every invocation, before
+applying any rule below.
+
+1. Read `~/.claude/skills/published-prose/voice-profile.md`.
+2. A profile counts as usable when the read succeeds **and** the file contains
+   the line `status: complete`. A failed read and a file without that line are
+   the same case.
+3. When the profile is usable, apply it and say nothing about it. When it is
+   not, state that no voice profile is installed and offer both of these:
+
+   - **Build one now.** Read `interview.md` from this skill's own directory,
+     ask its questions one at a time, and write the answers to
+     `~/.claude/skills/published-prose/voice-profile.md` using the shape in
+     `voice-profile.template.md`, which carries the `status: complete` line.
+     Creating the directory is part of this step. Never write the profile into
+     a plugin directory: a plugin update replaces everything under it.
+   - **Continue without one.** Apply this file alone and ask for each
+     preference at the moment it applies to a sentence.
+
+To rebuild a profile, delete `voice-profile.md` and invoke this skill again.
 
 ## Scope
 
@@ -110,10 +56,11 @@ Close this skill when writing to the reader instead of for them.
 
 ## The voice profile
 
-Personal preferences are not in this file. They are in `voice-profile.md`, in
-this same directory.
+Personal preferences are not in this file. They are in
+`~/.claude/skills/published-prose/voice-profile.md`, which "Before writing
+anything" above reads or builds.
 
-**Read `voice-profile.md` before writing or editing anything.** It records
+The profile records
 spelling convention, punctuation bans, when to write "I" and when "we", which
 sentence habits belong to the author and must survive an edit, what numbers may
 be published on which surface, and which words the author has banned.
@@ -141,15 +88,17 @@ and rewrite to remove them. Default to moderate intensity: preserve structure
 and ideas, rewrite sentences that sound generated. Adjust if asked for lighter
 or heavier treatment.
 
-## ASD-STE100 is the governing standard
+## Three rules borrowed from ASD-STE100
 
-ASD-STE100 (Simplified Technical English) is the governing standard for this
-skill. It is the controlled language used for aerospace and defence maintenance
-manuals: about 65 writing rules and a restricted dictionary. Where a rule below
-and STE disagree, STE takes priority, unless this file records a scoped
-exception.
+ASD-STE100 (Simplified Technical English) is a controlled language written for
+aerospace and defence maintenance manuals. It is not the governing standard for
+this skill and most of it does not apply to this genre. The standard exists for
+text that must not be misread, and it excludes writing where voice, nuance, and
+persuasion are the point.
 
-**The five rules that apply to everything here:**
+Three of its rules do solve failures that appear in this genre, so they are
+borrowed. Nothing else from the standard applies here, and no rule below is
+overridden by it.
 
 1. **One word carries one meaning, and one meaning gets one word.** Repeat the
    word. Do not swap in a synonym for variety. (This is the same instruction as
@@ -157,17 +106,20 @@ exception.
 2. **No idiom, metaphor, analogy, personification, or figurative phrasal verb.**
    Provenance decides: the author's own wording stays, the agent never generates
    any. Full detail in section 2.
-3. **Active voice, subject first.** The actor goes in the subject position.
-4. **One idea per sentence.**
-5. **Approved technical names are fine.** Real product and system names are
-   precise, so keep them. STE restricts general vocabulary, and this skill
-   already requires specificity.
+3. **Noun clusters take three words at most.** A stack of four or more marks
+   none of the relations between the words, so the reader has to guess them.
+   *"design system adoption evaluation framework"* becomes *"a framework for
+   evaluating how a design system is adopted"*.
 
-**Two rules are scoped instead of adopted whole.** Both are recorded in
-"Sentence architecture" below. The sentence-length ceiling applies to
-instructional content only, so narrative keeps its mixed rhythm. Subject-first
-stays a strong default in narrative under the two-condition test, and becomes
-absolute in instructional passages.
+**Punctuation here is voice and not standard.** STE permits the em dash and bans
+the semicolon. This genre often does the reverse. Both marks are settled in the
+voice profile, and the standard decides neither.
+
+**Instructional passages are the exception.** A numbered process, a how-to list,
+or a setup sequence is technical writing inside a published piece, and those
+passages take the standard's sentence rules: one instruction per sentence,
+around 20 words, subject first every time. Narrative does not. See "Sentence
+architecture".
 
 ### The replacement method
 
@@ -657,12 +609,10 @@ that…"*), and a mid-sentence appositive.
 **None of them is banned.** Good published prose uses all three well. They are a
 tell only under the two conditions below.
 
-**This is a deliberate divergence from ASD-STE100.** The standard makes
-subject-first mandatory with no exception. Published narrative keeps the
-two-condition test instead, because the surviving instances in real prose are
-the author's and they work. Apply STE's absolute rule to instructional passages
-only (numbered process steps, how-to lists); apply the two-condition test to
-narrative.
+**Instructional passages take the absolute rule.** Numbered process steps and
+how-to lists put the subject first every time. Narrative keeps the two-condition
+test instead, because the surviving instances in real prose are the author's and
+they work.
 
 **Condition 1: the fronted clause switches subject.** This is the reliable tell,
 because the dangling version is a thing people rarely write and models write
@@ -866,10 +816,10 @@ the variation.
 - **"held to", and intransitive "[the structure / process / bar] held"** for
   following or surviving a process. Say what happened: "I stuck to the process",
   "the structure worked", "we kept using it".
-- **Idioms, analogies, and metaphors: cut them, no exceptions.** ASD-STE100 is
-  the named authority. It bans idiom, metaphor, and figurative language
-  outright, and it requires one word to carry one meaning, which is the same
-  rule as the elegant-variation ban above. Typical figures that pile up in
+- **Idioms, analogies, and metaphors: cut them, no exceptions.** This is
+  borrowed rule 2, and one word carrying one meaning is borrowed rule 1, which
+  is the same rule as the elegant-variation ban above. Typical figures that
+  accumulate in
   drafts: a question a meeting "turns on", a rubric you "nod along to", "putting
   the same words in front of" someone, a matrix that "stays honest", "papering
   over the gap". Each one makes the reader decode an image instead of reading
@@ -1355,102 +1305,17 @@ reason. Natural writing has personality, rough edges, and opinions. It does not
 always flow perfectly. That is what makes it human.
 
 Applying these rules mechanically is doing it wrong.
-===== END SKILL.md =====
 
-===== INTERVIEW =====
+## Source and credit
 
-Ask these one at a time. Wait for each answer.
+ASD-STE100 is maintained by the Simplified Technical English Maintenance Group
+(STEMG). Three of its rules are borrowed above and no part of its dictionary is
+reproduced, because the standard is free to obtain and is not free to
+redistribute. The standard can be requested at
+<https://www.asd-ste100.org/STE_downloads.html>.
 
-1. Which surfaces do you publish under your own name, and where do those files
-   live? Name each one and its path or platform: blog, case studies, portfolio
-   pages, resume, strategy documents, social posts.
-
-2. Which spelling convention do you use: British, American, or something else?
-
-3. What is your rule on em dashes: never, sparingly, or freely? If you avoid
-   them, what do you use instead: parentheses, a semicolon, or two sentences?
-
-4. When do you write "I" and when do you write "we"? Give me the rule you follow
-   and one example of each if you have them.
-
-5. Which sentence habits are yours and must survive an edit? Examples of the
-   kinds of thing I mean: sentence fragments as closers, semicolons joining
-   clauses, single quotes around in-group jargon, casual connectives
-   ("actually", "even", "etc."), slash lists ("how/when/if"), hyphenated
-   compounds ("use-cases", "deep dive").
-
-6. How do you use bold, and how much of it per section? What does a bolded line
-   mean when a reader sees one?
-
-7. Headings and titles: sentence case or title case? Do you allow a
-   colon-subtitle in a title, or do you prefer a plain conjunction?
-
-8. Numbers. Which figures may be published on which surface? Is there an
-   employer whose absolute figures must always be softened? Is there any figure
-   old enough to be an explicit exception?
-
-9. What pronouns do you use for people you write about but do not name?
-
-10. Is there any surface where every metaphor and idiom must be removed, even
-    the ones you wrote yourself?
-
-11. Which words or phrases have you banned outright? Include anything you have
-    corrected an agent on before.
-
-12. How do your pieces usually end? A follow-on fact, a concrete opportunity
-    ahead, or a pointer to related work?
-
-===== VOICE PROFILE TEMPLATE =====
-
-Write the answers into this structure, in the author's own words. Where an
-answer was "no preference", write "No preference stated. Ask when it matters."
-
----
-name: voice-profile
-description: Personal voice preferences read by the published-prose skill before writing or editing.
----
-
-# Voice profile
-
-## Surfaces
-
-| Surface | Where it lives | Genre |
-|---|---|---|
-
-## Spelling
-
-## Punctuation
-
-- Em dashes:
-- Substitute:
-- Semicolons:
-- Quotation marks around jargon:
-
-## Person
-
-- "I":
-- "we":
-
-## Sentence habits to preserve
-
-## Bold
-
-## Headings and titles
-
-## Numbers
-
-| Surface | Percentages and ratios | Absolutes |
-|---|---|---|
-
-Explicit exceptions:
-
-## Pronouns for unnamed people
-
-## Surfaces where every figure is removed
-
-## Banned words and phrases
-
-## Closers
-
-===== END VOICE PROFILE TEMPLATE =====
-````
+This skill is not an STE authoring tool and carries no endorsement from ASD or
+STEMG, which maintains the standard, produces no AI tools, and endorses none.
+The boundary that the standard excludes creative and persuasive writing is taken
+from the asd-ste100-skill by Dustin Yuchen Teng, MIT licensed:
+<https://github.com/danyuchn/asd-ste100-skill>.

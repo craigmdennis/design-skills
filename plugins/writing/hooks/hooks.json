@@ -1,0 +1,31 @@
+{
+  "description": "writing injection hooks: load conversation-prose at session start and restate its checklist on every turn. A copy under ~/.claude/skills/ takes priority over the plugin's own.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/inject.js\" SessionStart conversation-prose SKILL.md",
+            "statusMessage": "Loading conversation-prose",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/inject.js\" UserPromptSubmit conversation-prose checks.md",
+            "statusMessage": "Loading conversation-prose checks",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,6 +1,9 @@
 {
   "name": "design-skills",
-  "owner": { "name": "Craig Dennis", "url": "https://craigmdennis.com" },
+  "owner": {
+    "name": "Craig Dennis",
+    "url": "https://craigmdennis.com"
+  },
   "plugins": [
     {
       "name": "case-study",
@@ -19,6 +22,12 @@
       "source": "./plugins/field-notes",
       "description": "Keep field notes on a project — a skill plus capture hooks that log the why behind your decisions, live, for a future blog post, case study, or retro.",
       "version": "0.3.0"
+    },
+    {
+      "name": "writing",
+      "source": "./plugins/writing",
+      "description": "Three writing standards, one per genre. `conversation-prose` governs an agent's replies, `documentation-prose` governs skills and READMEs and specs, and `published-prose` governs text going out under an author's own name. Ships the per-turn checklist hook that keeps the conversation standard applied over a long session.",
+      "version": "1.0.0"
     },
     {
       "name": "impact-report",

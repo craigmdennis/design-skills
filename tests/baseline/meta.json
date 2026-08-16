@@ -1,0 +1,33 @@
+{
+  "models": [
+    "claude-haiku-4-5-20251001",
+    "claude-opus-5"
+  ],
+  "modelPinned": "claude-opus-5",
+  "date": "2026-08-15",
+  "cli": "2.1.232 (Claude Code)",
+  "corpusCommit": "d8f7993",
+  "corpusHash": {
+    "conversation-prose": {
+      "01": "37284033a127",
+      "02": "c8804e16ef8d",
+      "03": "c66f26805171",
+      "04": "807eb48b5d00",
+      "05": "7c9b05b89905",
+      "06": "69e8d6145b8e"
+    },
+    "documentation-prose": {
+      "01": "1f5c8b2ecd33",
+      "02": "a759addf6b46",
+      "03": "cbc12214020b",
+      "04": "0acf3a11e3bd",
+      "05": "4831f175fec8",
+      "06": "d572b147bd62",
+      "07": "4879c850e86c"
+    }
+  },
+  "skills": [
+    "conversation-prose",
+    "documentation-prose"
+  ]
+}

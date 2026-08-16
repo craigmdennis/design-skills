@@ -1,0 +1,12 @@
+{
+  "skill": "documentation-prose",
+  "counts": {
+    "first-person": 3,
+    "your-possessive": 1,
+    "user-possessive": 2,
+    "decision-date": 2,
+    "agent-clause": 2,
+    "semicolon": 1,
+    "there-is": 1
+  }
+}

@@ -1,0 +1,297 @@
+# Prose skills: what was tried, what failed, what shipped
+
+Source material for a writeup. Chronological, with the dead ends kept in. Dates
+are the structure of the record and not an attribution of decisions.
+
+---
+
+## Phase 1 — Three skills, one machine (before 2026-08-12)
+
+Three writing standards existed as `SKILL.md` files in `~/.claude/skills/`, with
+a routing table in the account `CLAUDE.md` and a SessionStart hook:
+
+- `conversation-prose` — how the agent writes to its reader
+- `documentation-prose` — skills, READMEs, specs, comments
+- `published-prose` — prose going out under the author's name
+
+The three are separate skills because each governs a genre the other two make
+worse. `published-prose` bans caveats, which produces false confidence in an
+explanation. It bans about forty words, which forces vocabulary detours that
+obscure a technical point. Applied to a reply, it makes the reply worse.
+
+None of it could be handed to anyone else. `published-prose` in particular was
+saturated with one person's employers, file paths, spelling, and punctuation.
+
+## Phase 2 — Publish by paste, not by plugin (2026-08-12)
+
+**What was tried first:** the existing route, a Claude Code plugin from the
+marketplace in this repository.
+
+**Why it was dropped:** a skill that has to be active on every reply does not fit
+a marketplace install, and the reader is arriving from a blog post rather than
+from a CLI. The chosen route is a copy-paste prompt: the reader copies one fenced
+block, pastes it into a session, and the agent writes the skill into their own
+`~/.claude/skills/`.
+
+**The trade-off, taken deliberately:** a pasted prompt records nothing about where
+it came from. No repository URL, no version, no manifest, so no update ever
+reaches the installed file. That is the point — the copy becomes the reader's to
+edit, and nothing overwrites their edits. The cost is that a later correction
+upstream never arrives.
+
+**The split that made `published-prose` shareable:** the skill keeps the rules
+about failures in writing; an install-time interview of about twelve questions
+writes everything personal into a separate `voice-profile.md` beside it.
+Preferences cannot be shared. Failures can.
+
+## Phase 3 — The skill broke its own rule, in front of its author (2026-08-12)
+
+A reply contained "the profile wins". The word was banned in that context, the
+skill was loaded, and nothing had permitted it.
+
+**The mechanism, once found:** the skill listed categories with example words
+underneath. The self-check was reading those lists as the rule, so any word
+absent from a list passed. "Wins" was not on a list.
+
+**Four fixes were offered. Two were taken:**
+
+1. Restate every rule as a procedure and move the whole set to the top of the
+   file. A word list finds only the words on it; a procedure ("take the subject,
+   test whether the verb needs something alive") finds words nobody listed.
+2. Inject a one-page `checks.md` on every turn through a `UserPromptSubmit` hook,
+   because a skill loaded once per session fades as the session grows.
+
+**Declined:** a `Stop` hook that would inspect the last reply and block it. Too
+many false positives, and it forces a regeneration on every trip.
+
+**Also declined, and recorded with its reason so it is not re-adopted:** the
+present-perfect ban from ASD-STE100. "The job has completed" and "the job
+completed" are different statements, and a reply reports status constantly.
+
+## Phase 4 — Citing a standard properly (2026-08-14)
+
+The starting point was a claim in `published-prose` that ASD-STE100 was its
+governing standard, followed by overrides of most of it and one outright
+contradiction.
+
+**What the STEMG whitepaper on AI turned out to contain:** no writing rules. Three
+pages of position — non-endorsement of AI tools, human accountability,
+terminology control, traceability, and a call for benchmarks. Naming the standard
+in a public prompt reads as a compliance claim to anyone who searches the term.
+
+**What changed as a result:**
+
+- `conversation-prose` states what it is a subset of, what it does not implement
+  (the dictionary is licensed and not reproduced), and that it is not an
+  authoring tool for regulated technical publications.
+- `published-prose` stopped claiming the standard and kept three borrowed rules.
+  The genre ASD-STE100 explicitly excludes is creative and persuasive prose.
+- Four rules were added: noun clusters, the semicolon ban, no dropped words, and
+  vertical lists for sequences.
+- The edition detail and the structural/lexical split were adapted from a
+  third-party MIT-licensed skill, and credited — including inside the installed
+  skill body, because a pasted skill leaves the repository and the credit has to
+  leave with it.
+
+## Phase 5 — "Prove it" (2026-08-14)
+
+The request: a pipeline where a fresh Claude instance answers a fixed set of
+prompts, once without the skill and once with it, producing a score that can go
+in the README and be regenerated by anyone.
+
+**The design that emerged:**
+
+- Thirteen prompts across two skills, each self-contained.
+- Two scores. Eighteen detectors counted by script, of which thirteen are exact
+  and produce the headline; five are approximate and are printed separately
+  because they over-count and under-count equally on both sides. Plus a judged
+  score, where a second Claude instance marks each check pass or fail with the
+  failing sentence quoted.
+- The judge never receives the deterministic scores. A judge shown the script's
+  answer agrees with the script.
+- Normalised per 1,000 words, because a rewrite changes the word count.
+
+## Phase 6 — What failed while building it
+
+**The test command was running nothing.** `node --test tests/lib/` fails on
+Node 26 with "Cannot find module" — a directory argument is read as a module
+path. Every task's verification had been passing on a suite that never executed.
+The fix is a quoted glob: `node --test "tests/**/*.test.js"`.
+
+**The before texts were contaminated.** One of them said the document left out
+who proposed a feature "per the documentation-prose rule against naming people".
+The unskilled answer had quoted the skill. Cause: the calls ran with the
+repository as the working directory and tools enabled, so the model read
+`prompts/documentation-prose.md` off disk. The fix is three layers — a throwaway
+configuration directory, `--bare`, and eleven disallowed tools plus
+`--disable-slash-commands` plus an empty working directory. A canary probe now
+asks the fresh instance what the skill says and requires the answer "NO SUCH
+SKILL". Both baselines were regenerated.
+
+**Credentials could not be copied.** The first design copied
+`~/.claude/.credentials.json` into the throwaway directory. That file holds only
+plugin OAuth state; the account login lives in the system keychain. The second
+attempt used `CLAUDE_CODE_OAUTH_TOKEN`, which `--bare` rejects. The working
+design is `ANTHROPIC_API_KEY` from a gitignored `.env.test`, chmod 600,
+deliberately not exported globally — a global key changes how every ordinary
+session authenticates and bills.
+
+**The judge died after the expensive part.** `judge.js` never called
+`loadEnvFile()`, so a full run paid for fifteen corpus calls and then stopped at
+the first judging call with no credential. Three entry tests with a stub binary
+now cover that path, and removing the load fails two of them.
+
+**Two detector bugs that flattered the result.** Line-wrapped phrases evaded the
+string detectors, so whitespace is now collapsed before matching. Headings with
+no terminating punctuation merged into the following sentence and inflated the
+long-sentence count, so headings and list items now terminate a sentence.
+
+**A verification canary that tested the wrong pair.** The check paired a
+contaminant that was on the detector's list with an affirmation of cleanliness.
+A re-review found the unlisted case, which passed. The affirmation is now
+exclusive.
+
+**The measured improvement depended on how the judging ran.** Judging six pairs
+in one call, on Haiku, scored the before text 20 to 28 points more generously
+than judging one pair per call on Opus, which halved the measured improvement.
+Two variables had moved together, so the cause stayed unattributed. Cost fell
+from $3.99 to $0.83.
+
+**A wrong prediction about time.** A batch run was predicted to take "a few
+minutes" and took 23. Output tokens set the duration of a call, so six tables in
+one reply take about as long as six replies. Batching saves input cost and no
+wall clock. Calls now run concurrently, which is the only lever that shortens it.
+
+**Run metadata was being overwritten.** Each skill is a separate invocation of
+`run.js` writing `meta.json` into a shared run directory, so the second write
+replaced the first and the recorded cost covered one skill. It now merges.
+
+## Phase 7 — The skill's own prose failed its own checks (2026-08-14)
+
+Ten violations were caught in replies, one at a time, each one prompting an
+amendment: "Worth stating plainly", "The mechanical cause is narrower", "worth
+naming", "The failure was mine", "which is exactly why this reached a paid run
+before showing itself", "share one shape", "and the construction moved".
+
+**The finding underneath them:** the skill file itself broke its own rules in
+about twenty-five places, including six figurative uses of "shape". A rule
+written in prose that violates the rule teaches the violation. The skill was
+rewritten to obey itself, and the check count grew from fourteen to sixteen.
+
+The instruction that closed it: run the skill against the skill, and against the
+prompt that installs it, and keep going until they all pass.
+
+## Phase 8 — Making the number trustworthy (2026-08-15)
+
+Two judging methods disagreed. Instead of choosing the flattering one, the
+question asked was what the most rigorous method would be, and what batching
+changes mechanically.
+
+**The largest bias, found by asking:** the judging prompt labelled the two texts
+`BEGIN BEFORE` and `BEGIN AFTER`. The judge was told which text a skill had
+produced and then asked whether it was better.
+
+**What was built:**
+
+1. **Blinding.** The texts arrive as TEXT A and TEXT B. The template names
+   neither and does not mention a rewrite. Which slot the after text takes is
+   `(pair index + round) % 2` — reproducible, no stored seed, exactly balanced.
+2. **A control.** Each before text judged against a copy of itself. Both texts
+   pass and fail the same checks, so a gap is error.
+
+**The control returned zero, and turned out to be weak evidence.** A judge given
+two identical texts can answer by copying one column into the other. That
+realisation produced the better measurement: because the slot assignment flips
+between rounds, the same after text is marked from both positions, so the gap
+between those two figures is position bias measured on texts that differ. It
+costs nothing extra and every ordinary run now prints it.
+
+**What blinding was worth:** on the same thirteen pairs, the before score rose six
+to nine points and the measured improvement fell from 38 to 32–36. Position bias
+measured 1.0 point of 96.
+
+## Phase 9 — The paste route is replaced by a plugin (2026-08-16)
+
+Phase 2 chose paste over plugin for two reasons: a reader arrives from a blog
+post, and a frozen copy is the reader's to edit. Three facts changed after that.
+
+1. **The install became too large to paste.** `conversation-prose` came to
+   install two files and to ask the reader to hand-edit
+   `~/.claude/settings.json` — checking for `jq`, backing the file up, and
+   restoring the backup when the JSON failed to parse. A plugin registers hooks
+   without touching a reader's files at all.
+2. **The prompts reached 2,730 lines.** Two commands are easier to paste from a
+   blog post than 848 lines of one of them.
+3. **An update now makes a measured difference.** When Phase 2 chose the frozen
+   copy, no update changed a published figure. The restructure in Phase 3 is
+   what produced the 99% figure, and a reader on a copy taken before it gets a
+   worse result than the published number states.
+
+**What replaced the edits.** Two hooks: `SessionStart` injects the skill,
+`UserPromptSubmit` injects the sixteen checks each turn. Both prefer a copy at
+`~/.claude/skills/<skill>/` over the plugin's own. That keeps the Phase 2 reason
+for pasting, an edited copy taking priority, without the paste.
+
+**What made `published-prose` installable.** A plugin install cannot run an
+interview, and that skill's install-time interview was the reason it had no
+plugin route. The fix is a first instruction that reads the profile, treats a
+missing `status: complete` line as no profile, and offers the interview from a
+sibling file loaded only on that branch. The profile writes outside the plugin
+directory, because a plugin update replaces everything under it.
+
+**The names.** The plugin is called `writing`, giving `writing:conversation-prose`
+and `writing:documentation-prose`. Naming it `prose` was tried first and dropped:
+`prose:conversation-prose` repeats a word, and removing the repetition by
+shortening the skills to `conversation`, `documentation`, and `published` moved
+the cost somewhere worse. A skills-only install drops the plugin prefix, so those
+short names would sit in a flat `~/.claude/skills/` where any other author can
+claim `documentation` and shadow it silently. Naming the plugin for the domain
+and each skill for its genre satisfies both constraints at once.
+
+**What the first install test found.** A `SessionStart` hook's plain stdout is
+discarded. Both hooks were written to print the file directly, which worked for
+`UserPromptSubmit` and silently injected nothing at session start. The fix is
+the `hookSpecificOutput` envelope both events accept. Two properties of a
+headless `-p` run made this slow to see: the hook command executes and its
+output is dropped, so a marker file proves the wrong half; and `SessionStart`
+injection does not apply to `-p` at all, which a control run against a hook
+known to work interactively confirmed.
+
+**One improvement that fell out of the rename.** The harness had refused to run
+without a skill installed at `~/.claude/skills/<skill>/`, so a stranger cloning
+the repository could not reproduce a figure without installing first. It now
+resolves a skill in two places, installed first and the plugin second, and
+records in `meta.json` which one produced each figure. The hook script uses the
+same order.
+
+`prompts/` is deleted. The two committed run directories under `tests/runs/`
+keep the pre-rename names, being dated records of what was measured.
+
+## Where it landed
+
+| | |
+|---|---|
+| `conversation-prose` | 13.9 → 5.4 violations per 1,000 words (−61%); checks passed 61.5–65.6% → 99.0% |
+| `documentation-prose` | 24.6 → 3.9 violations per 1,000 words (−84%); checks passed 69.8–71.4% → 95.2–96.8% |
+
+Claude Opus 5, 2026-08-15, thirteen prompts, three judging rounds, blinded. About
+$4.90 to regenerate. The before texts, the reference run, and the judged records
+are committed, so the figures are checkable without a credential.
+
+**What the figures do not show, stated wherever they appear:** the detectors come
+from the skills' own rules, so this measures whether a skill removes the failures
+it names and not whether the writing is better. The judge has never been
+calibrated against a person marking the same checks by hand. Thirteen prompts is
+a direction, not a confidence interval. The test measures a rewrite pass over
+fixed text, where the normal use is prose written with the skill already loaded.
+`published-prose` is not measured at all.
+
+## Still open
+
+- `published-prose` has no `checks.md` and its self-check is still 29 bullets
+  across 569 lines, which is the structure that failed in Phase 3. It is also
+  the one skill with no per-turn injection, because the two hooks inject
+  `conversation-prose` only.
+- Whether batching alone or the cheaper model caused the leniency in Phase 6. One
+  run of batch on Opus, blinded, three rounds, six calls, would settle it.
+- Calibrating the judge against three pairs marked by hand.
