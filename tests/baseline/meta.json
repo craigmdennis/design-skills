@@ -14,7 +14,10 @@
       "03": "c66f26805171",
       "04": "807eb48b5d00",
       "05": "7c9b05b89905",
-      "06": "69e8d6145b8e"
+      "06": "69e8d6145b8e",
+      "07": "ffe2f91b8ac9",
+      "08": "3bdba91db8dd",
+      "09": "a48f01748cf6"
     },
     "documentation-prose": {
       "01": "1f5c8b2ecd33",
@@ -29,5 +32,13 @@
   "skills": [
     "conversation-prose",
     "documentation-prose"
-  ]
+  ],
+  "pinned": {
+    "conversation-prose": [
+      "07",
+      "08",
+      "09"
+    ]
+  },
+  "pinnedNote": "A pinned before text is copied from a real session transcript instead of generated from the corpus prompt. The prompt beside it records the situation the text came from, and any redaction made for privacy. No regeneration touches it, including --force."
 }

@@ -12,6 +12,17 @@ function plan(args) {
   return spawnSync(process.execPath, [ALL_JS, ...args, '--plan'], { encoding: 'utf8' });
 }
 
+// Every count below is derived from the corpus directories. A number written
+// into the test would have to be edited by hand each time a prompt is added,
+// and the edit would look like the fix rather than the breakage.
+function corpusSize(skill) {
+  return fs.readdirSync(path.join(__dirname, '..', 'corpus', skill))
+    .filter(f => f.endsWith('.md')).length;
+}
+const CONVERSATION = corpusSize('conversation-prose');
+const DOCUMENTATION = corpusSize('documentation-prose');
+const BOTH = CONVERSATION + DOCUMENTATION;
+
 test('--plan creates no directory and makes no call', () => {
   const before = fs.existsSync(path.join(__dirname, '..', 'runs'))
     ? fs.readdirSync(path.join(__dirname, '..', 'runs')).length
@@ -28,30 +39,32 @@ test('--plan creates no directory and makes no call', () => {
 
 test('--plan counts the corpus and the judging rounds', () => {
   const result = plan([]);
-  assert.match(result.stdout, /15 for the corpus/);
-  assert.match(result.stdout, /39 for 3 judging rounds/);
-  assert.match(result.stdout, /54 in total/);
+  const corpus = BOTH + 2;
+  assert.match(result.stdout, new RegExp(`${corpus} for the corpus`));
+  assert.match(result.stdout, new RegExp(`${BOTH * 3} for 3 judging rounds`));
+  assert.match(result.stdout, new RegExp(`${corpus + BOTH * 3} in total`));
 });
 
 test('the plan counts the corpus files instead of assuming a size', () => {
-  // documentation-prose carries one more prompt than conversation-prose, so a
-  // hardcoded six would report the wrong number for both.
+  // One call per prompt plus one isolation probe, per skill. A hardcoded number
+  // here would report the wrong count the first time a prompt is added.
   const both = plan([]).stdout.match(/(\d+) for the corpus/)[1];
   const one = plan(['conversation-prose']).stdout.match(/(\d+) for the corpus/)[1];
   const other = plan(['documentation-prose']).stdout.match(/(\d+) for the corpus/)[1];
+  assert.strictEqual(Number(one), CONVERSATION + 1);
+  assert.strictEqual(Number(other), DOCUMENTATION + 1);
   assert.strictEqual(Number(both), Number(one) + Number(other));
-  assert.notStrictEqual(one, other, 'the two corpora differ in size');
 });
 
 test('--batch takes judging to one call per skill per round', () => {
   const result = plan(['--batch']);
   assert.match(result.stdout, /6 for 3 judging rounds/);
-  assert.match(result.stdout, /21 in total/);
+  assert.match(result.stdout, new RegExp(`${BOTH + 2 + 6} in total`));
 });
 
 test('--fresh-before doubles the corpus calls', () => {
   const result = plan(['--fresh-before']);
-  assert.match(result.stdout, /28 for the corpus/);
+  assert.match(result.stdout, new RegExp(`${BOTH * 2 + 2} for the corpus`));
 });
 
 test('the plan names where the before texts come from', () => {
@@ -61,14 +74,14 @@ test('the plan names where the before texts come from', () => {
 
 test('naming one skill counts only that corpus', () => {
   const result = plan(['conversation-prose', '--rounds', '1']);
-  assert.match(result.stdout, /7 for the corpus/);
-  assert.match(result.stdout, /6 for 1 judging rounds/);
-  assert.match(result.stdout, /13 in total/);
+  assert.match(result.stdout, new RegExp(`${CONVERSATION + 1} for the corpus`));
+  assert.match(result.stdout, new RegExp(`${CONVERSATION} for 1 judging rounds`));
+  assert.match(result.stdout, new RegExp(`${CONVERSATION * 2 + 1} in total`));
 });
 
 test('--no-judge removes the judging calls from the count', () => {
   const result = plan(['--no-judge']);
-  assert.match(result.stdout, /15 in total/);
+  assert.match(result.stdout, new RegExp(`${BOTH + 2} in total`));
   assert.ok(!result.stdout.includes('judging rounds'));
 });
 

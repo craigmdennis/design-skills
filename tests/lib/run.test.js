@@ -7,7 +7,7 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const {
   buildAfterPrompt, REWRITE_INSTRUCTION, stamp, assertRunDirFree, assertBaselineComplete,
-  assertBaselineCorpusMatches, corpusHash, pinnedModel, mergeMeta, skillFingerprint, resolveSkillDir, readSkillBody, SKILLS, PLUGIN_SKILLS
+  assertBaselineCorpusMatches, corpusHash, baselineWorkList, pinnedModel, mergeMeta, skillFingerprint, resolveSkillDir, readSkillBody, SKILLS, PLUGIN_SKILLS
 } = require('../run');
 
 const RUN_JS = path.join(__dirname, '..', 'run.js');
@@ -47,8 +47,15 @@ test('a dry run reports no model calls and does not point at the scorer', () => 
     fs.rmSync(outDir, { recursive: true, force: true });
   }
 
+  // The corpus grows, so the count comes from the directory rather than a number
+  // the next added prompt would falsify.
+  const corpusSize = fs.readdirSync(path.join(__dirname, '..', 'corpus', 'conversation-prose'))
+    .filter(f => f.endsWith('.md')).length;
   assert.strictEqual(result.status, 0);
-  assert.match(result.stdout, /dry run: walked 6 corpus files, made no model calls/);
+  assert.match(
+    result.stdout,
+    new RegExp(`dry run: walked ${corpusSize} corpus files, made no model calls`)
+  );
   assert.ok(!/\d+ model calls,/.test(result.stdout), 'should not report a call count it did not make');
   assert.ok(!result.stdout.includes('score it with'), 'should not point at the scorer for a run with no pairs');
 });
@@ -157,6 +164,20 @@ test('assertBaselineComplete names the command that fixes it', () => {
     () => assertBaselineComplete('documentation-prose', ['99']),
     /--make-baseline/
   );
+});
+
+test('a pinned before text survives --force, which no other id does', () => {
+  const meta = JSON.parse(
+    fs.readFileSync(path.join(__dirname, '..', 'baseline', 'meta.json'), 'utf8')
+  );
+  const pinned = meta.pinned['conversation-prose'];
+  assert.ok(pinned.length > 0, 'the pinned list should name at least one id');
+
+  const forced = baselineWorkList('conversation-prose', [...pinned, '99'], true);
+  assert.deepStrictEqual(forced.ids, ['99']);
+
+  const plain = baselineWorkList('conversation-prose', pinned, false);
+  assert.deepStrictEqual(plain.ids, []);
 });
 
 test('pinnedModel reads the environment and returns empty when unset', () => {
