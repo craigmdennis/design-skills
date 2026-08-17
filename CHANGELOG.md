@@ -5,6 +5,34 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-08-17
+
+### writing 1.1.0 — pinned real-session texts, a framing-sentences instruction, and remeasured figures
+
+The conversation-prose corpus grows from six prompts to nine. The three new
+before texts are **pinned**: copied whole from real session transcripts at the
+point where the reader objected, with named persons, employers, and medical
+details replaced and each substitution listed in the corpus prompt. No model
+call regenerates a pinned text; `--make-baseline` and `--force` both skip
+pinned ids. An excerpt removes the facts a rewrite needs, so pinned texts are
+copied from first word to last.
+
+`checks.md` gains one instruction: check framing sentences — openers, closers,
+transitions — last and separately, because a sentence that reports no finding
+is where a proof-read stops looking. The skill's worked-example rewrite also
+now states its claim positively instead of as a negated contrast.
+
+A ninth exact detector counts "worth" plus a speech-act verb (naming, stating,
+flagging, noting, mentioning, saying, calling out), a class check 8 bans that
+the exact tier previously missed.
+
+Remeasured over nine pairs: 15.0 to 7.2 violations per 1,000 words (−52%),
+model-judged checks 59–63% before and 96–98% after. The six-pair figures were
+−61% and 99%; the pinned texts carry failures at real-session density and pull
+the numbers down. A separate red-team run measured generation with the skill
+loaded: all nine prompts reached zero confirmed violations within four rounds,
+six on the first draft, documented in `docs/red-team-pilot.md`.
+
 ## 2026-08-16
 
 ### The three prose skills become a plugin, and `prompts/` is removed

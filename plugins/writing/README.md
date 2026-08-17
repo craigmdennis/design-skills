@@ -87,11 +87,14 @@ copy takes priority over the plugin's anyway.
 
 ## Measured result
 
-Blinded and reproducible. Violations per 1,000 words fall by 61%
+Blinded and reproducible. Violations per 1,000 words fall by 52%
 for `conversation-prose` and 84% for `documentation-prose`; the model-judged
-check score rises from 61–66% to 99% and from 70–71% to 95–97%. The corpus,
-the harness, and the limits of what those figures show are in the repository
-README and `docs/prose-test-report.md`. `published-prose` is not measured.
+check score rises from 59–63% to 96–98% and from 70–71% to 95–97%. Three of
+the nine conversation-prose prompts carry before texts copied from real
+session transcripts, so the corpus includes failures at the density a session
+produces. The corpus, the harness, and the limits of what those figures show
+are in the repository README and `docs/prose-test-report.md`.
+`published-prose` is not measured.
 
 ## Limits
 

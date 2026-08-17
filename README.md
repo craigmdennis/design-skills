@@ -153,13 +153,26 @@ prose in and measure that instead.
 
 | skill | prompts | violations per 1,000 words, before | after | change | checks passed, before | after |
 |---|---:|---:|---:|---:|---:|---:|
-| conversation-prose | 6 | 13.9 | 5.4 | **−61%** | 61.5–65.6% | **99.0%** |
+| conversation-prose | 9 | 15.0 | 7.2 | **−52%** | 59.0–62.5% | **95.8–97.9%** |
 | documentation-prose | 7 | 24.6 | 3.9 | **−84%** | 69.8–71.4% | **95.2–96.8%** |
 
-Claude Opus 5, 2026-08-15. The first three columns are counted by script and reproduce
-exactly from the committed texts. The last two are marked by a second Claude instance across
-three rounds, so they are given as a range. Full detail, per prompt and per check, is in
+Claude Opus 5; conversation-prose 2026-08-17, documentation-prose 2026-08-15. The first
+three columns are counted by script and reproduce exactly from the committed texts. The last
+two are marked by a second Claude instance across three rounds, so they are given as a
+range. Full detail, per prompt and per check, is in
 [the report](docs/prose-test-report.md).
+
+Three of the nine conversation-prose prompts are **pinned**: their before texts are copied
+whole from real session transcripts, at the point where the reader objected, and no model
+call regenerates them. The pinned texts carry failures at the density a real session
+produces, and adding them moved the measured change from −61% to −52%. The prompts before
+and after that change are both in the repository, so either figure reproduces.
+
+A separate red-team run measured generation rather than rewrite: a writer with the skill
+loaded answers each prompt, a red team applies the sixteen checks with a majority vote of
+three verifiers, and the writer revises until a round confirms nothing. All nine prompts
+reached zero confirmed violations within four rounds, and six of nine first drafts passed
+immediately. That run is documented in [docs/red-team-pilot.md](docs/red-team-pilot.md).
 
 ### What the change looks like
 
