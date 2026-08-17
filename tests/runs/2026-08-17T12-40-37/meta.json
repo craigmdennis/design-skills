@@ -1,0 +1,34 @@
+{
+  "models": [
+    "claude-haiku-4-5-20251001",
+    "claude-opus-5"
+  ],
+  "modelPinned": "claude-opus-5",
+  "calls": 10,
+  "baseline": "tests/baseline",
+  "costUSD": 1.2365,
+  "date": "2026-08-17",
+  "cli": "2.1.233 (Claude Code)",
+  "corpusCommit": "64cb898",
+  "instructionHash": "64531d4d59d4",
+  "skills": {
+    "conversation-prose": {
+      "calls": 10,
+      "costUSD": 1.2365,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-opus-5"
+      ],
+      "fingerprint": {
+        "source": "plugin",
+        "installed": {
+          "SKILL.md": "893ac8755a98",
+          "checks.md": "323460089607"
+        },
+        "checkCount": 16,
+        "publishedCheckCount": 16,
+        "checksMatchPublished": true
+      }
+    }
+  }
+}
