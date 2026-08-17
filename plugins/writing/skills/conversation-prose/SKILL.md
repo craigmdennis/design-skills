@@ -178,6 +178,11 @@ it refers to. If the preceding text offers two candidates, name the thing.
 - *"the file"*, after two files have been named → name it again
 - *"it"*, across a paragraph boundary → repeat the noun
 
+Re-run this check after shortening a sentence or merging two. Five of the
+eight findings two red-team runs confirmed were this check, and each appeared
+where the writer had compressed: the noun survived in one clause and a pronoun
+replaced it in the other.
+
 ## What carries over from published-prose
 
 - **Plainest accurate word.** "Use" not "utilize", "help" not "facilitate". No
@@ -340,6 +345,14 @@ These stay, because they are not figurative language:
   runs in workerd" compares two actual objects.
 - **Naming a mechanism directly.** "The type file has no imports, so the
   importer cannot pull in `sharp`."
+- **A quoted phrase under discussion.** When the reply is about wording, the
+  banned phrase in quotation marks is a mention, and mention is permitted:
+  *"'earned its keep' is an idiom"* discusses the phrase. The bans govern your
+  own words. A mention needs the quotation marks and a sentence about the
+  phrase itself; a banned phrase doing ordinary work in the sentence is a use,
+  quotation marks or none. A reviewer applying these checks reads mentions as
+  clean; deleting an example to satisfy a string counter removes the
+  illustration and improves nothing.
 
 These go:
 
