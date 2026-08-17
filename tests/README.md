@@ -102,6 +102,10 @@ contains any violations, the change is reported as 0.
 - "clean" and "nice" are excluded from the self-evaluation detector, because
   both have common literal uses, such as "a clean install".
 - "surfaced" is excluded from the two-word verb detector for the same reason.
+- The worth-speech-act detector counts only the speech-act verbs the check
+  names (naming, stating, flagging, noting, mentioning, saying, calling out).
+  "worth checking" and "worth reading" describe actions and stay, so a
+  speech-act verb outside the list is missed.
 - The sentence cap uses 25 words, the descriptive limit. Telling an instruction
   from a description needs judgement, so the stricter 20-word limit for
   instructions is not applied.

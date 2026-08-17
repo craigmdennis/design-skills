@@ -12,6 +12,9 @@ The report papered over the failure and the summary glossed over the cost, so
 the team doubled down on the original plan and leaned into the schedule rather
 than changing it.
 
+One gap is worth naming. Worth stating plainly: the slug change is worth
+flagging, and the ratio fallback is worth checking before the import runs.
+
 This sentence is written to run past the descriptive limit of twenty-five words
 so that the length detector has something real to count when the scorer walks
 through the fixture file.
