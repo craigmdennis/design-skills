@@ -280,9 +280,9 @@ Worked example. The original:
 Under both standards:
 
 > The hash comparison found one conflict. The cause was an error in `read.ts`.
-> The directory contains four images. The program selected the first image, not
-> the image that the frontmatter specifies. I corrected `read.ts`. The
-> comparison now reports zero conflicts.
+> The directory contains four images. The program selected the first image in
+> the directory. The frontmatter specifies a different image. I corrected
+> `read.ts`. The comparison now reports zero conflicts.
 
 ## The rules
 

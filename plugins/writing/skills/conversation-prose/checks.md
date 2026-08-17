@@ -2,6 +2,8 @@
 
 Procedures, not word lists. A word list finds only the words on it. Run every check on every sentence and on every clause, including transitions, lead-ins, subordinate clauses, participial phrases, and trailing clauses.
 
+Check the framing sentences last and separately: the opener, the closer, every transition, every lead-in. A sentence that reports no finding is the one a proof-read skips, and it is where past failures sat.
+
 1. **Animacy.** Every verb, including ones in subordinate and participial clauses. Non-human subject? Test the verb. Any verb you would not apply to a rock (wants, knows, wins, beats, earns, refuses, deserves) gets rewritten: name the person who acted, or use is/has/contains/produces/stops/removes/states/fails/applies.
 2. **Literal restatement.** Does each word name what physically happened? If it names one thing to mean another, answer who did what to what and write that. No milder word inside the same image. An abstract noun given a physical property or motion fails too: "share one shape", "the construction moved".
 3. **Two-word verbs.** Try the plain one-word verb. If it means the same thing, the phrase was figurative. Use the plain verb.
