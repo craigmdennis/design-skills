@@ -5,6 +5,36 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-08-19
+
+### writing 1.2.0 — three checks from Google's style guide, and one report per run
+
+`conversation-prose` gains check 17 and `documentation-prose` check 19:
+a condition that limits a step goes before the step, so the reader tests the
+condition and then acts. Both skills also ban `please` in an instruction, ban
+`simply`, `just`, `easy`, and `quickly` where they describe a step, and require
+the second of two sentences that open on the same word to be rewritten.
+
+All four rules are taken from Google's developer documentation style guide.
+Google's second-person guidance is declined: `documentation-prose` keeps the
+third-person impersonal register, because a specification is read by people who
+did not take part in the conversation that produced it.
+`docs/google-style-audit.md` records fourteen rules where the skills already
+agreed with Google, the two declined rules, and five candidates that stay
+unmeasured.
+
+`tests/report.js` writes `docs/runs/<date>-<method>.md` and stops when that
+file exists. A second run on the same date takes a numbered suffix. Every past
+run is split into its own file under `docs/runs/`, and
+`docs/methodologies.md` names the four methods, links the current run for each,
+and states what none of them measure.
+
+`tests/skill-ab.js` measures whether a candidate edit lowers a frozen judge's
+finding count. A canary pair prices the run from real usage and stops before
+the arms spend anything when the projection exceeds the budget by more than 10
+percent. Two identical baseline arms scored 11 findings each, so the noise
+floor is 0.
+
 ## 2026-08-17
 
 ### writing 1.1.0 — pinned real-session texts, a framing-sentences instruction, and remeasured figures
@@ -31,7 +61,7 @@ model-judged checks 59–63% before and 96–98% after. The six-pair figures wer
 −61% and 99%; the pinned texts carry failures at real-session density and pull
 the numbers down. A separate red-team run measured generation with the skill
 loaded: all nine prompts reached zero confirmed violations within four rounds,
-six on the first draft, documented in `docs/red-team-pilot.md`.
+six on the first draft, documented in `docs/runs/2026-08-17-redteam-nine-prompt.md`.
 
 ## 2026-08-16
 

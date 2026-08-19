@@ -93,7 +93,7 @@ Restart the session afterwards. The two hooks below are inactive until then.
 `conversation-prose` governs every reply, so loading it on demand is too late. By the time
 the standard is found to apply, the reply is written. A `SessionStart` hook injects the full
 skill once per session, about 6,700 tokens. A `UserPromptSubmit` hook injects `checks.md`,
-the sixteen checks in one line each, on every turn, about 650 tokens. The per-turn injection
+the seventeen checks in one line each, on every turn, about 650 tokens. The per-turn injection
 is what keeps the standard applied at turn 90. A file read once at session start stops
 affecting output as a session gets longer.
 
@@ -160,7 +160,7 @@ Claude Opus 5; conversation-prose 2026-08-17, documentation-prose 2026-08-15. Th
 three columns are counted by script and reproduce exactly from the committed texts. The last
 two are marked by a second Claude instance across three rounds, so they are given as a
 range. Full detail, per prompt and per check, is in
-[the report](docs/prose-test-report.md).
+[the run report](docs/runs/2026-08-17-rewrite-nine-pair.md).
 
 Three of the nine conversation-prose prompts are **pinned**: their before texts are copied
 whole from real session transcripts, at the point where the reader objected, and no model
@@ -168,11 +168,17 @@ call regenerates them. The pinned texts carry failures at the density a real ses
 produces, and adding them moved the measured change from −61% to −52%. The prompts before
 and after that change are both in the repository, so either figure reproduces.
 
-A separate red-team run measured generation rather than rewrite: a writer with the skill
-loaded answers each prompt, a red team applies the sixteen checks with a majority vote of
-three verifiers, and the writer revises until a round confirms nothing. All nine prompts
-reached zero confirmed violations within four rounds, and six of nine first drafts passed
-immediately. That run is documented in [docs/red-team-pilot.md](docs/red-team-pilot.md).
+Three other methods measure what a rewrite pass cannot. A
+[red-team run](docs/runs/2026-08-17-redteam-nine-prompt.md) took all nine prompts to zero
+confirmed violations within four rounds, with six of nine first drafts passing immediately.
+A [skill-training loop](docs/runs/2026-08-17-skill-training.md) let an editor amend the skill
+after each round and diverged, which is recorded as a negative result. An
+[A/B run against a frozen judge](docs/runs/2026-08-19-ab-baseline.md) scored two identical
+arms at 11 findings each, giving a noise floor of 0 for candidate edits.
+
+[docs/methodologies.md](docs/methodologies.md) states what each method measures, links the
+current run for each, and names what none of them measure. Every run keeps its own file
+under `docs/runs/`, and no run overwrites another.
 
 ### What the change looks like
 
@@ -263,7 +269,7 @@ The individual steps run on their own if you want them:
 node tests/run.js conversation-prose --out tests/runs/mine   # generate the after texts
 node tests/score.js tests/runs/mine                          # counted score
 node tests/judge.js tests/runs/mine --rounds 3               # judged score
-node tests/report.js tests/runs/mine                         # write docs/prose-test-report.md
+node tests/report.js tests/runs/mine --method rewrite       # write docs/runs/<date>-rewrite.md
 node --test "tests/**/*.test.js"                             # the harness's own tests
 ```
 
