@@ -4,6 +4,7 @@ const assert = require('node:assert');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { spawnSync } = require('node:child_process');
 const { build, readJudged, pairTable, checkTable } = require('../report');
 
 // A run directory with two pairs, a judged record, and a control record. The
@@ -240,4 +241,26 @@ test('the report names which copy of a skill produced the figures', () => {
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test('a report never overwrites an existing one', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'report-out-'));
+  const target = path.join(dir, 'taken.md');
+  fs.writeFileSync(target, 'a published figure');
+  const runDir = path.join(__dirname, '..', 'runs');
+  const existing = fs.existsSync(runDir)
+    ? fs.readdirSync(runDir).filter(f => !f.startsWith('.'))
+    : [];
+  if (existing.length === 0) {
+    fs.rmSync(dir, { recursive: true, force: true });
+    return; // no run directory to report on
+  }
+  const result = spawnSync(
+    process.execPath,
+    [path.join(__dirname, '..', 'report.js'), path.join(runDir, existing[0]), '--out', target],
+    { encoding: 'utf8' }
+  );
+  fs.rmSync(dir, { recursive: true, force: true });
+  assert.notStrictEqual(result.status, 0, 'should refuse the overwrite');
+  assert.match(result.stderr, /nothing overwrites one/);
 });

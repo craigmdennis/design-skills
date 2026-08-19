@@ -214,7 +214,7 @@ function main(argv) {
 
   // The report is written last, so it describes whatever this run produced. A
   // run stopped before judging still gets one, carrying the detector counts.
-  step('report', [path.join(HERE, 'report.js'), runDir]);
+  step('report', [path.join(HERE, 'report.js'), runDir, '--method', 'rewrite']);
 
   console.log(`\nrun directory: ${runDir}`);
 }

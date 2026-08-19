@@ -9,7 +9,20 @@ const { scoreRun } = require('./score');
 // marked, what the calibrations returned, and what the figures do not cover.
 // all.js calls it at the end of every run, so the committed report always
 // describes the most recent one.
-const DEFAULT_OUT = path.join(__dirname, '..', 'docs', 'prose-test-report.md');
+const RUNS_DIR = path.join(__dirname, '..', 'docs', 'runs');
+
+// A published figure is evidence, so a later run adds a file and never
+// replaces one. The name carries the date and the method, and a second run on
+// the same date takes a numbered suffix.
+function reportPath(runDir, method) {
+  const date = new Date(fs.statSync(runDir).mtime).toISOString().slice(0, 10);
+  const base = path.join(RUNS_DIR, `${date}-${method}`);
+  if (!fs.existsSync(`${base}.md`)) return `${base}.md`;
+  for (let n = 2; n < 100; n += 1) {
+    if (!fs.existsSync(`${base}-${n}.md`)) return `${base}-${n}.md`;
+  }
+  throw new Error(`99 reports already exist for ${base}. Name one with --out.`);
+}
 
 function readJson(file) {
   if (!fs.existsSync(file)) return null;
@@ -389,13 +402,22 @@ function main(argv) {
   const args = argv.slice(2);
   const runDir = args.find(a => !a.startsWith('--'));
   const outIndex = args.indexOf('--out');
-  const out = outIndex >= 0 ? args[outIndex + 1] : DEFAULT_OUT;
+  const methodIndex = args.indexOf('--method');
+  const method = methodIndex >= 0 ? args[methodIndex + 1] : 'rewrite';
 
   if (!runDir) {
-    console.error('usage: node tests/report.js <run-dir> [--out <file>]');
+    console.error('usage: node tests/report.js <run-dir> [--method <name>] [--out <file>]');
     process.exit(1);
   }
   if (!fs.existsSync(runDir)) throw new Error(`no run directory at ${runDir}`);
+
+  const out = outIndex >= 0 ? args[outIndex + 1] : reportPath(runDir, method);
+  if (fs.existsSync(out)) {
+    throw new Error(
+      `${out} exists. A report is evidence and nothing overwrites one. ` +
+      'Pass --out with a free name.'
+    );
+  }
 
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, build(runDir));
@@ -411,4 +433,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { build, readJudged, pairTable, checkTable, DEFAULT_OUT };
+module.exports = { build, readJudged, pairTable, checkTable, reportPath, RUNS_DIR };
