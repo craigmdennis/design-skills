@@ -35,9 +35,9 @@ edit lowers the finding count by more than the gap between two identical arms.
 | Rewrite | [2026-08-17, nine pairs](runs/2026-08-17-rewrite-nine-pair.md) | 15.0 to 7.2 violations per 1,000 words, −52%; judge 59–63% to 96–98% |
 | Red team | [2026-08-17, nine prompts](runs/2026-08-17-redteam-nine-prompt.md) | All nine reached zero confirmed findings within four rounds |
 | Skill training | [2026-08-17, twelve prompts](runs/2026-08-17-skill-training.md) | Diverged: 6 confirmed findings to 22 over five rounds |
-| A/B | [2026-08-19, baseline](runs/2026-08-19-ab-baseline.md) | Two identical arms scored 11 each; noise floor 0 |
+| A/B | [2026-08-19, 17-check rubric](runs/2026-08-19-ab-baseline-17check.md) | Arms scored 8 and 10; noise floor 2 |
 
-Superseded runs stay in `docs/runs/` and keep their figures.
+Superseded runs stay in `docs/runs/` and keep their figures. [The first A/B baseline](runs/2026-08-19-ab-baseline.md) was measured against the 16-check rubric and is superseded by the run above, which uses the shipped 17-check rubric.
 [The pilot of 2026-08-17](runs/2026-08-17-redteam-pilot.md) preceded the
 nine-prompt red team on three prompts.
 

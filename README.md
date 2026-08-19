@@ -173,8 +173,8 @@ Three other methods measure what a rewrite pass cannot. A
 confirmed violations within four rounds, with six of nine first drafts passing immediately.
 A [skill-training loop](docs/runs/2026-08-17-skill-training.md) let an editor amend the skill
 after each round and diverged, which is recorded as a negative result. An
-[A/B run against a frozen judge](docs/runs/2026-08-19-ab-baseline.md) scored two identical
-arms at 11 findings each, giving a noise floor of 0 for candidate edits.
+[A/B run against a frozen judge](docs/runs/2026-08-19-ab-baseline-17check.md) scored two
+identical arms at 8 and 10 findings, giving a noise floor of 2 for candidate edits.
 
 [docs/methodologies.md](docs/methodologies.md) states what each method measures, links the
 current run for each, and names what none of them measure. Every run keeps its own file
