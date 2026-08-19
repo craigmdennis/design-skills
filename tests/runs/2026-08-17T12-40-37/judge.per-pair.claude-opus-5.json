@@ -1,0 +1,3001 @@
+{
+  "rounds": 3,
+  "batch": false,
+  "control": false,
+  "blinded": true,
+  "calls": 27,
+  "model": "claude-opus-5",
+  "costUSD": 3.5692,
+  "results": [
+    {
+      "skill": "conversation-prose",
+      "pairs": 9,
+      "rows": [
+        {
+          "round": 1,
+          "before": 90,
+          "after": 141,
+          "a": 109,
+          "b": 122,
+          "denominator": 144,
+          "unparsed": 0
+        },
+        {
+          "round": 2,
+          "before": 85,
+          "after": 138,
+          "a": 120,
+          "b": 103,
+          "denominator": 144,
+          "unparsed": 0
+        },
+        {
+          "round": 3,
+          "before": 85,
+          "after": 141,
+          "a": 105,
+          "b": 121,
+          "denominator": 144,
+          "unparsed": 0
+        }
+      ]
+    }
+  ],
+  "positionSplit": {
+    "inA": {
+      "calls": 13,
+      "after": 99.03846153846155,
+      "before": 63.46153846153846
+    },
+    "inB": {
+      "calls": 14,
+      "after": 95.53571428571429,
+      "before": 57.14285714285714
+    }
+  },
+  "marks": [
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "01",
+      "afterSlot": "b",
+      "a": 9,
+      "b": 15,
+      "before": 9,
+      "after": 15,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The check exists precisely to catch that combination: a post declared finished that still has a placeholder in it."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "FAIL",
+          "quote": "The same script passed on the previous commit, so the change arrived in this commit."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Since the same script passed on the previous commit, the change came in with this one — either the `TKTK` was just added, or `draft` was flipped from `true` to `false` while the placeholder was still there."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The guard is working as intended."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The guard is working as intended."
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "`scripts/check-drafts.js` scans `src/content/posts/*.md` for `TKTK` — the standard placeholder for \"text to come\" — and exits 1 if it finds any."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "It found one at `src/content/posts/measuring-adoption.md:41`."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "02",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 11,
+      "before": 11,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Keep those two routes on Express behind a mount, if the migration allows a hybrid."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "`parseBody` buffers the whole file in memory, so if these routes accept large uploads that's the wrong answer."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "**2 not started, and these are the real problem.**"
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "There's no Hono equivalent in the project's dependencies."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "I've only run the tests for the files I touched, not the full suite."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "03",
+      "afterSlot": "b",
+      "a": 9,
+      "b": 16,
+      "before": 9,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The cost is that a revoked token can keep working for up to 5 minutes."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "If revocation latency turns out to matter more than we assumed, the lever is to lower this toward 1–2 minutes and check the resulting request rate against the 100/min limit at peak."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "If revocation latency turns out to matter more than we assumed, the lever is to lower this toward 1–2 minutes and check the resulting request rate against the 100/min limit at peak."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Uncached, that's already 60% of the budget in steady state, with nothing left for bursts or retries."
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That's why we didn't go higher: the provider recommends 1–15 minutes, and 5 sits at the low end of that range, so we get most of the rate reduction while keeping the revocation window short."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Caching for 5 minutes means each token is introspected once per window instead of once per request, which drops the steady-state rate well under the ceiling and leaves real headroom."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "If revocation latency turns out to matter more than we assumed, the lever is to lower this toward 1–2 minutes and check the resulting request rate against the 100/min limit at peak."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "04",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 10,
+      "before": 10,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "and your caller happily treats it as the authenticated user, `admin` flag and all"
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "loose equality papers over it and you'll never know which"
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "`db.query` gives back `undefined`, the `if` falls through, and the function ends with no explicit return"
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Depending on the driver's multi-statement handling, it gets worse than that."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "This isn't a \"harden it later\" item; it's the whole function."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "If it's `\"1\"` or `true`, loose equality papers over it and you'll never know which."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "05",
+      "afterSlot": "b",
+      "a": 12,
+      "b": 16,
+      "before": 12,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "We accepted that as the price of per-request authorisation and a ~28x lower bill."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The image CDN was ruled out on cost: the quote came to $340/month at our current volume, against roughly $12/month for R2 storage plus Worker requests."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The tradeoff is latency — the Worker adds about 15ms per image request."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "10 subject position",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Uploaded images are stored in R2 and served through a Worker rather than from a public R2 bucket on a custom domain or a third-party image CDN."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "06",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 11,
+      "before": 11,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "It's a throwaway container, durability buys you nothing, and the 3.5x local-vs-CI gap smells like slow disk."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Those two worlds have completely different fixes, and right now you can't tell them apart."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That's the change that turns cores into minutes, and it's also what makes the 4-core machine worth buying afterward."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "At 2x cost per minute it only breaks even if the run gets twice as fast, and it can't: the 900 database tests run one after another, so they're a serial chain that doesn't care how many cores are idle beside it."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "At 2x cost per minute it only breaks even if the run gets twice as fast, and it can't: the 900 database tests run one after another, so they're a serial chain that doesn't care how many cores are idle beside it."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "07",
+      "afterSlot": "b",
+      "a": 9,
+      "b": 16,
+      "before": 9,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The byte-hash comparison earned its keep twice over."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The byte-hash comparison earned its keep twice over."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "4 first sentence",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The byte-hash comparison earned its keep twice over."
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "A cross-check between two independent paths to the same answer finds errors on *either* side, which is why it beats validating one path harder."
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The byte-hash comparison earned its keep twice over."
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "A cross-check between two independent paths to the same answer finds errors on *either* side, which is why it beats validating one path harder."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "It was specified to catch corpus corruption, and instead caught a bug in my own reader — one directory holds four images, and resolving by directory listing instead of the frontmatter's declared name silently imported the wrong picture."
+        },
+        {
+          "check": "10 subject position",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "08",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 13,
+      "before": 13,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The image is worn away, so it reads as ordinary vocabulary."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "A fixed phrase whose meaning you cannot work out from the words."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "10 subject position",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The image is worn away, so it reads as ordinary vocabulary."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 1,
+      "pair": "09",
+      "afterSlot": "b",
+      "a": 6,
+      "b": 14,
+      "before": 6,
+      "after": 14,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "On the risk to you, I was wrong, and that's the part that sent you spiralling."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That's solid ground, not contested ground."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "because if I retract something true to smooth this over you might go and defend learning styles to the company"
+        },
+        {
+          "check": "4 first sentence",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "You're right, and the part that matters most is the last bit: I should have worked out whether it actually applied to you before I put it under a heading that said it could cost you the job."
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "FAIL",
+          "after": "FAIL",
+          "quote": "If I withdraw a true claim to end this disagreement, you might defend learning styles to the company."
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Here's what you actually said, which I should have weighed before writing that section:"
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "On the science, I'm not folding"
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "FAIL",
+          "quote": "Going forward: when a factual claim supports a conclusion about your work, I give the source and my confidence level with the claim."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "You proposed it as **research to run**, not a finding to build on."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "I gave you the alarm-bell version of it, about an interview you can't go back and redo."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "01",
+      "afterSlot": "a",
+      "a": 15,
+      "b": 9,
+      "before": 9,
+      "after": 15,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Don't reach for skipping `prebuild` or loosening the pattern in the script — that trades a two-minute fix for a placeholder shipping to production later."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "FAIL",
+          "quote": "The guard is working as intended."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Don't reach for skipping `prebuild` or loosening the pattern in the script — that trades a two-minute fix for a placeholder shipping to production later."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The check exists precisely to catch that combination: a post declared finished that still has a placeholder in it."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The guard is working as intended."
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Since the same script passed on the previous commit, the change came in with this one — either the `TKTK` was just added, or `draft` was flipped from `true` to `false` while the placeholder was still there."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That file's frontmatter says `draft: false`, so it's marked ready to publish."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "02",
+      "afterSlot": "b",
+      "a": 10,
+      "b": 15,
+      "before": 10,
+      "after": 15,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Add a dependency — `@hono/node-server` has some helpers, or use `c.req.parseBody()` directly, which handles multipart and gives you `File` objects."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "`parseBody` buffers the whole file in memory, so if these routes accept large uploads that's the wrong answer."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Worth a full run before you trust that 9/14 number."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "There's no Hono equivalent in the project's dependencies."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "I've only run the tests for the files I touched, not the full suite."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "FAIL",
+          "quote": "That may be enough, depending on what those routes do with the uploads (disk storage, streaming, or size limits)."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "03",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 9,
+      "before": 9,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Caching for 5 minutes means each token is introspected once per window instead of once per request, which drops the steady-state rate well under the ceiling and leaves real headroom."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "If revocation latency turns out to matter more than we assumed, the lever is to lower this toward 1–2 minutes and check the resulting request rate against the 100/min limit at peak."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That's why we didn't go higher: the provider recommends 1–15 minutes, and 5 sits at the low end of that range, so we get most of the rate reduction while keeping the revocation window short."
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Uncached, that's already 60% of the budget in steady state, with nothing left for bursts or retries."
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That's why we didn't go higher: the provider recommends 1–15 minutes, and 5 sits at the low end of that range, so we get most of the rate reduction while keeping the revocation window short."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Caching for 5 minutes means each token is introspected once per window instead of once per request, which drops the steady-state rate well under the ceiling and leaves real headroom."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "If revocation latency turns out to matter more than we assumed, the lever is to lower this toward 1–2 minutes and check the resulting request rate against the 100/min limit at peak."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "04",
+      "afterSlot": "b",
+      "a": 9,
+      "b": 14,
+      "before": 9,
+      "after": 14,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "`is_admin == 1` works but hides what the driver actually hands you."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "If it's `\"1\"` or `true`, loose equality papers over it and you'll never know which."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "`db.query` gives back `undefined`, the `if` falls through, and the function ends with no explicit return."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "FAIL",
+          "quote": "The defect is the whole function."
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "FAIL",
+          "quote": "The request `GET /users/1%20OR%201=1` returns the first row in the table, whichever user that is, and the caller then treats that row as the authenticated user, including the `admin` flag."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "This isn't a \"harden it later\" item; it's the whole function."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Depending on the driver's multi-statement handling, it gets worse than that."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "05",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 10,
+      "before": 10,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The public bucket was ruled out because private galleries need an authorisation check on every request, which a bucket alone can't do."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "We accepted that as the price of per-request authorisation and a ~28x lower bill."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The public bucket was ruled out because private galleries need an authorisation check on every request, which a bucket alone can't do."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The tradeoff is latency — the Worker adds about 15ms per image request."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The public bucket was ruled out because private galleries need an authorisation check on every request, which a bucket alone can't do."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Uploaded images are stored in R2 and served through a Worker rather than from a public R2 bucket on a custom domain or a third-party image CDN."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "06",
+      "afterSlot": "b",
+      "a": 9,
+      "b": 15,
+      "before": 9,
+      "after": 15,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "At 2x cost per minute it only breaks even if the run gets twice as fast, and it can't: the 900 database tests run one after another, so they're a serial chain that doesn't care how many cores are idle beside it."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "It's a throwaway container, durability buys you nothing, and the 3.5x local-vs-CI gap smells like slow disk."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Those two worlds have completely different fixes, and right now you can't tell them apart."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The likely real win is making those 900 tests run concurrently — a schema or database per worker against the same container, so N workers get N isolated namespaces."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Most runners will dump per-test durations with a flag (`--durations=25`, `--profile`, etc.), so you're one CI run away from knowing whether the 900 tests are uniformly slow or whether 30 of them eat half the wall clock."
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That's the change that turns cores into minutes, and it's also what makes the 4-core machine worth buying afterward."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "FAIL",
+          "quote": "The container is discarded after the run, so durability has no value in it."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "07",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 9,
+      "before": 9,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The byte-hash comparison earned its keep twice over."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The byte-hash comparison earned its keep twice over."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "4 first sentence",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The byte-hash comparison earned its keep twice over."
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "A cross-check between two independent paths to the same answer finds errors on *either* side, which is why it beats validating one path harder."
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The byte-hash comparison earned its keep twice over."
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "A cross-check between two independent paths to the same answer finds errors on *either* side, which is why it beats validating one path harder."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "It was specified to catch corpus corruption, and instead caught a bug in my own reader — one directory holds four images, and resolving by directory listing instead of the frontmatter's declared name silently imported the wrong picture."
+        },
+        {
+          "check": "10 subject position",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "08",
+      "afterSlot": "b",
+      "a": 14,
+      "b": 16,
+      "before": 14,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The image is worn away, so it reads as ordinary vocabulary."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "10 subject position",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "It covers any wording that means something other than its literal sense:"
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 2,
+      "pair": "09",
+      "afterSlot": "a",
+      "a": 15,
+      "b": 6,
+      "before": 6,
+      "after": 15,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "I gave you the alarm-bell version of it, about an interview you can't go back and redo."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "You're right, and the part that matters most is the last bit: I should have worked out whether it actually applied to you before I put it under a heading that said it could cost you the job."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "You're right, and the part that matters most is the last bit: I should have worked out whether it actually applied to you before I put it under a heading that said it could cost you the job."
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "On the science, I'm not folding, because if I retract something true to smooth this over you might go and defend learning styles to the company, and that would be worse than anything I've done here."
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "On the risk to you, I was wrong, and that's the part that sent you spiralling."
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "You're right, and the part that matters most is the last bit: I should have worked out whether it actually applied to you before I put it under a heading that said it could cost you the job."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "On the science, I'm not folding, because if I retract something true to smooth this over you might go and defend learning styles to the company, and that would be worse than anything I've done here."
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "FAIL",
+          "quote": "Earlier in the call you'd already said, about the cliff-notes idea, \"I don't know the impact of that and that might be the wrong thing. So someone from pedagogy might be better placed to shape that.\""
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That's solid ground, not contested ground."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Realistic worst case is the interviewer thinking \"he'd want a pedagogy partner\" — which you'd already told her you'd hire."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "01",
+      "afterSlot": "b",
+      "a": 9,
+      "b": 16,
+      "before": 9,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "`git diff HEAD~1 -- src/content/posts/measuring-adoption.md` will tell you which."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Don't reach for skipping `prebuild` or loosening the pattern in the script — that trades a two-minute fix for a placeholder shipping to production later."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Don't reach for skipping `prebuild` or loosening the pattern in the script — that trades a two-minute fix for a placeholder shipping to production later."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The guard is working as intended."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The guard is working as intended."
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Since the same script passed on the previous commit, the change came in with this one — either the `TKTK` was just added, or `draft` was flipped from `true` to `false` while the placeholder was still there."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "It found one at `src/content/posts/measuring-adoption.md:41`."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "02",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 10,
+      "before": 10,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Keep those two routes on Express behind a mount, if the migration allows a hybrid."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "`parseBody` buffers the whole file in memory, so if these routes accept large uploads that's the wrong answer."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "2 not started, and these are the real problem."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Worth a full run before you trust that 9/14 number."
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "There's no Hono equivalent in the project's dependencies."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "I've only run the tests for the files I touched, not the full suite."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "03",
+      "afterSlot": "b",
+      "a": 7,
+      "b": 16,
+      "before": 7,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The cost is that a revoked token can keep working for up to 5 minutes."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Uncached, that's already 60% of the budget in steady state, with nothing left for bursts or retries."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "If revocation latency turns out to matter more than we assumed, the lever is to lower this toward 1–2 minutes and check the resulting request rate against the 100/min limit at peak."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That's why we didn't go higher: the provider recommends 1–15 minutes, and 5 sits at the low end of that range, so we get most of the rate reduction while keeping the revocation window short."
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That's why we didn't go higher: the provider recommends 1–15 minutes, and 5 sits at the low end of that range, so we get most of the rate reduction while keeping the revocation window short."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Caching for 5 minutes means each token is introspected once per window instead of once per request, which drops the steady-state rate well under the ceiling and leaves real headroom."
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "If revocation latency turns out to matter more than we assumed, the lever is to lower this toward 1–2 minutes and check the resulting request rate against the 100/min limit at peak."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Caching for 5 minutes means each token is introspected once per window instead of once per request, which drops the steady-state rate well under the ceiling and leaves real headroom."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "If revocation latency turns out to matter more than we assumed, the lever is to lower this toward 1–2 minutes and check the resulting request rate against the 100/min limit at peak."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "04",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 9,
+      "before": 9,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "`GET /users/1%20OR%201=1` returns the first row in the table — whoever that is — and your caller happily treats it as the authenticated user, `admin` flag and all."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "If it's `\"1\"` or `true`, loose equality papers over it and you'll never know which."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "`db.query` gives back `undefined`, the `if` falls through, and the function ends with no explicit return."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Two smaller notes:"
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "If `id` should be an integer, reject non-integers at the route boundary rather than letting the DB coerce."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "This isn't a \"harden it later\" item; it's the whole function."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Depending on the driver's multi-statement handling, it gets worse than that."
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "05",
+      "afterSlot": "b",
+      "a": 11,
+      "b": 16,
+      "before": 11,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The image CDN was ruled out on cost: the quote came to $340/month at our current volume, against roughly $12/month for R2 storage plus Worker requests."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The image CDN was ruled out on cost: the quote came to $340/month at our current volume, against roughly $12/month for R2 storage plus Worker requests."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The public bucket was ruled out because private galleries need an authorisation check on every request, which a bucket alone can't do."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The tradeoff is latency — the Worker adds about 15ms per image request."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "10 subject position",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Uploaded images are stored in R2 and served through a Worker rather than from a public R2 bucket on a custom domain or a third-party image CDN."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "06",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 11,
+      "before": 11,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Most runners will dump per-test durations with a flag (`--durations=25`, `--profile`, etc.), so you're one CI run away from knowing whether the 900 tests are uniformly slow or whether 30 of them eat half the wall clock."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "It's a throwaway container, durability buys you nothing, and the 3.5x local-vs-CI gap smells like slow disk."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Those two worlds have completely different fixes, and right now you can't tell them apart."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That's the change that turns cores into minutes, and it's also what makes the 4-core machine worth buying afterward."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That's the change that turns cores into minutes, and it's also what makes the 4-core machine worth buying afterward."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "07",
+      "afterSlot": "b",
+      "a": 8,
+      "b": 16,
+      "before": 8,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The byte-hash comparison earned its keep twice over."
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The byte-hash comparison earned its keep twice over."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "4 first sentence",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The byte-hash comparison earned its keep twice over."
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "A cross-check between two independent paths to the same answer finds errors on *either* side, which is why it beats validating one path harder."
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The byte-hash comparison earned its keep twice over."
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "A cross-check between two independent paths to the same answer finds errors on *either* side, which is why it beats validating one path harder."
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "It was specified to catch corpus corruption, and instead caught a bug in my own reader — one directory holds four images, and resolving by directory listing instead of the frontmatter's declared name silently imported the wrong picture."
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "It was specified to catch corpus corruption, and instead caught a bug in my own reader — one directory holds four images, and resolving by directory listing instead of the frontmatter's declared name silently imported the wrong picture."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "08",
+      "afterSlot": "a",
+      "a": 16,
+      "b": 14,
+      "before": 14,
+      "after": 16,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "The image is worn away, so it reads as ordinary vocabulary."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "A fixed phrase whose meaning you cannot work out from the words."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "10 subject position",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        }
+      ]
+    },
+    {
+      "skill": "conversation-prose",
+      "round": 3,
+      "pair": "09",
+      "afterSlot": "b",
+      "a": 6,
+      "b": 13,
+      "before": 6,
+      "after": 13,
+      "denominator": 16,
+      "checks": [
+        {
+          "check": "1 animacy",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "2 literal restatement",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "**On the science, I'm not folding**, because if I retract something true to smooth this over you might go and defend learning styles to the company, and that would be worse than anything I've done here."
+        },
+        {
+          "check": "3 two-word verbs",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "I should have worked out whether it actually applied to you before I put it under a heading that said it could cost you the job."
+        },
+        {
+          "check": "4 first sentence",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "You're right, and the part that matters most is the last bit: I should have worked out whether it actually applied to you before I put it under a heading that said it could cost you the job."
+        },
+        {
+          "check": "5 permission narration",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "6 justification clauses",
+          "before": "FAIL",
+          "after": "FAIL",
+          "quote": "That outcome would be worse than any error I have made here."
+        },
+        {
+          "check": "7 self-evaluation",
+          "before": "FAIL",
+          "after": "FAIL",
+          "quote": "My statement about the risk to you was wrong."
+        },
+        {
+          "check": "8 signposting and significance",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "Here's what you actually said, which I should have weighed before writing that section:"
+        },
+        {
+          "check": "9 repeated meaning",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "**On the science, I'm not folding**, because if I retract something true to smooth this over you might go and defend learning styles to the company, and that would be worse than anything I've done here."
+        },
+        {
+          "check": "10 subject position",
+          "before": "FAIL",
+          "after": "FAIL",
+          "quote": "If I withdraw a true claim to end this disagreement, you might defend learning styles to the company."
+        },
+        {
+          "check": "11 negated contrast",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "That's solid ground, not contested ground."
+        },
+        {
+          "check": "12 banned list",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "13 structure",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "14 question answered with work",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "15 noun clusters",
+          "before": "PASS",
+          "after": "PASS",
+          "quote": null
+        },
+        {
+          "check": "16 one reading",
+          "before": "FAIL",
+          "after": "PASS",
+          "quote": "I should have worked out whether it actually applied to you before I put it under a heading that said it could cost you the job."
+        }
+      ]
+    }
+  ]
+}

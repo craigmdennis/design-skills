@@ -5,8 +5,8 @@ rules that improve one genre make the other two worse.
 
 | Writing | Skill | Standard |
 |---|---|---|
-| An agent's replies: explanations, status updates, summaries, plans, reviews, questions back | `conversation-prose` | ASD-STE100 subset, 16 checks |
-| Documentation: skills, READMEs, specs, plans, code comments, pull request bodies | `documentation-prose` | Third-person impersonal, 18 checks |
+| An agent's replies: explanations, status updates, summaries, plans, reviews, questions back | `conversation-prose` | ASD-STE100 subset, 17 checks |
+| Documentation: skills, READMEs, specs, plans, code comments, pull request bodies | `documentation-prose` | Third-person impersonal, 20 checks |
 | Prose published under an author's name: posts, case studies, resume copy | `published-prose` | Voice rules plus a personal profile |
 
 Applying `published-prose` to a reply removes the comparison that would have
@@ -37,7 +37,7 @@ there; both events accept it.
 | `UserPromptSubmit` | `conversation-prose/checks.md` | about 650 tokens per turn |
 
 The per-turn injection exists because a file read once at session start stops
-affecting output as a session gets longer. The 16 checks restated on each turn
+affecting output as a session gets longer. The 17 checks restated on each turn
 are what keep the standard applied at turn 90.
 
 `documentation-prose` and `published-prose` load on demand from their
@@ -87,11 +87,14 @@ copy takes priority over the plugin's anyway.
 
 ## Measured result
 
-Blinded and reproducible. Violations per 1,000 words fall by 61%
+Blinded and reproducible. Violations per 1,000 words fall by 52%
 for `conversation-prose` and 84% for `documentation-prose`; the model-judged
-check score rises from 61–66% to 99% and from 70–71% to 95–97%. The corpus,
-the harness, and the limits of what those figures show are in the repository
-README and `docs/prose-test-report.md`. `published-prose` is not measured.
+check score rises from 59–63% to 96–98% and from 70–71% to 95–97%. Three of
+the nine conversation-prose prompts carry before texts copied from real
+session transcripts, so the corpus includes failures at the density a session
+produces. The corpus, the harness, and the limits of what those figures show
+are in the repository README and `docs/methodologies.md`.
+`published-prose` is not measured.
 
 ## Limits
 

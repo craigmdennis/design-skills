@@ -5,9 +5,10 @@ not measure whether the writing is better, and no automatic test can.
 
 ## How a run is produced
 
-Twelve prompts are stored in `corpus/`, six for each skill. Each one contains
-every fact its answer needs, so no run reads a repository, calls a tool, or
-reaches the network.
+The prompts are stored in `corpus/`, one directory for each skill. Each one
+contains every fact its answer needs, so no run reads a repository, calls a
+tool, or reaches the network. Every count in the harness and its tests is read
+from those directories, so a prompt can be added without editing a number.
 
 `node run.js <skill>` sends each prompt to a Claude instance with no skill
 loaded, which produces the "before" text. It then sends the skill body, a fixed
@@ -46,6 +47,36 @@ directory. It proves nothing about isolation, which the live probe covers.
 
 `node run.js --show-instruction` prints the rewrite instruction.
 
+### Pinned before texts
+
+A before text is normally generated: the corpus prompt goes to an instance with
+no skill loaded, and the reply is committed under `baseline/`. A **pinned**
+before text is different. It is copied out of a real session transcript, at the
+point where the reader objected to what the reply said, and the corpus prompt
+beside it records the situation that produced it. `meta.json` names the pinned
+ids under `pinned`.
+
+The reason for pinning is the state each text comes from. A generated before
+text is produced in isolation: no instruction file, no hooks, no history, one
+prompt carrying every fact its answer needs. Almost nobody writes to Claude in
+that state. A pinned text was produced inside a working session, after hours of
+context, with the earlier turns and the reader's corrections already in the
+window, which is the state the skill has to hold in.
+
+Nothing regenerates a pinned text, because no model call can reproduce it.
+`--make-baseline` skips a pinned id, and so does `--force`, which is the one
+case where `--force` leaves a before text alone.
+
+A pinned text is copied whole, from the first word of the reply to the last.
+An excerpt removes the facts that make the reply intelligible, and a rewrite
+pass cannot restore a fact its input omits, so a trimmed sample measures the
+skill against a problem no skill can solve.
+
+Where a transcript names a person, an employer, or a medical detail, that detail
+alone is replaced with a neutral term of the same length and the corpus prompt
+lists every substitution. This repository is public. Nothing else is reworded,
+since a reworded sample is a generated sample with extra steps.
+
 ## How a run is scored
 
 `node score.js <run-dir>` counts rule violations on both sides and reports them
@@ -71,6 +102,10 @@ contains any violations, the change is reported as 0.
 - "clean" and "nice" are excluded from the self-evaluation detector, because
   both have common literal uses, such as "a clean install".
 - "surfaced" is excluded from the two-word verb detector for the same reason.
+- The worth-speech-act detector counts only the speech-act verbs the check
+  names (naming, stating, flagging, noting, mentioning, saying, calling out).
+  "worth checking" and "worth reading" describe actions and stay, so a
+  speech-act verb outside the list is missed.
 - The sentence cap uses 25 words, the descriptive limit. Telling an instruction
   from a description needs judgement, so the stricter 20-word limit for
   instructions is not applied.
@@ -140,7 +175,7 @@ each other or be mistaken for one result:
 3. The test measures a rewrite pass over fixed text. It does not measure prose
    written with the skill already loaded, which is how `conversation-prose` is
    normally used.
-4. Twelve prompts is enough for a direction and too few for a confidence
+4. A corpus this size is enough for a direction and too few for a confidence
    interval.
 5. `published-prose` is not covered. That skill reads a voice profile written
    at install time, so a shared run would need either one profile that does not

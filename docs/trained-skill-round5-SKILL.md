@@ -38,7 +38,7 @@ or justify your own choices" below.
 
 ## The checks
 
-**Run all seventeen on the draft before sending. Every reply, not only the long
+**Run all sixteen on the draft before sending. Every reply, not only the long
 ones.**
 
 Count the words in every sentence first, and split each sentence past 25 words
@@ -62,8 +62,8 @@ fails, and the main verb of that sentence passes.
 
 Verbs that require a living actor include *want, know, think, decide, refuse,
 agree, try, promise, care, like, enjoy, suffer, win, lose, beat, earn, deserve,
-expect, believe, remember, forget, wait, hope, admit, insist*. The list is not
-the test. Any verb you would not apply to a rock fails this check.
+expect, believe, remember, forget, wait, hope, admit, insist, argue, claim*.
+The list is not the test. Any verb you would not apply to a rock fails this check.
 
 Rewrite by putting the person who acted in the subject position, or by using a
 verb a thing can take: *is, has, contains, produces, requires, returns, stops,
@@ -72,6 +72,11 @@ removes, states, fails, applies*.
 - *"the profile wins"* → *"the profile takes priority"*
 - *"the test wants a fixture"* → *"the test fails without a fixture"*
 - *"the check earned its keep"* → *"the check found one error"*
+- *"a second summary that argues your position"* → *"a second summary that
+  states your position"*
+
+A document does not argue. This verb appears most often in the closing offer,
+so read the closer against this check on its own.
 
 **2. Literal restatement.** For each content word, ask whether it names what
 physically happened. If the word names one thing in order to mean another, it is
@@ -80,11 +85,79 @@ questions — who did it, what did they do, to what — and writing that sentenc
 Do not substitute a milder word inside the same image. That produces a second
 metaphor.
 
-An abstract noun standing in for a concrete act fails this check too. An abstract noun given a physical property or physical motion fails too: *"the two share one shape"*, *"the construction moved"*, *"the rule sits above"*. Name what is alike, or where the words appeared.
+An abstract noun standing in for a concrete act fails this check too. An abstract noun given a physical property or physical motion fails too: *"the two share one shape"*, *"the construction moved"*, *"the rule sits above"*, *"the strongest test coverage"*. Name what is alike, where the words appeared, or the number of cases the tests cover.
+
+An abstract noun as the subject of an action verb fails as well, because the
+person who acted is missing: *"a restart of the API pods ended the failures"*.
+Write *"Someone restarted the API pods and the rejected attempts stopped."*
+
+A release, a run, and a pass over the data take the same rewrite. *"The August
+16 release added a 60-second time to live to the module scope cache"* becomes
+*"I added the 60-second time to live to the module scope cache. The August 16
+release included the 60-second time to live."* *"the weekly sitemap pass
+re-lists every URL"* becomes *"the crawler re-lists every URL from the sitemap
+every week"*.
+
+A number, a state, and a span of time do not move. *rose*, *fell*, *climbed*,
+*dropped*, *cleared*, and *passed* give physical motion to a measurement or to a
+state, and they leave out whoever acted:
+
+- *"the database price rose to $35 on August 15"* → *"someone changed the Pro
+  plan price to $35 in the database on August 15"*
+- *"the locks on the production `orders` table cleared"* → *"the database
+  released the locks when the production UPDATE stopped"*
+- *"about 2 hours have passed on the converted 24 call sites"* → *"I have spent
+  about 2 hours on the converted 24 call sites"*
+
+*passed* also fails where a file, a test, or a run is the subject. A migration
+file does not pass anything. *"`migrations/0142_backfill_order_status.sql`
+passed on staging"* becomes *"the staging run of
+`migrations/0142_backfill_order_status.sql` completed with no errors"*.
+
+*against* and *versus* name physical opposition to mean *compared with*. Write
+the two facts as two sentences: *"Downtime was 4 minutes against the 30 minutes
+announced to users"* becomes *"Downtime was 4 minutes. The announced downtime
+was 30 minutes."*
+
+An adjective can give code a property of a living thing. *"19 of the remaining
+24 call sites are timezone-sensitive"* becomes *"19 of the remaining 24 call
+sites produce different results in different timezones"*. *aware* and *knows
+about* fail the same way.
+
+*is* between a statement and an operation names one thing to mean another.
+*"`select * from orders where user_id = $1` is a sequential scan of the
+production `orders` table"* becomes *"Postgres does a sequential scan of the
+production `orders` table for each `select * from orders where user_id = $1`"*.
+
+A component is not a span of time either. *"the session store is about 2 weeks"*
+names a thing as a duration. Write the act and its duration: *"building the
+session store takes about 2 weeks of the revised estimate of 6 weeks"*.
+
+Ordering gets stated as ordering. *"the session store comes first"* gives a
+software component physical motion to mean a constraint on the schedule. Write
+*"the session store must be built before the SAML work starts."* The same applies
+to *comes after*, *comes before*, and *moves ahead of*.
 
 
 *"announced candour"* names a quality. Write what the sentence did: *"stated
 that what follows is worth saying"*.
+
+Developer idiom is the largest group of failures here. Each of these names one
+thing to mean another, and the plain word exists: *shipped* → released or
+included, *happy path* → the flow with no error cases, *raised an objection* →
+stated an objection, *blocker* → the thing that stops the work, *churn* →
+repeated rework, *bandwidth* → available time, *I own the ticket* → I am
+responsible for the ticket, *support escalated* → support reported the failures
+to the team responsible for the service, *rollback* → a return to the earlier
+version, *boot* → every time the service starts, *dry-run mode* → a mode that
+reports the matched rows and deletes nothing, *spike ticket* → the ticket that
+covers the investigation, *window* → the period of time or the announced
+downtime, *spin up* → start, *test coverage* → the tests, *covers every case* → tests
+every case, *pass* over the data → run, *lose the rows* → delete the rows. A
+word every programmer writes is still a metaphor. The exemption covers technical names in backticks (`workerd`,
+`state_redirects`) and stops there. A backticked name beside the idiom exempts
+only itself: *"logs a deprecation warning about `utf8mb3` on every boot"* keeps
+`utf8mb3` and replaces *boot* with *every time the service starts*.
 
 **3. Two-word verbs.** For every verb of two or more words, try the plain
 one-word verb. If the plain verb means the same thing, the phrase was
@@ -117,7 +190,12 @@ reader can act on neither. State what broke and what changed.
 **8. Signposting and significance.** Take the subject of each sentence. If the
 subject names a part of the message (the cause, the point, the reason, the
 answer, the version, one thing) and the sentence only describes what comes next,
-delete it. The next sentence says it. Delete also any sentence or clause that
+delete it. The next sentence says it. A subject that points at visible
+adjacent content is the same failure: *the draft below*, *the table above*,
+*the list that follows*. A sentence that only lists what that content states
+gets deleted. A sentence that reports an omission or a scope call stays,
+because the reader cannot see those in the content. Delete also any sentence
+or clause that
 explains why a finding matters, what it teaches, or why a technique is good. A
 trailing *"which is exactly why…"* does the same inside a clause. The reader
 decides what it means. Position does not matter. Apply the subject test.
@@ -127,6 +205,19 @@ decides what it means. Position does not matter. Apply the subject test.
   state the thing
 - *"The short version is this."* → delete it
 - *"One thing worth flagging."* → delete it
+- *"One follow-up remains."* → delete it, then state the follow-up
+
+A count of the items in the message is the same subject, whatever the verb:
+*one follow-up*, *two things*, *one caveat*, *one exception*, with *remains*,
+*is left*, *follows*, or *applies*. The count is visible in the sentences that
+state the items, so the counting sentence goes. The count fails as the object of
+a verb about your own work as well: *"I found four problems in the nine changed
+files"* stands above a numbered list of the four problems, so delete the count
+and open on the first problem.
+
+- *"The draft below states her reasons, your objections, and the recorded
+  outcome."* → delete it. The draft appears directly beneath, and the reader
+  sees its contents by reading it.
 
 **Delete any "worth ...ing" with a speech act**: worth naming,
 worth stating, worth flagging, worth noting, worth mentioning, worth saying.
@@ -134,9 +225,67 @@ The verb varies and the construction does not. It appears as a whole sentence, a
 clause, and as a tail on a noun ("a gap worth naming"). The subject test finds
 only the first of the three. Delete the phrase and say the thing.
 
-**9. Repeated meaning.** For each concept that appears twice, check whether both
-instances use the same word. Two words for one concept means one is a synonym
-chosen for variety. Use the first term in both places.
+**9. Repeated meaning.** List every object, action, and decision the draft
+names. For each one, find every place it appears and compare the words used. Two
+words for one concept means one is a synonym chosen for variety. Use the first
+term in both places.
+
+The pairs that survive a proof-read share no word, so a search for a repeated
+word finds nothing:
+
+- *"the decision"* and *"the final call"* → keep *decision* in both places
+- *"the production backup"* and *"last night's snapshot"* → keep *backup*
+- *"the error rate"* and *"the failure rate"* → keep *error rate*
+
+A verb names a concept too, and one event takes one verb across the whole draft:
+
+- *"the migration completed"* and *"the project finished"* → keep *completed*
+- *"the database was updated"* and *"the price changed"* → keep *updated*
+- *"rejected 91 attempts"* and *"ended the failures"* → keep *rejected attempts*
+- *"change line 57"* and *"both problems are fixable"* → keep *change*
+- *"the team decided"* and *"Priya made the decision"* → name Priya in the first
+  sentence and write *decided* once
+
+A state takes one verb too: *"the ORM logs a deprecation warning every time
+the service starts"* and *"the deprecation warning is still present"* state one
+condition twice, so keep *logs*. A quantity takes one verb across every mention:
+*"requires a 54 MB bit array"*, *"stores about 60 bytes per URL"*, and *"would
+take roughly 1.8 GB"* are three verbs for memory required, so write *requires*
+in all three.
+
+A description standing in for a name is a second name as well. A thing already
+named by its path, its number, or its full term keeps that name in every later
+mention: *"`src/scheduler/`"* and *"a directory with no tests"* are one
+directory, so keep the path. *"a restore from that production backup"* and *"a
+restore of production"* are one operation, so keep the first wording.
+
+The storage word and the domain word name one set of things. *"31,406 rows"*
+and *"every draft written since the production backup finished"* are one set,
+so keep *row* in every mention. *"a server-side record"* and *"server-side
+sessions"* are one concept, so keep *record*.
+
+Two words for one concept can stand inside one sentence. *"batch backfills in
+chunks of 10,000 rows"* uses *batch* and *chunks* for one grouping of rows.
+Write *"batch backfills in batches of 10,000 rows"*.
+
+The closer is where a description replaces the name. The body names *"the
+fix"* and describes it as a one-line change in `config/db.yml`, and the closer
+then writes *"the `config/db.yml` change"*. Keep *the fix* in the closer.
+
+A category word is the common second name, and a proof-read skips it:
+*"that module"* for *"`lib/http/retry.ts`"*, *"the diff"* for *"the nine changed
+files on `feature/team-invites`"*, *"the process"* for *"the service"*, *"the
+production run"* for *"the production UPDATE"*, *"the Pro plan price"* for *"the
+database price"*. *"the change"* is a category word for an act already named:
+*"copied the 12 lines into `workers/publish.js`"*. *"the recorded outcome"* is
+one for a decision already named: *"Priya decided to migrate the notification
+service to SQS in Q4"*. The first full name is the name of that object for the
+rest of the draft. Every later mention repeats it, including the mentions in the closing
+sentence and in a new paragraph. Check 16 adds a qualifier to the first noun and
+keeps that noun: *"the production UPDATE"* keeps *UPDATE* in every mention.
+
+A second name for one object also fails check 16. The reader has to work out
+that the two names are the same object.
 
 **10. Subject position.** Read the first five words of every sentence.
 
@@ -149,24 +298,39 @@ chosen for variety. Use the first term in both places.
   put it in the subject position.
 - Any mid-sentence appositive: split it into two sentences.
 
-**11. Negated contrast.** Search for *not, isn't, wasn't, never* where the
-clause pairs two options. If you wrote the contrast, delete it and state the
-positive claim. The reader's own contrasts stay untouched, in their own wording.
+**11. Negated contrast.** Search for every negator, including the ones that
+carry no *not*: *not, isn't, wasn't, never, no, none, nothing, no one*. The
+contrast is yours when the clause pairs two options, in either word order,
+across a comma, a dash, or a full stop. Delete it and state the positive claim.
+The reader's own contrasts stay untouched, in their own wording.
+
+- *"Nothing has been added to scope — all of the new work was discovered"* →
+  *"All of the new work was in the signed contracts from the start. The estimate
+  missed it. The scope is unchanged since August 4."*
 
 **12. Banned list.** Check every entry in "Words the reader has banned" below,
-in each form the entry names.
+in each form the entry names. The general rule under the *"figure"* entry covers
+every multi-word term in the draft: never clip one to its head noun, in any
+position. List each multi-word term the draft names, find every mention of it,
+and write the full term in each one.
 
-**Three bans taken from Google's developer documentation style guide.**
+Three positions produce the clipping. The second clause of a coordinated
+sentence is the first (*"the checkout error rate"* becomes *"the rate"*). A
+sentence opener several sentences later is the second (*"the Bloom filter"*
+becomes *"The filter hashes each inserted URL"*). A new paragraph, where the
+full term stands in the paragraph above, is the third (*"the self-hosted
+RabbitMQ cluster"* becomes *"The cluster caused three pages"*, and *"the
+notification service"* becomes *"The service has 14 bindings"*). Every mention
+takes the full term, including each mention that follows a full one.
 
-- **"please" in an instruction.** *"To view the document, please click View"* →
-  *"To view the document, click View."* Politeness in a step adds a word the
-  reader must read past.
-- **"simply", "just", "easy", "quickly" describing a step.** Each one states
-  how hard the reader will find the work, which the writer cannot know. A
-  reader who then struggles reads the word as a judgement. Delete it and give
-  the step.
-- **The same opening word in consecutive sentences.** Read the first word of
-  each sentence in a paragraph. Two in a row that match get one rewritten.
+A demonstrative in place of the qualifier is the fourth position. *"a contract
+appendix"* becomes *"that appendix"*, and *"the `src/api/validate.js` copy"*
+becomes *"that copy"*. A demonstrative is not a qualifier, so write the full
+term.
+
+A full mention elsewhere in the same sentence does not permit the clipping. One
+reply kept *"`src/routes/invites.js` line 52"* in full and wrote *"line 87"*
+beside it. Both mentions take the file path.
 
 **13. Structure.** Count the headers and tables. A question with a one-line answer
 takes neither. Structure is for an audit, a comparison, or a plan. Three or more
@@ -193,26 +357,69 @@ it refers to. If the preceding text offers two candidates, name the thing.
   scope → name which one
 - *"the file"*, after two files have been named → name it again
 - *"it"*, across a paragraph boundary → repeat the noun
+- *"the contract appendix"*, after three signed contracts → name the contract,
+  or write *"each contract's appendix"* when all three contain it
+- *"the pods"*, after six pods and the four with a stale cache → give the
+  count: *"the four pods"* or *"all six pods"*
+- *"the restore"*, after a restore into production and a restore into a scratch
+  database → name the variant: *"the restore into the scratch database"*
+- *"the run"*, after a staging run and a production run → *"the production run"*
+- *"them"*, after 24 converted call sites and 24 remaining ones → name the set:
+  *"19 of the remaining 24"*
+- *"the same rows"*, after three sets of rows → give the count and the set:
+  *"the same 31,406 rows"*
+- *"the 2-week figure"*, after two spans of two weeks → *"the August 4 estimate
+  of 2 weeks"*
+- *"The code"*, after this project's code and a named library that parses the
+  same input → *"the invite routes"*
+- *"the same POST"*, after POST as an HTTP method and a request that uses it →
+  *"the same POST request to the orders API"*
+- *"the price"*, after the plan price table and the Pro plan price → *"the Pro
+  plan price"*
+- *"the Okta flow"*, after the existing login flow in `src/auth/` and the new
+  SAML work → name which flow was tested on staging
+- *"the Bloom filter"*, after the Bloom filter in `internal/dedupe/filter.go`
+  and a Bloom filter described in general → *"this Bloom filter"* for the one in
+  `internal/dedupe/filter.go`, and *"a Bloom filter"* for the general statements
+- *"it"*, after a POST request to the orders API and the orders API itself →
+  *"the POST request to the orders API"*
+
+An operation or a number that appears in two variants keeps its qualifier in
+every mention: *the production run*, *the staging run*, *the existing tests*,
+*the August 4 estimate*. The bare noun fails once both variants appear in the
+reply, and the earlier sentences take the qualifier as well.
+
+Candidates include actions and hypothetical mentions. A named set makes each
+member a candidate. A singular definite phrase after a plural set takes the
+member's name. A plural after a set and its subset takes the count. The closing
+question or offer fails this check most often: the body states the full name
+and the closer keeps only *"the restore"*.
 
 Re-run this check after shortening a sentence or merging two. Five of the
 eight findings two red-team runs confirmed were this check, and each appeared
 where the writer had compressed: the noun survived in one clause and a pronoun
 replaced it in the other.
 
-**17. Conditions before instructions.** Read every sentence that tells the
-reader to do something. If a condition limits the step, put the condition
-first. The reader then tests the condition before acting and reads the step
-once.
+The coordinated sentence is the common shape. The full term stands in the first
+clause and the bare head noun stands in the second: *"46% of checkout attempts
+failed and the rate peaked at 46%"*. A threshold in an alert condition is a
+second candidate for *"the rate"*, so write the full term in both clauses:
+*"the checkout error rate peaked at 46%"*. Write the full term in the second
+clause even where the sentence reads longer for it. This is STE's rule against
+omitting words to shorten a sentence: *"the existing tests send only 500 and 503
+responses, so the existing tests pass with both problems present"*. A pronoun in
+the second clause is the same failure (*"and it is decommissioned after that"*),
+so write the noun: *"and the 5.7 server is decommissioned on Friday"*. An
+attribute of the named thing takes the name as well: *"I am responsible for
+NOTIF-812 and the due date is September 5"* becomes *"…and the NOTIF-812 due
+date is September 5"*.
 
-- *"Click Deploy if the tests pass"* → *"If the tests pass, click Deploy."*
-- *"Run `--force` when the baseline came from another model"* → *"When the
-  baseline came from another model, run `--force`."*
-
-The rule covers a clause naming a version, a permission, an operating system,
-or a step that must already be done. A condition that applies to the whole
-reply goes in its own sentence before the steps. Taken from Google's developer
-documentation style guide, which states it for documentation; a reply carries
-instructions too.
+The demonstrative opener is the second shape. *That* and *This* at the start of
+a sentence point at a whole preceding clause, and a preceding sentence that
+states both a result and an action gives two candidates. Write the noun: *"That
+is acceptable because…"* becomes *"The false positive rate is acceptable
+because…"*. A demonstrative with a noun is the same shape. *"that change"* and
+*"that copy"* point at one of two named members, so write the member's name.
 
 ## What carries over from published-prose
 
@@ -612,7 +819,7 @@ it if it is not a ban the reader wants.
 
 ## Editing this file
 
-Every edit to this file runs the seventeen checks over the whole file, including
+Every edit to this file runs the sixteen checks over the whole file, including
 the text the edit did not touch. This file has broken its own rules before.
 
 ## The meta-rule

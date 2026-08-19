@@ -27,7 +27,7 @@ Both companion skills are optional. This one is complete on its own.
 
 ## The checks
 
-**Run all eighteen on the draft before saving.**
+**Run all twenty on the draft before saving.**
 
 Each check is a procedure, not a list of words to search for. A word list finds
 only the words on it. Where a check gives example words, they illustrate the
@@ -288,11 +288,32 @@ placeholder and say why it is there.
 
 ## The compact checks file
 
-`checks.md` beside this file states the same eighteen checks in one line each.
+**19. A condition placed after its instruction.** Read every sentence that
+states a step. If a condition limits that step, the condition goes first. The
+reader tests the condition and then acts, and no step is read twice.
+
+- *"Run the migration if the backup finished"* → *"If the backup finished, run
+  the migration."*
+- *"Pass `--force` when the baseline came from another model"* → *"When the
+  baseline came from another model, pass `--force`."*
+
+The rule covers a clause naming a version, a permission, an operating system,
+or a step that must already be done. A condition governing a whole procedure
+takes its own sentence before the first step. Taken from Google's developer
+documentation style guide.
+
+**20. A politeness word or a difficulty word in a step.** Delete *please* from
+an instruction. Delete *simply*, *just*, *easy*, and *quickly* where they
+describe a step: each one states how hard the reader will find the work, which
+the writer cannot know. Read the first word of each sentence in a paragraph,
+and rewrite the second of any two that match. Taken from Google's developer
+documentation style guide.
+
+`checks.md` beside this file states the same twenty checks in one line each.
 It is short enough to inject on every turn, where this file is long enough that
 a session loads it once. Edit both together, and confirm the two agree.
 
 ## Editing this file
 
-Every edit to this file runs the eighteen checks over the whole file, including
+Every edit to this file runs the twenty checks over the whole file, including
 the text the edit did not touch.

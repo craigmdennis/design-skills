@@ -146,6 +146,17 @@ const DETECTORS = [
     count: ctx => matchCount(ctx.text, /\b(?:I decided|I went ahead|I took the liberty|I chose to|I'm going to ask you|I am going to ask you)\b/gi)
   },
   {
+    id: 'worth-speech-act',
+    label: 'worth + speech act',
+    tier: 'exact',
+    skills: [CONVERSATION],
+    // Check 8 bans "worth <speech act>ing" in any position: as a sentence, as
+    // a clause, and as a tail on a noun ("a gap worth naming"). The speech-act
+    // verbs are a closed list, so the match is exact. "worth checking" and
+    // "worth reading" describe actions and stay.
+    count: ctx => matchCount(ctx.text, /\bworth (?:naming|stating|flagging|noting|mentioning|saying|calling out)\b/gi)
+  },
+  {
     id: 'first-person',
     label: 'first person',
     tier: 'exact',

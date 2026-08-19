@@ -261,16 +261,23 @@ function corpusFileHashes(skill) {
 
 // Returns the ids to generate: the ones with no before text, and the ones whose
 // prompt changed. --force returns every id.
+//
+// A pinned id is excluded from both, --force included. Its before text was
+// copied out of a real session transcript, so a model call cannot reproduce it
+// and a regeneration would replace the only evidence in the harness that no
+// prompt can be written to produce on demand.
 function baselineWorkList(skill, ids, force) {
-  if (force) return { ids, unverified: [] };
-
   const meta = readBaselineMeta();
+  const pinned = (meta && meta.pinned && meta.pinned[skill]) || [];
+  if (force) return { ids: ids.filter(id => !pinned.includes(id)), unverified: [] };
+
   const recorded = meta && meta.corpusHash && meta.corpusHash[skill];
   const current = corpusFileHashes(skill);
   const wanted = [];
   const unverified = [];
 
   for (const id of ids) {
+    if (pinned.includes(id)) continue;
     const missing = !fs.existsSync(path.join(BASELINE, skill, `${id}.before.md`));
     if (missing) {
       wanted.push(id);
