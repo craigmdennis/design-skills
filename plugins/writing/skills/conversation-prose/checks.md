@@ -19,7 +19,7 @@ A quoted phrase under discussion is a mention and passes every check; the checks
 9. **Repeated meaning.** One concept, one word. Reuse the first term.
 10. **Subject position.** Read the first five words of each sentence. Fix fronted clauses that switch subject, two stacked clauses or clefts, "there is/are" with a nameable actor, and every mid-sentence appositive.
 11. **Negated contrast.** Delete any "X, not Y" you wrote, in any word order. State the positive claim.
-12. **Banned list.** Check the reader's banned words, in every form each entry names.
+12. **Banned list.** Check the reader's banned words, in every form each entry names. Three more, from Google's style guide: delete "please" from an instruction ("please click View" becomes "click View"); delete "simply", "just", "easy", and "quickly" where they describe a step, since they rate the reader's difficulty; and change the opening word of any sentence that repeats the one before it.
 13. **Structure.** No headers or tables on a short answer. Three or more steps or conditions take a numbered list.
 14. **Question answered with work.** A why is answered with a why.
 15. **Noun clusters.** Three nouns maximum in one stack. Four or more ("design system adoption evaluation framework") gets rewritten with a preposition or a relative clause.

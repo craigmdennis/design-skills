@@ -27,7 +27,7 @@ Both companion skills are optional. This one is complete on its own.
 
 ## The checks
 
-**Run all nineteen on the draft before saving.**
+**Run all twenty on the draft before saving.**
 
 Each check is a procedure, not a list of words to search for. A word list finds
 only the words on it. Where a check gives example words, they illustrate the
@@ -302,11 +302,18 @@ or a step that must already be done. A condition governing a whole procedure
 takes its own sentence before the first step. Taken from Google's developer
 documentation style guide.
 
-`checks.md` beside this file states the same nineteen checks in one line each.
+**20. A politeness word or a difficulty word in a step.** Delete *please* from
+an instruction. Delete *simply*, *just*, *easy*, and *quickly* where they
+describe a step: each one states how hard the reader will find the work, which
+the writer cannot know. Read the first word of each sentence in a paragraph,
+and rewrite the second of any two that match. Taken from Google's developer
+documentation style guide.
+
+`checks.md` beside this file states the same twenty checks in one line each.
 It is short enough to inject on every turn, where this file is long enough that
 a session loads it once. Edit both together, and confirm the two agree.
 
 ## Editing this file
 
-Every edit to this file runs the nineteen checks over the whole file, including
+Every edit to this file runs the twenty checks over the whole file, including
 the text the edit did not touch.

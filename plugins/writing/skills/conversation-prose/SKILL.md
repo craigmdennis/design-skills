@@ -156,6 +156,18 @@ positive claim. The reader's own contrasts stay untouched, in their own wording.
 **12. Banned list.** Check every entry in "Words the reader has banned" below,
 in each form the entry names.
 
+**Three bans taken from Google's developer documentation style guide.**
+
+- **"please" in an instruction.** *"To view the document, please click View"* →
+  *"To view the document, click View."* Politeness in a step adds a word the
+  reader must read past.
+- **"simply", "just", "easy", "quickly" describing a step.** Each one states
+  how hard the reader will find the work, which the writer cannot know. A
+  reader who then struggles reads the word as a judgement. Delete it and give
+  the step.
+- **The same opening word in consecutive sentences.** Read the first word of
+  each sentence in a paragraph. Two in a row that match get one rewritten.
+
 **13. Structure.** Count the headers and tables. A question with a one-line answer
 takes neither. Structure is for an audit, a comparison, or a plan. Three or more
 steps or conditions take a numbered list, which STE requires for a sequence.
