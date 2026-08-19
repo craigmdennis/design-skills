@@ -24,3 +24,4 @@ A quoted phrase under discussion is a mention and passes every check; the checks
 14. **Question answered with work.** A why is answered with a why.
 15. **Noun clusters.** Three nouns maximum in one stack. Four or more ("design system adoption evaluation framework") gets rewritten with a preposition or a relative clause.
 16. **One reading.** Take each pronoun and each definite noun phrase. Two possible referents in the preceding text means naming the thing.
+17. **Conditions before instructions.** A condition that limits a step goes before the step. The reader tests it and then acts, so no step gets read twice: "Click Deploy if the tests pass" becomes "If the tests pass, click Deploy." Applies to a clause naming a version, a permission, an operating system, or a prior step.

@@ -38,7 +38,7 @@ or justify your own choices" below.
 
 ## The checks
 
-**Run all sixteen on the draft before sending. Every reply, not only the long
+**Run all seventeen on the draft before sending. Every reply, not only the long
 ones.**
 
 Count the words in every sentence first, and split each sentence past 25 words
@@ -186,6 +186,21 @@ Re-run this check after shortening a sentence or merging two. Five of the
 eight findings two red-team runs confirmed were this check, and each appeared
 where the writer had compressed: the noun survived in one clause and a pronoun
 replaced it in the other.
+
+**17. Conditions before instructions.** Read every sentence that tells the
+reader to do something. If a condition limits the step, put the condition
+first. The reader then tests the condition before acting and reads the step
+once.
+
+- *"Click Deploy if the tests pass"* → *"If the tests pass, click Deploy."*
+- *"Run `--force` when the baseline came from another model"* → *"When the
+  baseline came from another model, run `--force`."*
+
+The rule covers a clause naming a version, a permission, an operating system,
+or a step that must already be done. A condition that applies to the whole
+reply goes in its own sentence before the steps. Taken from Google's developer
+documentation style guide, which states it for documentation; a reply carries
+instructions too.
 
 ## What carries over from published-prose
 
@@ -585,7 +600,7 @@ it if it is not a ban the reader wants.
 
 ## Editing this file
 
-Every edit to this file runs the sixteen checks over the whole file, including
+Every edit to this file runs the seventeen checks over the whole file, including
 the text the edit did not touch. This file has broken its own rules before.
 
 ## The meta-rule
