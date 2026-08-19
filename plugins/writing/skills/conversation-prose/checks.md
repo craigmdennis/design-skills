@@ -4,6 +4,8 @@ Procedures, not word lists. A word list finds only the words on it. Run every ch
 
 Check the framing sentences last and separately: the opener, the closer, every transition, every lead-in. A sentence that reports no finding is the one a proof-read skips, and it produced the past failures.
 
+Count the words in each sentence before anything else. Past 25, split it at the coordinating conjunction, coordinated sentences included. The sentence you rewrote or merged during a check is the one that crosses 25.
+
 A quoted phrase under discussion is a mention and passes every check; the checks judge your own wording. After shortening a sentence or merging two, re-run check 16: compression is where a pronoun gains two referents.
 
 1. **Animacy.** Every verb, including ones in subordinate and participial clauses. Non-human subject? Test the verb. Any verb you would not apply to a rock (wants, knows, wins, beats, earns, refuses, deserves) gets rewritten: name the person who acted, or use is/has/contains/produces/stops/removes/states/fails/applies.
