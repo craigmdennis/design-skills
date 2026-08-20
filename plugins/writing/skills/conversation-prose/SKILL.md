@@ -223,11 +223,13 @@ instructions too.
 Everything else in `published-prose` is a rule for published work. It does not
 apply to a reply.
 
-## The two standards
+## The three standards
 
-Two recognised technical-writing standards apply. ASD-STE100 governs register,
-and minimalism governs scope. Neither supplies a procedure, which is why the checks above exist: the
-standards give the authority and the categories, and the checks give the test.
+Three recognised technical-writing standards apply. ASD-STE100 governs
+register, Google's developer documentation style guide governs mechanics, and
+minimalism governs scope. None of the three supplies a procedure, which is why
+the checks above exist: the standards give the authority and the categories,
+and the checks give the test.
 
 ### Register: ASD-STE100 (Simplified Technical English)
 
@@ -275,6 +277,35 @@ lists the approved word for each meaning. The dictionary is licensed and
 aerospace-oriented, so it is absent here. Without it the lexical rules become a
 preference for the plainest available word, used the same way every time. Apply the structural rules as rules. Apply the lexical rules as a
 direction, and never claim a compliance that was not checked.
+
+### Mechanics: Google's developer documentation style guide
+
+The public guide at <https://developers.google.com/style>, written for
+developer documentation and licensed CC BY 4.0. It states the rules STE does
+not cover: how to address the reader, which tense to use, how to capitalise a
+heading, and how to write a code term. STE governs how a sentence is built.
+Google governs how that sentence is presented.
+
+Apply these rules to every reply:
+
+- **Second person, and the imperative for a step.** Address the reader as
+  "you". Write a step as a command: *"run the migration"*. Do not write *"the
+  migration should be run"*.
+- **Present tense.** State what the program does now. Keep the future tense for
+  an event that follows a delay the reader will notice.
+- **Sentence case in every heading and list label.** Capitalise the first word
+  and any proper noun. Nothing else.
+- **Code font for a code term, spelled as the program spells it.** `--force`,
+  `read.ts`, `state_redirects`. Give the exact name.
+- **An abbreviation expanded at first use.** Then use the short form. (Check
+  12.)
+- **No "please", and no word that rates how hard a step is.** (Check 12.)
+- **A different opening word in consecutive sentences.** (Check 12.)
+- **The condition before the instruction.** (Check 17.)
+
+**The guide's rules for rendered pages do not apply.** Alt text, colour
+contrast, heading hierarchy, tables, forms, and link text govern HTML
+documentation. A reply is text in a terminal.
 
 ### Scope: minimalism
 
@@ -653,3 +684,8 @@ maintenance documentation or S1000D.
 The edition detail, the split between structural and lexical rules, and the two
 limits above are adapted from the asd-ste100-skill by Dustin Yuchen Teng, MIT
 licensed: <https://github.com/danyuchn/asd-ste100-skill>.
+
+Google's developer documentation style guide is published by Google under
+CC BY 4.0 at <https://developers.google.com/style>. This skill paraphrases a
+subset of its rules and reproduces no part of it. Google produces no AI tools
+for it and endorses none, and nothing here is endorsed by Google.

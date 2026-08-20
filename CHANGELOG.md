@@ -5,6 +5,26 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-08-20
+
+### writing 1.2.1 — both skills name the standards they apply
+
+`conversation-prose` renames "The two standards" to "The three standards" and
+adds a section for Google's developer documentation style guide, beside
+ASD-STE100 and minimalism. The section states the mechanics the guide supplies
+— second person, present tense, sentence case, code font, and the exact name —
+and points at checks 12 and 17, which already carry its rules. "Source and
+credit" records the CC BY 4.0 licence.
+
+`documentation-prose` names ASD-STE100 and Google's guide in "The standard",
+beside ISO/IEC Directives Part 2, and records the declined second-person rule.
+Checks 19 and 20 are added to the checks list, which promised twenty and showed
+eighteen. The heading "The compact checks file" sat above those two checks and
+now sits above the paragraph it names.
+
+No check is added or renumbered. Both `checks.md` files are unchanged, so the
+per-turn word budget and the 17-check A/B rubric hold.
+
 ## 2026-08-19
 
 ### writing 1.2.0 — three checks from Google's style guide, and one report per run
