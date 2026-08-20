@@ -17,8 +17,8 @@ also has a shape of its own. See "Change documents" below.
 It does not govern two other genres:
 
 - **Conversational replies.** Explanations, status updates, summaries, reviews,
-  and questions back to a reader follow ASD-STE100. See the `conversation-prose`
-  skill where it is installed.
+  and questions back to a reader address the reader directly, in second person.
+  See the `conversation-prose` skill where it is installed.
 - **Prose published under a person's own name.** Blog posts, case studies,
   resume copy, and application answers follow that author's own voice rules. See
   the `published-prose` skill where it is installed.
@@ -103,6 +103,15 @@ gets a term, defined once and reused.
 **18. A missing out-of-scope part.** Where the change leaves a related mechanism
 unchanged, the document says so and gives the reason.
 
+Checks 19 and 20 apply to every document.
+
+**19. A condition placed after its instruction.** A condition that limits a step
+goes before the step.
+
+**20. A politeness word or a difficulty word in a step.** Delete *please*,
+*simply*, *just*, *easy*, and *quickly*. Change the opening word of any sentence
+that repeats the one before it.
+
 The sections below explain the checks and give the worked examples.
 
 ## The standard
@@ -114,6 +123,37 @@ it does not describe one person's preferences.
 
 A reader arriving at documentation has no access to the conversation that
 produced it. Every sentence must stand without that context.
+
+Two further standards supply what the register does not.
+
+**ASD-STE100 (Simplified Technical English)** supplies sentence construction:
+one idea per sentence, active voice with the subject first, one word for one
+meaning, no figurative language, and no semicolon. Checks 7 and 9 to 13 state
+those rules. Rule 8.1 bans the semicolon and permits every other standard
+punctuation mark, the em dash included. The standard is a controlled language
+for aerospace maintenance manuals, and its dictionary is licensed and absent
+here, so its vocabulary rules apply as a direction toward the plainest
+available word.
+
+**Google's developer documentation style guide** supplies the mechanics. It is
+published under CC BY 4.0 at <https://developers.google.com/style>.
+
+1. Sentence case in every heading, label, and list item. Capitalise the first
+   word and any proper noun, and nothing else.
+2. Present tense for what the program does. The future tense is reserved for an
+   event that follows a delay the reader notices.
+3. The imperative for a step, with the condition before it. Check 19 states
+   this.
+4. No politeness word and no difficulty word in a step. Check 20 states this.
+5. Code font for a code term, spelled as the program spells it: `--force`,
+   `read.ts`, `state_redirects`.
+6. An abbreviation expanded at first use, and the short form after that.
+
+One rule of the guide is declined. Google requires second person, and check 6
+removes it. A skill file, a specification, and a plan are read by people who
+took no part in the conversation that produced them, and the impersonal
+register holds. The imperative *you* inside an instruction stays, which is
+where the two standards agree.
 
 ## The three operations
 
@@ -181,7 +221,8 @@ repetition makes a reader wonder whether two different roles are meant.
 
 ## Also apply the prose rules
 
-Documentation is prose, so these apply on top of the register:
+Documentation is prose, so these apply on top of the register. Each one is an
+ASD-STE100 rule, restated for a document:
 
 - **No idiom, metaphor, analogy, or personification.** "load-bearing", "spine",
   "hinge", "slip past", "on sight", "bolt on", "flatten", "punchy" all go.
@@ -286,7 +327,7 @@ replace it with a bracketed placeholder such as `[Name]`. Where the name is the
 point, such as an example showing why a quotation cannot be published, keep the
 placeholder and say why it is there.
 
-## The compact checks file
+## The two checks from Google's style guide
 
 **19. A condition placed after its instruction.** Read every sentence that
 states a step. If a condition limits that step, the condition goes first. The
@@ -308,6 +349,8 @@ describe a step: each one states how hard the reader will find the work, which
 the writer cannot know. Read the first word of each sentence in a paragraph,
 and rewrite the second of any two that match. Taken from Google's developer
 documentation style guide.
+
+## The compact checks file
 
 `checks.md` beside this file states the same twenty checks in one line each.
 It is short enough to inject on every turn, where this file is long enough that

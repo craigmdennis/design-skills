@@ -15,7 +15,7 @@ what remains a candidate.
 | Use one term for one concept, always the same | conversation-prose check 9 |
 | Define abbreviations on first use | The never-clip-a-term rule in check 12 |
 | Numbered lists for sequences, bulleted for the rest | conversation-prose check 13 |
-| Sentence case for headings | documentation-prose |
+| Sentence case for headings | documentation-prose, "The standard" |
 | Put conditions before instructions | conversation-prose check 17, documentation-prose check 19 |
 | No "please" in an instruction | conversation-prose check 12, documentation-prose check 20 |
 | Nothing about how hard the step is | The same two checks |
@@ -27,6 +27,14 @@ what remains a candidate.
 Two of these arrived from Google on 2026-08-17 and 2026-08-19 and are new to
 the skills. The rest were already present, and Google is a second independent
 source for them.
+
+Both skills now name the guide as one of the standards they apply.
+`conversation-prose` carries it under "The three standards", beside ASD-STE100
+and minimalism. `documentation-prose` carries it under "The standard", beside
+ISO/IEC Directives Part 2 and ASD-STE100. Each section lists the mechanics the
+guide supplies, points at the checks that already enforce them, and records the
+second-person divergence. No check was added or renumbered, so the
+17-check and 20-check rubrics and the `checks.md` word budget are unchanged.
 
 ## Where the skills diverge on purpose
 
