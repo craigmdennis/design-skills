@@ -1,6 +1,6 @@
 {
   "name": "writing",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Three writing standards, one per genre. `conversation-prose` governs an agent's replies, `documentation-prose` governs skills and READMEs and specs, and `published-prose` governs text going out under an author's own name. Ships the per-turn checklist hook that keeps the conversation standard applied over a long session.",
   "author": {
     "name": "Craig Dennis",

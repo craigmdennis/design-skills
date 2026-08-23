@@ -9,7 +9,9 @@ description: Use at the start of every session and whenever writing a reply, exp
 
 This governs **the agent's prose, written to the reader**: replies,
 explanations, status updates, summaries, plans, code review, commit messages,
-and questions back to the reader.
+questions back to the reader, and every `★ Insight` callout the `explanatory`
+output style adds. A callout is the agent's prose in a box, and every check
+applies to it.
 
 It does not govern text going out under the author's name. That is
 `published-prose`: blog posts, case studies, portfolio pages, strategy
