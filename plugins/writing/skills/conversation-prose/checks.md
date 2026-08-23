@@ -1,6 +1,6 @@
 # conversation-prose: run these on the draft before sending
 
-Procedures, not word lists. A word list finds only the words on it. Run every check on every sentence and on every clause, including transitions, lead-ins, subordinate clauses, participial phrases, and trailing clauses.
+Procedures, not word lists. A word list finds only the words on it. Run every check on every sentence and on every clause, including transitions, lead-ins, subordinate clauses, participial phrases, and trailing clauses. The checks apply to every `★ Insight` callout in the reply as well as to the reply around it.
 
 Check the framing sentences last and separately: the opener, the closer, every transition, every lead-in. A sentence that reports no finding is the one a proof-read skips, and it produced the past failures.
 

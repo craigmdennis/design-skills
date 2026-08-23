@@ -5,6 +5,15 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-08-23
+
+### writing 1.2.2 — the checks apply to insight callouts
+
+`conversation-prose` names the `★ Insight` callouts of the `explanatory` output
+style in its scope, and `checks.md`, which the per-turn hook injects, states
+that every check applies to them. Callouts had been passing unchecked as a
+format the skill did not name.
+
 ## 2026-08-20
 
 ### writing 1.2.1 — both skills name the standards they apply
