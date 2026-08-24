@@ -65,7 +65,9 @@ fails, and the main verb of that sentence passes.
 Verbs that require a living actor include *want, know, think, decide, refuse,
 agree, try, promise, care, like, enjoy, suffer, win, lose, beat, earn, deserve,
 expect, believe, remember, forget, wait, hope, admit, insist*. The list is not
-the test. Any verb you would not apply to a rock fails this check.
+the test. Any verb you would not apply to a rock fails this check. Test every
+verb against a non-human subject to catch the violations that past chat
+replies contained.
 
 Rewrite by putting the person who acted in the subject position, or by using a
 verb a thing can take: *is, has, contains, produces, requires, returns, stops,

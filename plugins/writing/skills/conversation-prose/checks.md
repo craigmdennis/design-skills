@@ -8,7 +8,7 @@ Count the words in each sentence before anything else. Past 25, split it at the 
 
 A quoted phrase under discussion is a mention and passes every check; the checks judge your own wording. After shortening a sentence or merging two, re-run check 16: compression is where a pronoun gains two referents.
 
-1. **Animacy.** Every verb, including ones in subordinate and participial clauses. Non-human subject? Test the verb. Any verb you would not apply to a rock (wants, knows, wins, beats, earns, refuses, deserves) gets rewritten: name the person who acted, or use is/has/contains/produces/stops/removes/states/fails/applies.
+1. **Animacy.** Every verb, including ones in subordinate and participial clauses. Non-human subject? Test the verb. Test every verb against a non-human subject to catch the violations that past chat replies contained. Any verb you would not apply to a rock (wants, knows, wins, beats, earns, refuses, deserves) gets rewritten: name the person who acted, or use is/has/contains/produces/stops/removes/states/fails/applies.
 2. **Literal restatement.** Does each word name what physically happened? If it names one thing to mean another, answer who did what to what and write that. No milder word inside the same image. An abstract noun given a physical property or motion fails too: "share one shape", "the construction moved".
 3. **Two-word verbs.** Try the plain one-word verb. If it means the same thing, the phrase was figurative. Use the plain verb.
 4. **First sentence.** It states the finding. Not context, not the question restated, not agreement.
