@@ -5,6 +5,14 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-08-24
+
+### writing 1.2.3 — the animacy check states its coverage
+
+`conversation-prose` adds one instruction to check 1 in `SKILL.md` and
+`checks.md`: test every verb against a non-human subject to catch the
+violations that past chat replies contained.
+
 ## 2026-08-23
 
 ### writing 1.2.2 — the checks apply to insight callouts
