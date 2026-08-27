@@ -5,6 +5,21 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-08-27
+
+### field-notes 0.4.0 — nothing tracked in the project repo
+
+`track-project` no longer edits `.gitignore`, writes a section into
+`AGENTS.md`/`CLAUDE.md`, or commits — a tracked project's only artifact is the
+untracked `.field-notes/` folder. A new SessionStart hook
+(`inject-instructions`) injects the capture instructions
+(`scripts/instructions.md`) into context in tracked projects and adds
+`.field-notes/` to the repo's local `.git/info/exclude`, so repos tracked by
+earlier versions heal on their next session. When git already tracks files
+under `.field-notes/`, the hook appends a warning instead of staying silent,
+since ignore rules do not apply to tracked files. Agents without hooks get the
+agent-instructions section only as an explicit opt-in that names the
+trade-off: the section ends up committed.
 ## 2026-08-24
 
 ### writing 1.2.3 — the animacy check states its coverage
