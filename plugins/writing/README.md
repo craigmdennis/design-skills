@@ -124,3 +124,8 @@ Parts of the ASD-STE100 description and the statement of limits are adapted from
 the asd-ste100-skill by Dustin Yuchen Teng, MIT licensed:
 <https://github.com/danyuchn/asd-ste100-skill>.
 
+The rule against mannered prose, in which metaphor and flourish stand in for a
+direct statement and add connotations the writer did not choose, is taken from
+Anthropic's guidance on writing density in its prompting guide for Claude
+Fable 5.1:
+<https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1#writing-density>.

@@ -8,7 +8,7 @@ Procedures, not word lists. A word list finds only the words on it. Run every ch
 4. **Possessive determiner.** The user's, their, his, her, my, our. Delete the determiner. Where the noun then works as a general one, drop the article too: "the user's prose" becomes "the prose".
 5. **Heading naming an owner.** Every heading and label states what the section covers, never whose it is.
 6. **First and second person.** I, we, my, our, your, referring to the document's owner. Delete them. The imperative "you" is standard in instructions and stays.
-7. **Figurative language.** Does each content word name what physically happened? Metaphor, idiom, analogy, and personification all go, including figurative phrasal verbs, which read as ordinary English: "glossed over", "went the same way", "bolt on".
+7. **Figurative language.** Does each content word name what physically happened? Metaphor, idiom, analogy, and personification all go, including figurative phrasal verbs, which read as ordinary English: "glossed over", "went the same way", "bolt on". When a literal phrase is available, use it: "a dial worth turning" becomes "a parameter worth varying".
 8. **Replacement that kept the image.** For every phrase replaced under check 7, ask whether the new wording carries the original picture. Answer who did it, what they did, and to what, then write that.
 9. **Synonym for variety.** One concept, one word. Reuse the first term.
 10. **One term per role.** One term for each role in the document, repeated. Varying it makes a reader ask whether two roles are meant.

@@ -429,6 +429,14 @@ These go:
   wants"*, *"the parser is happy"*, *"the profile wins"*. (Check 1.)
 - Analogy to an unrelated domain.
 
+Mannered prose substitutes metaphor and flourish for direct statement: *"a dial
+worth turning"* for *"a parameter worth varying"*, *"this point earns its keep"*
+for *"this point still matters"*. The writer chose the phrase to be admired for
+it, and readers notice. The reader does more work so the writer can perform. The
+sentence is also less precise: a metaphor adds connotations the writer did not
+choose and cannot control. Say what you mean. When a literal phrase is
+available, use it.
+
 A concept you cannot state directly is a concept you do not understand yet. Say
 what is uncertain and stop. Do not use a metaphor to cover the gap.
 

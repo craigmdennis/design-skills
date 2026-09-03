@@ -5,6 +5,16 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-09-03
+
+### writing 1.3.1 — mannered prose named as a failure
+
+All three skills and both per-turn checks files name mannered prose, metaphor
+and flourish in place of a direct statement, as a failure, with the rule that
+a literal phrase is used wherever one is available. The rule comes from
+Anthropic's writing-density guidance for Claude Fable 5.1, credited in the
+plugin README.
+
 ## 2026-08-27
 
 ### writing 1.3.0 — the injection hooks run on Codex

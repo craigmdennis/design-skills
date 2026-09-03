@@ -830,6 +830,14 @@ the variation.
   actually is. If the literal sentence is harder to write, write the harder
   sentence.
 
+  Mannered prose substitutes metaphor and flourish for direct statement: *"a dial
+  worth turning"* for *"a parameter worth varying"*, *"this point earns its keep"*
+  for *"this point still matters"*. The writer chose the phrase to be admired for
+  it, and readers notice. The reader does more work so the writer can perform. The
+  sentence is also less precise: a metaphor adds connotations the writer did not
+  choose and cannot control. Say what you mean. When a literal phrase is
+  available, use it.
+
   **Provenance decides, exactly as it does for "X, not Y".**
   - **The agent writing fresh prose: never generate non-literal wording.** No
     metaphor, analogy, idiom, figurative phrasal verb, or personification, in
