@@ -89,9 +89,18 @@ Each entry: one to three sentences, raw and specific, written from the user's pe
 
 Skip this step if the repo has no meaningful commits yet (only setup/init commits).
 
+## Codex
+
+If this skill was installed by the skills CLI and the agent is Codex, the capture hooks
+can register there too — the hook scripts sit in this skill's `scripts/` folder. Offer it
+as an explicit yes/no, stating what it does: `node <this skill>/scripts/install-codex-hooks.js`
+merges three entries into `~/.codex/hooks.json` (backup to `hooks.json.bak`; rerun-safe;
+`--uninstall` removes them; `capture-insights` is Claude-only and stays out). Run it only
+after the user agrees, since it edits a file outside the project.
+
 ## Agents without hooks
 
-On Claude Code the plugin injects the capture instructions every session, so no repo file has to carry them. A skill-only install (`npx skills add`) on an agent with no hook system has no injection path; the only alternative is a `## Field notes` section in the project's agent-instructions file (`AGENTS.md` or `CLAUDE.md`), and git will track that file. Offer it as an explicit opt-in: tell the user the section ends up committed to the repo, and only after their yes copy the contents of the plugin's `scripts/instructions.md` into the file. Never write it by default.
+On Claude Code the plugin injects the capture instructions every session, and the Codex register script produces the same injection there, so no repo file has to carry them. A skill-only install (`npx skills add`) on an agent with no hook system has no injection path; the only alternative is a `## Field notes` section in the project's agent-instructions file (`AGENTS.md` or `CLAUDE.md`), and git will track that file. Offer it as an explicit opt-in: tell the user the section ends up committed to the repo, and only after their yes copy the contents of the plugin's `scripts/instructions.md` into the file. Never write it by default.
 
 ## What NOT to do
 

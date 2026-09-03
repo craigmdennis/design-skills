@@ -7,6 +7,16 @@ contract changes.
 
 ## 2026-08-27
 
+### field-notes 0.5.0 — the capture hooks run on Codex
+
+Hook scripts move from `scripts/` into `skills/track-project/scripts/` so a
+skills-CLI install carries them, and a new `install-codex-hooks.js` registers
+three of them (`inject-instructions`, `capture-feedback`, `prompt-rationale`)
+in `~/.codex/hooks.json` with the same merge, backup, and `--uninstall`
+behavior as writing's. `capture-insights` stays Claude-only: it reads Claude
+Code's transcript format for callouts only the `explanatory` output style
+produces.
+
 ### field-notes 0.4.0 — nothing tracked in the project repo
 
 `track-project` no longer edits `.gitignore`, writes a section into

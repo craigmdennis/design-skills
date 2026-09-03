@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/inject-instructions.js\"",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/skills/track-project/scripts/inject-instructions.js\"",
             "timeout": 10
           }
         ]
@@ -17,24 +17,13 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/capture-feedback.js\"",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/skills/track-project/scripts/capture-feedback.js\"",
             "timeout": 10
           },
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/prompt-rationale.js\"",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/skills/track-project/scripts/prompt-rationale.js\"",
             "timeout": 10
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/capture-insights.js\"",
-            "timeout": 15
           }
         ]
       }

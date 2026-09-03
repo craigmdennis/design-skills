@@ -31,7 +31,25 @@ Then say "keep field notes on this project" in any repo you want tracked. Nothin
 npx skills add craigmdennis/design-skills
 ```
 
-The [skills CLI](https://skills.sh) installs skills from this repo (pick `track-project`) into Claude Code or any agent that supports skills (Codex, Cursor, Amp, and others) — hooks are a Claude Code plugin concept it doesn't handle. Without hooks there is no injection path for the capture instructions, so the skill offers one fallback as an explicit opt-in: a `## Field notes` section in the project's agent-instructions file, which git will track. You also lose the automatic parts — the verbatim prompt log, insight capture, and the rationale nudge. For the full setup, install the plugin.
+The [skills CLI](https://skills.sh) installs skills from this repo (pick `track-project`) into Claude Code or any agent that supports skills (Codex, Cursor, Amp, and others) — hooks are a Claude Code plugin concept it doesn't handle. On Codex the skills install carries the hook scripts, and one command registers them — see the Codex section below. On an agent with no hook system there is no injection path for the capture instructions, so the skill offers one fallback as an explicit opt-in: a `## Field notes` section in the project's agent-instructions file, which git will track. You also lose the automatic parts — the verbatim prompt log, insight capture, and the rationale nudge. For the full setup, install the plugin.
+
+## Codex
+
+Codex hooks use the same events and stdin payload as Claude Code's, so three of the four
+hooks run there unchanged. `capture-insights` stays Claude-only: it reads Claude Code's
+transcript format for callouts only the `explanatory` output style produces. Install the
+skill with the skills CLI, then register the hooks:
+
+```bash
+npx skills add craigmdennis/design-skills
+node ~/.codex/skills/track-project/scripts/install-codex-hooks.js
+```
+
+The register script merges its entries into `~/.codex/hooks.json`, backs the file up to
+`hooks.json.bak` first, adds nothing twice on a rerun, and `--uninstall` removes exactly
+what it added. Restart Codex afterwards. The hooks stay dormant until a project is
+tracked, same as on Claude Code, and `FIELD_NOTES_CAPTURE_FEEDBACK=0` disables prompt
+capture in either agent.
 
 ## Privacy — read this
 
