@@ -7,9 +7,9 @@ description: Use when the user wants to keep field notes on a project — a live
 
 ## Overview
 
-Adds live decision capture to a project by updating the project's agent-instructions file (`AGENTS.md` or `CLAUDE.md`) with an instruction, creating a gitignored `.field-notes/` folder, and adding `.field-notes/` to `.gitignore`. The `.field-notes/` folder holds the notes log, draft writeups, and any images — none of it gets committed to the project repo. The dot-prefix keeps it out of the way and guarantees it never collides with the project's own content directories (`blog/`, `notes/`, `docs/`).
+Adds live decision capture to a project by creating an untracked `.field-notes/` folder that holds the notes log, draft writeups, and any images. The skill creates no tracked files: on Claude Code the plugin's SessionStart hook injects the capture instructions into context each session and adds `.field-notes/` to the repo's local exclude file (`.git/info/exclude`), so the project's `.gitignore` and agent-instructions file stay untouched. The dot-prefix keeps the folder out of the way and guarantees it never collides with the project's own content directories (`blog/`, `notes/`, `docs/`).
 
-The presence of `.field-notes/notes.md` is what marks a project as tracked — on Claude Code with the plugin installed, the capture hooks key off that file, and do nothing in any project that lacks it. Tracking only ever starts because someone asked for it; nothing offers it unprompted.
+The presence of `.field-notes/notes.md` is what marks a project as tracked — the capture hooks and the instruction injection key off that file, and do nothing in any project that lacks it. Tracking only ever starts because someone asked for it; nothing offers it unprompted.
 
 ## Focus: whose story the notes tell
 
@@ -28,17 +28,13 @@ The notes are the **user's** story — their thinking, their decisions, the ques
 
 ## Capture thinking live, not just from history
 
-Once a project is tracked, this skill's setup is one-off but its intent is ongoing: capture the user's reasoning *in the moment*, because reconstructing it later from commits gets the *what* but loses the *why*. The Step 3 instruction is what carries this into every future session — it tells the assistant to treat a non-obvious decision, a rejected approach, a change of direction, a sharp question, or a reaction to what a tool did as a logworthy moment in the same turn, and to keep the Framing block (problem, goal, workaround, outcome) current as the bookends.
+Once a project is tracked, this skill's setup is one-off but its intent is ongoing: capture the user's reasoning *in the moment*, because reconstructing it later from commits gets the *what* but loses the *why*. The injected instructions (the plugin's `scripts/instructions.md`, printed into context by the SessionStart hook) carry this into every future session — they tell the assistant to treat a non-obvious decision, a rejected approach, a change of direction, a sharp question, or a reaction to what a tool did as a logworthy moment in the same turn, and to keep the Framing block (problem, goal, workaround, outcome) current as the bookends.
 
 The rule of thumb: if the user has already said *why* in the conversation, log it in their words; if they haven't, ask one short question to draw it out, then log it. Prompt only at real decision points, and back off immediately if the user doesn't want to capture a given moment. The goal is the user's voice and reasoning at the time, which is exactly what a later writeup can't manufacture.
 
 ## What to do
 
-### Step 1: Add `.field-notes/` to .gitignore
-
-Read `.gitignore`. If `.field-notes/` is not already listed, add it.
-
-### Step 2: Create the .field-notes/ folder and notes file
+### Step 1: Create the .field-notes/ folder and notes file
 
 Create `.field-notes/notes.md` if it does not already exist:
 
@@ -61,51 +57,19 @@ The writeup's opening and ending. Fill the first three at the start; fill Outcom
 <!-- Dated decision log. Each entry is about the user's thinking, decisions, questions, and their experience of the tools — not the assistant's own debugging. Format: **YYYY-MM-DD — Short title**\nOne to three sentences. -->
 ```
 
-### Step 3: Add section to the agent-instructions file
+### Step 2: Hide the folder from git
 
-Pick the file that carries this project's agent instructions:
+If the project is a git repo and git does not already ignore `.field-notes`, add it to the repo's local exclude file:
 
-- If `AGENTS.md` exists, use it — it's the cross-agent convention (Codex, Cursor, Amp, Gemini CLI; newer Claude Code reads it too).
-- Otherwise, if `CLAUDE.md` exists, use that.
-- If neither exists, create `AGENTS.md`.
-- If both exist, add the section to whichever holds the project's main instructions and do not duplicate it in the other.
-
-Append the section below to that file. Check first — do not add it twice.
-
-Add this section exactly:
-
-```markdown
-## Field notes
-
-This project keeps field notes for a future writeup (blog post, case study, or retro). Throughout sessions, maintain `.field-notes/notes.md`: a **Framing** block (the bookends) plus a dated decision log.
-
-Keep the Framing block current — it's the writeup's opening and ending, and the part commit history can never reconstruct:
-- **Problem / who feels it** and the **goal** (the outcome the user wants in the world) — capture these the moment they surface, usually early. A decision log with no why has no opening.
-- **Current workaround** — what the user does today, before this exists.
-- **Outcome** — fill in once it ships: whether it works end to end, and what it's like now versus before. Don't leave it blank at the finish; if the user hasn't said, ask.
-
-Log the user's thinking — not the assistant's process. Dated entries are about the user's decisions, questions, changes, and their experience of the tools, written from their perspective:
-- The user's key decisions and the reasoning behind them (especially where they rejected the obvious approach)
-- Questions the user asked, and what was at stake in them
-- Moments the user changed direction mid-build, and why
-- Trade-offs and constraints the user weighed; anything that changed how they think about the problem
-- The user's experience of the tools — what they asked for and what actually happened, especially where the result surprised them, and moments they realised they could solve it themselves
-
-Capture the user's side of the tooling, not the assistant's. "I asked for X and it did Y I didn't expect" is the user's story and belongs. Your own tool errors, debugging detours, and bugs you fixed do not — if one mattered, capture the user's decision or question it triggered, not your struggle with it.
-
-Capture the thinking live — don't just reconstruct it afterwards. When the user makes a non-obvious decision, rejects an approach, changes direction, asks a sharp question, or reacts to what a tool did, treat it as a logworthy moment in the same turn. If they already explained their reasoning in the conversation, record it in their own words. If the reasoning is unstated, ask one short question to draw it out (what tipped the decision, what they were weighing, what worried them) and log their answer. Keep it low-friction: prompt only at genuine decision points, never mid-flow for trivia, and drop it the moment they'd rather not.
-
-Format each entry as:
-
-```
-**YYYY-MM-DD — Short title**
-One to three sentences. Raw observations only — a later writing pass turns them into prose.
+```bash
+git check-ignore -q .field-notes || echo ".field-notes/" >> "$(git rev-parse --git-common-dir)/info/exclude"
 ```
 
-Draft writeups and images go in `.field-notes/`. This folder is gitignored — nothing in it is committed to the repo.
-```
+The exclude file is local-only, so this changes nothing git tracks. Do not edit the project's `.gitignore`. The SessionStart hook repeats this check every session, so a repo tracked before this protection existed heals itself.
 
-### Step 4: Populate .field-notes/notes.md for existing repos
+If `git ls-files .field-notes` prints anything, git already tracks notes from an earlier setup, and ignore rules do not apply to tracked files — tell the user and offer `git rm -r --cached .field-notes`.
+
+### Step 3: Populate .field-notes/notes.md for existing repos
 
 If the repo already has commits beyond the initial setup (i.e. this isn't a blank project), populate `.field-notes/notes.md` with entries drawn from the current repo state. To do this:
 
@@ -125,33 +89,34 @@ Each entry: one to three sentences, raw and specific, written from the user's pe
 
 Skip this step if the repo has no meaningful commits yet (only setup/init commits).
 
-### Step 5: Commit only the tracked files
+## Codex
 
-Stage the two tracked files and propose the commit — only run it if the user has already authorized commits (in this session or their instructions); otherwise ask first:
+If this skill was installed by the skills CLI and the agent is Codex, the capture hooks
+can register there too — the hook scripts sit in this skill's `scripts/` folder. Offer it
+as an explicit yes/no, stating what it does: `node <this skill>/scripts/install-codex-hooks.js`
+merges three entries into `~/.codex/hooks.json` (backup to `hooks.json.bak`; rerun-safe;
+`--uninstall` removes them; `capture-insights` is Claude-only and stays out). Run it only
+after the user agrees, since it edits a file outside the project.
 
-```bash
-git add .gitignore AGENTS.md   # or CLAUDE.md — whichever file Step 3 used
-git commit -m "docs: add field notes capture"
-```
+## Agents without hooks
 
-Do not `git add .field-notes/` — it is intentionally untracked.
+On Claude Code the plugin injects the capture instructions every session, and the Codex register script produces the same injection there, so no repo file has to carry them. A skill-only install (`npx skills add`) on an agent with no hook system has no injection path; the only alternative is a `## Field notes` section in the project's agent-instructions file (`AGENTS.md` or `CLAUDE.md`), and git will track that file. Offer it as an explicit opt-in: tell the user the section ends up committed to the repo, and only after their yes copy the contents of the plugin's `scripts/instructions.md` into the file. Never write it by default.
 
 ## What NOT to do
 
 Do not:
-- Commit anything inside `.field-notes/` — it is gitignored by design
+- Commit anything — the skill creates no tracked files
+- Edit `.gitignore`, `AGENTS.md`, or `CLAUDE.md` (the one exception is the opt-in above, after the user has agreed)
 - Create scripts, CLI tools, or npm commands
-- Add hooks or other automation config — on Claude Code the plugin registers its own capture hooks; on other agents, skill-only mode is the design
+- Add hooks or other automation config — on Claude Code the plugin registers its own capture hooks
 - Add dependencies
-- Create more than the two tracked files (`.gitignore` and the agent-instructions file)
 - Log your own debugging, tool errors, or problems you encountered — the notes are the user's story, told from their perspective
 
 Finished writeups belong in the user's blog or portfolio site, not in the project repo. The `.field-notes/` folder is a local working area only.
 
 ## Idempotent
 
-- If `.field-notes/` is already in `.gitignore`, skip Step 1
-- If `.field-notes/notes.md` already exists, skip Step 2
-- If the agent-instructions file already has a `## Field notes` section, skip Step 3
-- If all three are already set up but `.field-notes/notes.md` is empty or only contains the template placeholder, still run Step 4 to populate it
-- If all three are set up and notes already have content, report that field notes are already configured and stop
+- If `.field-notes/notes.md` already exists, skip Step 1
+- Step 2 is safe to repeat — it appends only when git does not already ignore the folder
+- If `.field-notes/notes.md` exists but is empty or only contains the template placeholder, still run Step 3 to populate it
+- If notes already have content, report that field notes are already configured and stop

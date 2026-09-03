@@ -236,6 +236,14 @@ ASD-STE100 rule, restated for a document:
 - **Plainest accurate word.** "Use" rather than "utilize", "help" rather than
   "facilitate".
 
+Mannered prose substitutes metaphor and flourish for direct statement: *"a dial
+worth turning"* for *"a parameter worth varying"*, *"this point earns its keep"*
+for *"this point still matters"*. The writer chose the phrase to be admired for
+it, and readers notice. The reader does more work so the writer can perform. The
+sentence is also less precise: a metaphor adds connotations the writer did not
+choose and cannot control. Say what you mean. When a literal phrase is
+available, use it.
+
 ## The replacement method
 
 When non-literal wording is found, do not look for a gentler word inside the

@@ -38,6 +38,22 @@ pick into Claude Code, Codex, Cursor, Amp, or any other agent it supports. Nothi
 the background. Invoke a skill when you want it, by asking your agent to "set my goals",
 "write up my impact", "keep field notes on this project", or "strengthen my case study".
 
+### Install: Codex, skills and hooks
+
+```
+npx skills add craigmdennis/design-skills
+node ~/.codex/skills/conversation-prose/install-codex-hooks.js
+node ~/.codex/skills/track-project/scripts/install-codex-hooks.js
+```
+
+Codex hooks use the same events, payload, and output contract as Claude Code's, so the
+same scripts serve both agents, and the skills CLI carries them because they live inside
+the skill folders. The two register commands merge entries into `~/.codex/hooks.json`,
+back the file up first, add nothing twice on a rerun, and remove exactly their own
+entries with `--uninstall`. One hook stays Claude-only: `capture-insights` reads Claude
+Code's transcript format for callouts only the `explanatory` output style produces. A
+skills install is a frozen snapshot — update by rerunning both commands.
+
 ### Install: Claude Code plugins
 
 ```
@@ -53,7 +69,8 @@ For **case-study**, **design-goals**, and **impact-report** the two routes are e
 Both install pure skills.
 
 **field-notes** and **writing** are the two where the plugin route adds something, because
-both register hooks that the skills-only route cannot.
+both register hooks that the skills-only route cannot. On Codex the register commands above
+close that gap.
 
 **field-notes** registers capture hooks that run on Claude Code events: logging your
 prompts, collecting insight callouts, and asking once a session for the "why" behind a

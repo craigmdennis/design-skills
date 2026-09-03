@@ -1,29 +1,29 @@
 {
-  "description": "field-notes capture hooks: capture prompts and insight blocks, nudge for rationale. All are no-ops unless the project is already tracked.",
+  "description": "field-notes capture hooks: inject capture instructions and git protection at session start, capture prompts and insight blocks, nudge for rationale. All are no-ops unless the project is already tracked.",
   "hooks": {
-    "UserPromptSubmit": [
+    "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/capture-feedback.js\"",
-            "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/prompt-rationale.js\"",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/skills/track-project/scripts/inject-instructions.js\"",
             "timeout": 10
           }
         ]
       }
     ],
-    "Stop": [
+    "UserPromptSubmit": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/capture-insights.js\"",
-            "timeout": 15
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/skills/track-project/scripts/capture-feedback.js\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/skills/track-project/scripts/prompt-rationale.js\"",
+            "timeout": 10
           }
         ]
       }

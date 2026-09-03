@@ -17,8 +17,11 @@
 // Node also removes the `jq` dependency an equivalent shell hook would carry.
 //
 // Precedence: a copy under ~/.claude/skills/<skill>/ takes priority over the
-// plugin's own. An edited copy is the one that applies, and the same text is
-// never injected twice.
+// plugin's own, and the file next to this script is the final fallback. The
+// fallback is what makes a skills-CLI install work on any agent — under
+// ~/.codex/skills/ the script and its skill files travel together, so no
+// plugin root exists and none is needed. An edited copy is the one that
+// applies, and the same text is never injected twice.
 //
 // Best-effort: always exits 0. A failure prints nothing at all.
 
@@ -40,6 +43,7 @@ function main() {
   if (process.env.CLAUDE_PLUGIN_ROOT) {
     candidates.push(path.join(process.env.CLAUDE_PLUGIN_ROOT, 'skills', skill, file));
   }
+  candidates.push(path.join(__dirname, file));
 
   for (const candidate of candidates) {
     let text;

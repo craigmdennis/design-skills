@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/inject.js\" SessionStart conversation-prose SKILL.md",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/skills/conversation-prose/inject.js\" SessionStart conversation-prose SKILL.md",
             "statusMessage": "Loading conversation-prose",
             "timeout": 10
           }
@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/inject.js\" UserPromptSubmit conversation-prose checks.md",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/skills/conversation-prose/inject.js\" UserPromptSubmit conversation-prose checks.md",
             "statusMessage": "Loading conversation-prose checks",
             "timeout": 10
           }

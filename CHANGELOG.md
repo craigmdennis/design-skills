@@ -5,6 +5,50 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-09-03
+
+### writing 1.3.1 — mannered prose named as a failure
+
+All three skills and both per-turn checks files name mannered prose, metaphor
+and flourish in place of a direct statement, as a failure, with the rule that
+a literal phrase is used wherever one is available. The rule comes from
+Anthropic's writing-density guidance for Claude Fable 5.1, credited in the
+plugin README.
+
+## 2026-08-27
+
+### writing 1.3.0 — the injection hooks run on Codex
+
+`inject.js` moves into `skills/conversation-prose/` and gains a fallback that
+resolves skill files next to itself, so a skills-CLI install into any agent
+carries the whole mechanism without a plugin root. A new
+`install-codex-hooks.js` in the same folder registers the session-start and
+per-turn injections in `~/.codex/hooks.json` — merged with a backup,
+rerun-safe, removed with `--uninstall`.
+
+### field-notes 0.5.0 — the capture hooks run on Codex
+
+Hook scripts move from `scripts/` into `skills/track-project/scripts/` so a
+skills-CLI install carries them, and a new `install-codex-hooks.js` registers
+three of them (`inject-instructions`, `capture-feedback`, `prompt-rationale`)
+in `~/.codex/hooks.json` with the same merge, backup, and `--uninstall`
+behavior as writing's. `capture-insights` stays Claude-only: it reads Claude
+Code's transcript format for callouts only the `explanatory` output style
+produces.
+
+### field-notes 0.4.0 — nothing tracked in the project repo
+
+`track-project` no longer edits `.gitignore`, writes a section into
+`AGENTS.md`/`CLAUDE.md`, or commits — a tracked project's only artifact is the
+untracked `.field-notes/` folder. A new SessionStart hook
+(`inject-instructions`) injects the capture instructions
+(`scripts/instructions.md`) into context in tracked projects and adds
+`.field-notes/` to the repo's local `.git/info/exclude`, so repos tracked by
+earlier versions heal on their next session. When git already tracks files
+under `.field-notes/`, the hook appends a warning instead of staying silent,
+since ignore rules do not apply to tracked files. Agents without hooks get the
+agent-instructions section only as an explicit opt-in that names the
+trade-off: the section ends up committed.
 ## 2026-08-24
 
 ### writing 1.2.3 — the animacy check states its coverage
