@@ -7,6 +7,15 @@ contract changes.
 
 ## 2026-08-27
 
+### writing 1.3.0 — the injection hooks run on Codex
+
+`inject.js` moves into `skills/conversation-prose/` and gains a fallback that
+resolves skill files next to itself, so a skills-CLI install into any agent
+carries the whole mechanism without a plugin root. A new
+`install-codex-hooks.js` in the same folder registers the session-start and
+per-turn injections in `~/.codex/hooks.json` — merged with a backup,
+rerun-safe, removed with `--uninstall`.
+
 ### field-notes 0.5.0 — the capture hooks run on Codex
 
 Hook scripts move from `scripts/` into `skills/track-project/scripts/` so a

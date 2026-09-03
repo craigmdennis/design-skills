@@ -52,6 +52,23 @@ Before reading its own copy, each injection looks for
 An edited copy takes priority over the plugin's, and the same text is never
 injected twice.
 
+## Codex
+
+Codex hooks use the same events, stdin payload, and `hookSpecificOutput` envelope as
+Claude Code's, so `inject.js` runs there unchanged. Install the skills with the skills
+CLI, then register the two injections:
+
+```bash
+npx skills add craigmdennis/design-skills
+node ~/.codex/skills/conversation-prose/install-codex-hooks.js
+```
+
+The register script merges the two entries into `~/.codex/hooks.json`, backs the file up
+to `hooks.json.bak` first, adds nothing twice on a rerun, and `--uninstall` removes
+exactly what it added. Restart Codex afterwards. The script injects the `SKILL.md` and
+`checks.md` that sit next to it; a copy under `~/.claude/skills/` still takes priority
+where one exists.
+
 ## The voice profile
 
 `published-prose` reads
@@ -106,3 +123,4 @@ the ASD Simplified Technical English Maintenance Group has not endorsed them.
 Parts of the ASD-STE100 description and the statement of limits are adapted from
 the asd-ste100-skill by Dustin Yuchen Teng, MIT licensed:
 <https://github.com/danyuchn/asd-ste100-skill>.
+
