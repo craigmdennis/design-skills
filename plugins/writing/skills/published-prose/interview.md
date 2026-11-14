@@ -8,7 +8,7 @@ Ask these one at a time. Wait for each answer.
 
 1. Which surfaces do you publish under your own name, and where do those files
    live? Name each one and its path or platform: blog, case studies, portfolio
-   pages, resume, strategy documents, social posts.
+   pages, resume, social posts.
 
 2. Which spelling convention do you use: British, American, or something else?
 

@@ -95,7 +95,7 @@ make worse, so they are separate skills and not settings on one skill. The backg
 | Genre | Skill | Standard |
 |---|---|---|
 | Replies, explanations, status updates, summaries, plans, review | [conversation-prose](plugins/writing/skills/conversation-prose/) | ASD-STE100 (Issue 9) and minimalism |
-| Skill files, READMEs, specs, plans, code comments, changelogs | [documentation-prose](plugins/writing/skills/documentation-prose/) | Third-person impersonal |
+| Skill files, READMEs, specs, plans, code comments, changelogs, decision documents | [documentation-prose](plugins/writing/skills/documentation-prose/) | Third-person impersonal |
 | Prose published under an author's own name | [published-prose](plugins/writing/skills/published-prose/) | The author's own voice, from an interview |
 
 ```

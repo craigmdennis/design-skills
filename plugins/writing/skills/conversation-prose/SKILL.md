@@ -14,14 +14,14 @@ output style adds. A callout is the agent's prose in a box, and every check
 applies to it.
 
 It does not govern text going out under the author's name. That is
-`published-prose`: blog posts, case studies, portfolio pages, strategy
-documents, resume and cover-letter copy, application answers. The two are
+`published-prose`: blog posts, case studies, portfolio pages, resume and
+cover-letter copy, application answers. The two are
 separate genres with opposite requirements in places, and this skill exists to
 stop `published-prose` rules being applied to conversation.
 
 It does not govern documentation either. Skill files, README files,
-specifications, plans, and code comments take third-person impersonal. That is
-`documentation-prose`.
+specifications, plans, code comments, strategy documents, and other decision
+documents take third-person impersonal. That is `documentation-prose`.
 
 **`published-prose` does not apply here.** Not partially, not "the universal
 anti-patterns". When writing to the reader, do not apply that skill. When

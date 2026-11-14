@@ -6,7 +6,7 @@ rules that improve one genre make the other two worse.
 | Writing | Skill | Standard |
 |---|---|---|
 | An agent's replies: explanations, status updates, summaries, plans, reviews, questions back | `conversation-prose` | ASD-STE100 subset, 17 checks |
-| Documentation: skills, READMEs, specs, plans, code comments, pull request bodies | `documentation-prose` | Third-person impersonal, 20 checks |
+| Documentation: skills, READMEs, specs, plans, code comments, pull request bodies, decision documents | `documentation-prose` | Third-person impersonal, 30 checks |
 | Prose published under an author's name: posts, case studies, resume copy | `published-prose` | Voice rules plus a personal profile |
 
 Applying `published-prose` to a reply removes the comparison that would have
