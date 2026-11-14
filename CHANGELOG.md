@@ -5,6 +5,31 @@ Versions follow semver against the skill's *contract* — its triggers, inputs,
 outputs, and guarantees. Patch = wording, minor = new capability, major = the
 contract changes.
 
+## 2026-11-14
+
+### writing 2.0.0 — strategy documents move to documentation-prose
+
+`published-prose` no longer governs strategy documents, vision documents,
+product specifications, internal proposals, or memos. It now covers only prose
+written in the author's own voice. Its strategy section moves to
+`documentation-prose` as a "Strategy documents" subsection, restated in the
+impersonal register. Team-first "we" is removed. A first name is still
+allowed for the owner of an action, as the one exception
+to check 1. Bets become blocks of bold labels, each followed by prose, and the
+argument around them is written in paragraphs. The section on publishing
+strategy content as a blog post stays in `published-prose`.
+
+`documentation-prose` also gains ten checks, 21 to 30, and now governs decision
+documents: memos, proposals, status updates, and incident reviews. Checks 21 to
+26 apply to every document. They require a baseline, a period, and a cause for
+every number, an amount in place of a vague quantity, no precision beyond what
+changes a decision, no trivia, a sentence for every figure, and a core answer
+first in every answer. Checks 27 to 30 apply to decision documents only. They
+require paragraphs for the argument, one page where possible and six pages at
+most, answers to the six reviewer question types, and a stated setback that
+names no person. Check 13 also removes jargon and filler words. The Google
+abbreviation rule now prefers no abbreviation over an expanded one.
+
 ## 2026-09-03
 
 ### writing 1.3.1 — mannered prose named as a failure

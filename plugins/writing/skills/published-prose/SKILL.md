@@ -1,6 +1,6 @@
 ---
 name: published-prose
-description: Use when writing or editing prose published or sent under the author's own name — blog posts, case studies, portfolio pages, strategy docs, resume and cover-letter copy, application answers, social posts. Applies the author's voice rules and removes AI-generated patterns. Does NOT govern how the agent writes back to the reader in conversation.
+description: Use when writing or editing prose published or sent under the author's own name — blog posts, case studies, portfolio pages, resume and cover-letter copy, application answers, social posts. Applies the author's voice rules and removes AI-generated patterns. Does NOT govern how the agent writes back to the reader in conversation.
 ---
 
 # Published prose
@@ -33,9 +33,13 @@ To rebuild a profile, delete `voice-profile.md` and invoke this skill again.
 This skill governs text that goes out **under the author's name**. It does not
 govern the agent's replies in conversation.
 
-**In scope:** blog posts, case studies, portfolio and profile pages, strategy
-and internal documents, resume and cover-letter copy, application answers,
-social posts, bio copy. Anything a reader will attribute to the author.
+**In scope:** blog posts, case studies, portfolio and profile pages, resume and
+cover-letter copy, application answers, social posts, bio copy. Anything a
+reader will attribute to the author, written in the author's own voice.
+
+**Strategy documents and other internal documents are out of scope.** Strategy
+documents, vision documents, product specifications, internal proposals, and
+memos follow the `documentation-prose` skill.
 
 **Out of scope:** the agent's replies in conversation — explanations, status
 updates, summaries, plans, code review, commit messages, questions back to the
@@ -184,8 +188,7 @@ bake-off"), rewrite them.
 ## Narrative arc: diagnose first, then support the conclusion
 
 The section above is about the headings. This is about the shape they trace.
-Every piece long enough to have sections — case study, strategy document,
-essay-length post — follows the same arc. Even a short post opens on the
+Every piece long enough to have sections — case study or essay-length post — follows the same arc. Even a short post opens on the
 problem, not the setup.
 
 1. **Open with the diagnosis.** Name the problem first. Not the project, not the
@@ -265,32 +268,25 @@ stated opinion or value judgement.
 
 ## Genre
 
-Two genres apply, each with different conventions. Apply the universal
-anti-patterns (below) to both, then layer the genre-specific section.
+One genre applies: **blog, essay, and personal** writing, published under the
+author's name for a public reader. Narrative rhythm, no internal figures unless
+the voice profile allows them, and an ending on what happened next or a specific
+opportunity ahead. Apply the universal anti-patterns (below), then see
+"Narrative and personal-essay craft" below, then the voice profile.
 
-- **Blog, essay, personal** — published under the author's name for a public
-  reader. Narrative rhythm, no internal figures unless the voice profile allows
-  them, ends on what happened next or a specific opportunity ahead. See
-  "Narrative and personal-essay craft" below, then the voice profile.
-- **Strategy and internal document** — strategy documents, vision documents,
-  product specifications, internal proposals. Team-first "we" is welcome,
-  specific numbers are retained, bolded label-then-elaborate structure is the
-  genre's skim format, numbered guiding policies and hypothesis blocks are
-  correct. See "Writing style guidance for strategy and internal documents".
-
-**Picking the right voice:**
+**Picking the right skill:**
 
 - The file path is usually decisive, and the voice profile records which paths
-  map to which genre.
+  are published under the author's name.
+- A strategy document, a proposal, or another internal document follows
+  `documentation-prose`, wherever the file lives.
 - If the content shape contradicts the path (a blog post that argues a product
-  strategy, or a memo published as a post), ask which voice to layer. Do not
-  silently apply blog rules to strategy structure.
-- For ambiguous mixed-genre work, apply the universal anti-patterns first, then
-  ask.
+  strategy, or a memo published as a post), ask which skill applies. Where the
+  answer is a public post, see "Publishing strategy content as a blog post".
 
 ## Numbers: what stays specific, by surface
 
-One rule, five surfaces. The question is always what the surface exposes about
+One rule, four surfaces. The question is always what the surface exposes about
 the underlying business, never whether a number "sounds generated."
 
 | Surface | Percentages and ratios | Absolutes (revenue, headcount, user counts, costs) |
@@ -299,7 +295,6 @@ the underlying business, never whether a number "sounds generated."
 | Case study or portfolio page | Keep as given | Soften |
 | Public bio and profile pages | Keep as given | Soften |
 | Resume (applicant-tracking, not public) | Keep | Keep |
-| Strategy or internal document | Keep | Keep |
 
 - **Why percentages survive on published surfaces:** they do not reveal the size
   of the underlying business. Absolutes do. *"40% relative drop in
@@ -429,63 +424,12 @@ rhythm on top.
   pressure test it."*). Present tense, the principle, what the reader will take
   away.
 
-## Writing style guidance for strategy and internal documents
+## Publishing strategy content as a blog post
 
-Apply this on top of the universal anti-patterns when writing internal strategy
-documents, vision documents, and internal proposals.
-
-- **"We" is welcome.** Strategy documents are team artifacts. Use "we" where the
-  action is collective and "I" only where it is personal. A blog rule preferring
-  "I" does not apply here.
-- **Internal numbers stay specific.** "$7,914 lost in one week" instead of
-  "significant revenue lost". "10% reduction in churn from the poor-experience
-  segment" instead of "meaningful reduction". Internal audiences need the
-  specifics; the relative-language rule is for external publication (see
-  "Numbers: what stays specific, by surface").
-- **Bolded labels on numbered items are correct.** Guiding policies (`**1.
-  Design From Evidence**`), bet subheaders (`**Hypothesis**`, `**Why we believe
-  this**`, `**What Design delivers**`, `**Measuring success**`), and
-  `**Outcomes:**` / `**Dependencies:**` sub-headers are the genre's skim format.
-  The "no bolded instructional lists" rule does not apply.
-- **Diagnostic "not X. It is Y." reframes are worth keeping.** When the contrast
-  is core argumentative work, rejecting a wrong frame to install a right one
-  (*"The retention problem is not a support problem. It is a measurement
-  problem."*), keep it. Still cut it when it is only emphasis.
-- **Open with the thesis as a complete H2.** "We can't move what we don't
-  measure". The thesis is the executive summary. No summary header, no "this
-  document outlines".
-- **Hypotheses are causal "if/then" claims.** "If we [action] then [measurable
-  outcome]." That forces a testable bet. "Why we believe this" comes next.
-- **Strategic bet template.** Each bet repeats: Hypothesis, Why we believe this,
-  What [team] delivers (with owner names), How this influences the company,
-  Measuring success (specific targets), calendar milestones.
-- **Equation-style headers** for memorable framings: "Effectiveness >
-  Experience", "Right Config = Right Fit". Use them only when the claim
-  compresses cleanly.
-- **Tight imperative bullets**, verb-first or noun-first. No "we will / we
-  should" padding inside the bullet. "Automated evaluation passes led by design"
-  instead of "We will run automated evaluation passes."
-- **Owner attribution by first name** for accountability: "Quality index —
-  [First name]".
-- **Dependencies named by team and role**: "Dependencies: Support
-  (facilitation), Product (process changes)."
-- **Verbatim customer quotes** as italicised, attributed evidence: *"This call
-  should have been transferred to us"* (a customer in the legal vertical). Do
-  not paraphrase; the specific phrasing is what makes it necessary.
-- **Tables for genuine comparisons** — Goal to Role, Industry to Objective to
-  Evidence, rule to Pass to Fail. Do not force tables for structure.
-- **Calendar markers** for timelines: `**April:** [Milestone]`.
-- **Inline backticks** for technical identifiers (`next_step: schedule`,
-  `is_disabled: true`).
-- **A "what this unlocks" closer** names what becomes possible, often by posing
-  the questions the team can now answer. Do not end with a claim of cosmic
-  significance.
-
-### Publishing strategy content as a blog post
-
-When a strategy-shaped piece goes to a public blog instead of an internal vault,
-the audience changes from "team executing this" to "thoughtful reader". Some of
-the strategy apparatus stops being useful:
+An internal strategy document follows `documentation-prose`. When a
+strategy-shaped piece goes to a public blog instead, this skill applies, and the
+audience changes from "team executing this" to "thoughtful reader". Some of the
+strategy apparatus stops being useful:
 
 - **Drop scope and implementation sections entirely.** Readers do not need a
   checklist. The thinking is the point.
@@ -501,9 +445,9 @@ reframes, tight bullets, tables for genuine comparisons, and the "what this
 unlocks" closer. The strategic *thinking* survives intact; the operational
 *apparatus* does not.
 
-## Case-study and strategy framing: write like a product leader
+## Case-study framing: write like a product leader
 
-Applies to case studies and strategy documents, on top of the genre voice above.
+Applies to case studies, on top of the genre voice above.
 Frame the thinking the way a product leader would, not the way a designer
 defending craft would. A hiring manager reading a case study is buying
 judgement, not pixels.
@@ -665,10 +609,9 @@ Narrative prose carries no ceiling. The mixed-rhythm rule governs there. A blog
 post containing a numbered set of steps follows both: narrative rhythm in the
 paragraphs, the 20-word ceiling inside the steps.
 
-**Two things this rule does not touch.** Sanctioned fragment closers stay where
+**One thing this rule does not touch.** Sanctioned fragment closers stay where
 the voice profile allows them; they are a deliberate voice move, not a displaced
-subject. Strategy-document bullets stay verb-first and subjectless; that is the
-genre's skim format, and this rule is about sentences in prose.
+subject.
 
 **Each sentence picks up the one before it.** The structure section above
 requires connecting sentences between *sections*. The same discipline applies
@@ -1145,8 +1088,8 @@ shape does the convincing, and that is the move that reads as generated.
 - For "and now we had to…" and "I didn't leave it there": just continue. Drop
   the announced momentum and write the next plain sentence.
 
-**Distinguish from the diagnostic reframe, which stays.** The strategy and
-case-study section endorses *"The retention problem is not a support problem. It
+**Distinguish from the diagnostic reframe, which stays.** The case-study
+section endorses *"The retention problem is not a support problem. It
 is a measurement problem."* That works because it rejects a wrong frame to
 install the actual thesis of the piece, once, in plain words. The banned
 versions differ: they are used throughout, they pivot on a clever or dismissive
@@ -1187,7 +1130,7 @@ Scan the output against the voice profile first, then scan for:
 - Any sentence stating a conclusion, takeaway, reframe, or opinion that was not
   actually supplied. Do not ship it as the author's verdict. Replace it with a
   marked placeholder and ask.
-- (Case study and strategy) Any design decision justified only on aesthetic
+- (Case study) Any design decision justified only on aesthetic
   grounds ("cleaner", "more elegant"). Tie it to a business or customer
   consequence, or cut it.
 - (Published content) Any quote carrying a real name, identifiable business
